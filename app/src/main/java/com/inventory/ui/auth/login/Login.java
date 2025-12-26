@@ -3,7 +3,7 @@ package com.inventory.ui.auth.login;
 import java.awt.event.*;
 import javax.swing.*;
 
-import com.inventory.utils.handleLogin;
+import com.inventory.utils.handleAuth;
 
 // Simpler to extend than including it inside.
 // Allows us to control the visibility outside easily.
@@ -50,9 +50,9 @@ public class Login extends JFrame {
                 loginButton.setEnabled(false);
                 
                 // calling login logic
-                handleLogin login = new handleLogin(usernameField.getText(), passwordField.getPassword());
+                handleAuth login = new handleAuth(usernameField.getText(), passwordField.getPassword());
 
-                if(login.loginUser()) {
+                if(login.loginUser() == 200) {
                     SuccessDialog loginSuccess = new SuccessDialog();
                     loginSuccess.setSuccessDialog("Login Success");
                     loginButton.setEnabled(true);
