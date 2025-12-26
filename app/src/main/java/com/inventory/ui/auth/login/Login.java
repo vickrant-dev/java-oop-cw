@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import com.inventory.ui.auth.signup.Signup;
+import com.inventory.ui.dashboard.Dashboard;
 import com.inventory.utils.*;
 
 public class Login extends JFrame {
@@ -68,6 +69,9 @@ public class Login extends JFrame {
                 if (status == 200) {
                     SuccessDialog loginSuccess = new SuccessDialog();
                     loginSuccess.setSuccessDialog("Login Success");
+                    Dashboard dashboard = new Dashboard();
+                    Login.this.setVisible(false);
+                    dashboard.setVisible(true);
                     loginButton.setEnabled(true);
                 } else if (status == 4201) {
                     FailureDialog loginFailure = new FailureDialog();
