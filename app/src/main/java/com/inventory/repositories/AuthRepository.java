@@ -2,12 +2,15 @@ package com.inventory.repositories;
 
 import com.inventory.server.Server;
 import com.inventory.utils.Encryptor;
+import com.inventory.utils.sessionManager;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AuthRepository {
     public int Login(String username, String password) {
@@ -28,31 +31,37 @@ public class AuthRepository {
         try (Connection loginConn = Server.getConnection()) {
             if (loginConn != null) {
                 // check if username exists
-                PreparedStatement statement1 = loginConn.prepareStatement(user_check_create_user_query);
-                statement1.setString(1, username);
-                ResultSet isUser = statement1.executeQuery(); // checking if username exists
+                PreparedStatement check_username_exists = loginConn.prepareStatement(user_check_create_user_query);
+                check_username_exists.setString(1, username);
+                ResultSet isUser = check_username_exists.executeQuery(); // checking if username exists
 
                 if (isUser.next()) {
-                    PreparedStatement statement2 = loginConn.prepareStatement(user_login_create_user_query);
-                    statement2.setString(1, username);
-                    statement2.setString(2, encryptedPassword);
+                    PreparedStatement user_login = loginConn.prepareStatement(user_login_create_user_query);
+                    user_login.setString(1, username);
+                    user_login.setString(2, encryptedPassword);
 
-                    ResultSet res = statement2.executeQuery();
+                    ResultSet res = user_login.executeQuery();
 
+                    // login success
                     if (res.next()) {
-                        System.out.println("Success: " + res.getString("username"));
+                        new sessionManager(res.getString("role"));
+                        res.close();
+                        user_login.close();
                         return 200;
                     }
                     else {
+                        res.close();
+                        user_login.close();
                         return 401; // login failed. invalid credentials.
                     }
                 }
                 else {
+                    isUser.close();
+                    check_username_exists.close();
                     return 4201; // not yet a user. popup a signup form.
                 }
 
 
-                // System.out.println("Connection successful!");
             } else {
                 System.out.println("Connection failed!");
                 return 503;
