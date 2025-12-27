@@ -1,7 +1,6 @@
 package com.inventory.ui.dashboard.product_management;
 
-import com.inventory.ui.dashboard.supplier_management.Supplier;
-import com.inventory.utils.loadAllProducts;
+import com.inventory.domain.Supplier;
 import com.inventory.utils.loadAllSuppliers;
 
 import javax.swing.*;

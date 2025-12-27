@@ -1,9 +1,7 @@
 package com.inventory.controller;
 
-import com.inventory.repositories.ProductRepository;
 import com.inventory.repositories.SupplierRepository;
-import com.inventory.ui.dashboard.product_management.Product;
-import com.inventory.ui.dashboard.supplier_management.Supplier;
+import com.inventory.domain.Supplier;
 
 import java.util.List;
 
@@ -16,5 +14,13 @@ public class SupplierController {
 
     public List<Supplier> getAllSuppliers() {
         return supplierRepo.getAllSuppliers();
+    }
+
+    public int updateSupplierName(int id, String new_name) {
+        return supplierRepo.updateSupplierName(id, new_name);
+    }
+
+    public int updateSupplierContact(int id, String contact_info) {
+        return supplierRepo.updateSupplierContact(id, contact_info);
     }
 }

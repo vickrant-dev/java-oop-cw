@@ -1,7 +1,7 @@
 package com.inventory.controller;
 
 import com.inventory.repositories.ProductRepository;
-import com.inventory.ui.dashboard.product_management.Product;
+import com.inventory.domain.Product;
 
 import java.util.List;
 
@@ -16,15 +16,9 @@ public class ProductController {
         return productRepo.fetchAllProducts();
     }
 
-    public int updateProductStock(int product_id, int new_quantity) {
-        return productRepo.updateProductStock(product_id, new_quantity);
-    }
-
-    public int updateProductName(int product_id, String new_name) {
-        return productRepo.updateProductName(product_id, new_name);
-    }
-
-    public int updateProductCategory(int product_id, String category) {
-        return productRepo.updateProductCategory(product_id, category);
+    public int updateProductDetails(String id, int product_id, String name, String category,
+                                    double price, int stock_quantity) {
+        return productRepo.updateProductDetails(id, product_id, name, category, price,
+                stock_quantity);
     }
 }

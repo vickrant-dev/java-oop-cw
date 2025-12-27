@@ -1,7 +1,7 @@
 package com.inventory.utils;
 
 import com.inventory.controller.ProductController;
-import com.inventory.ui.dashboard.product_management.Product;
+import com.inventory.domain.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,6 @@ public class loadAllProducts {
         List<Product> all_products = new ProductController().fetchAllProducts();
         List<Object[]> table_data = new ArrayList<>();
         for (Product prod: all_products) {
-            // What are anonymous objects
             // An anonymous object is an instance created without assigning it to a reference variable.
             // They are typically used for "one-off" tasks where you don't need to refer
             // to that object ever again.

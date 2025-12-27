@@ -31,7 +31,6 @@ public class Dashboard extends JFrame {
         // default view being managing products
         showPanel(new ProductPanel());
 
-        // sidebar item actions
 
         // Typically we use addActionListener to perform an event when a button is clicked.
         // But, from newer java versions we can use something called "the lambda syntax" only because
@@ -40,6 +39,7 @@ public class Dashboard extends JFrame {
         // instead of writing it all, we could simply call the fn using a lambda syntax like the following:
         // "e -> callSomeFunction( ...params )"
 
+        // sidebar item actions
         sidebar.setProductButtonAction(e -> showPanel(new ProductPanel()));
         sidebar.setCustomerButtonAction(e -> showPanel(new CustomerPanel()));
         sidebar.setSupplierButtonAction(e -> showPanel(new SupplierPanel()));

@@ -1,11 +1,8 @@
 package com.inventory.utils;
 
-import com.inventory.controller.ProductController;
 import com.inventory.controller.SupplierController;
-import com.inventory.ui.dashboard.product_management.Product;
-import com.inventory.ui.dashboard.supplier_management.Supplier;
+import com.inventory.domain.Supplier;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class loadAllSuppliers {

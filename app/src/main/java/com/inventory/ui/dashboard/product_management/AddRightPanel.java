@@ -7,7 +7,7 @@ import java.awt.*;
 public class AddRightPanel extends JPanel {
 
     private final ManageProducts product_manager;
-    JButton refreshProducts = new JButton("Refresh");
+    private JButton refreshProducts = new JButton("Refresh");
 
     public AddRightPanel(ManageProducts product_manager) {
         this.product_manager = product_manager;
