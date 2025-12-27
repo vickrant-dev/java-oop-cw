@@ -11,23 +11,32 @@ public class handleValidateFields {
         return null;
     }
 
+    // used for validating supplier fields
+    public String validateString(String name, String contact_info) {
+        if (name.trim().isEmpty() || contact_info.trim().isEmpty()) {
+            return "401a";
+        }
+        return null;
+    }
+
+    // used for validating product fields
     public String validateString(int product_id, String name, String category,
                                  double price, int stock_quantity) {
 
         if (name == null || name.trim().isEmpty()) {
-            return "401b"; // invalid name
+            return "401a"; // invalid name
         }
 
         if (category == null || category.trim().isEmpty()) {
-            return "401c"; // invalid category
+            return "401a"; // invalid category
         }
 
         if (price < 0) {
-            return "401d"; // invalid price
+            return "401a"; // invalid price
         }
 
         if (stock_quantity < 0) {
-            return "401e"; // invalid stock quantity
+            return "401a"; // invalid stock quantity
         }
 
         return null; // valid

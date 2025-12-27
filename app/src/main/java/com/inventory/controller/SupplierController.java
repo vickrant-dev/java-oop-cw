@@ -16,11 +16,7 @@ public class SupplierController {
         return supplierRepo.getAllSuppliers();
     }
 
-    public int updateSupplierName(int id, String new_name) {
-        return supplierRepo.updateSupplierName(id, new_name);
-    }
-
-    public int updateSupplierContact(int id, String contact_info) {
-        return supplierRepo.updateSupplierContact(id, contact_info);
+    public int updateSupplierDetails(int id, String name, String contact_info) {
+        return supplierRepo.updateSupplierDetails(id, name, contact_info);
     }
 }

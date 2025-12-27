@@ -20,13 +20,13 @@ public class Supplier {
     public String getSupplierContactInfo() { return contact_info; }
 
     // setters (updaters basically)
-    public String setSupplierName(String name) {
+    public String setSupplierDetails(String name, String contact_info) {
         this.name = name;
-        return updateSupplierName(name);
-    }
-    public String setSupplierContactInfo(String contact_info) {
         this.contact_info = contact_info;
-        return updateSupplierContact(contact_info);
+        return updateSupplierDetails();
+    }
+    public String addNewSupplier() {
+        return createNewSupplier();
     }
 
     // overriding the default toString method of an Object.
@@ -37,9 +37,10 @@ public class Supplier {
         return name;
     }
 
-    private String updateSupplierName(String name) {
-        if(new handleValidateFields().validateString(name) == null) {
-            int update_res = new SupplierController().updateSupplierName(this.id, this.name);
+    private String updateSupplierDetails() {
+        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+            int update_res = new SupplierController().updateSupplierDetails(this.id, this.name,
+                    this.contact_info);
             if (update_res == 200) {
                 System.out.println("Updated Supplier successfully for: " + this.id);
             }
@@ -53,11 +54,12 @@ public class Supplier {
         }
     }
 
-    private String updateSupplierContact(String contact_info) {
-        if(new handleValidateFields().validateString(contact_info) == null) {
-            int update_res = new SupplierController().updateSupplierContact(this.id, this.contact_info);
+    private String createNewSupplier() {
+        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+            int update_res = new SupplierController().updateSupplierDetails(this.id, this.name,
+                    this.contact_info);
             if (update_res == 200) {
-                System.out.println("Updated Supplier successfully for: " + this.id);
+                System.out.println("created a new Supplier successfully for: " + this.id);
             }
             else {
                 System.out.println("Supplier updating failed for: " + this.id + ". Error: " + update_res);

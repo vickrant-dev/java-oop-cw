@@ -42,47 +42,15 @@ public class SupplierRepository {
         }
     }
 
-    public int updateSupplierName(int id, String new_name) {
-        String update_suppliers_query = "UPDATE suppliers SET name=? WHERE supplier_id=?";
+    public int updateSupplierDetails(int id, String name, String contact_info) {
+        String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE supplier_id=?";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement updateSupplierStatement = conn.prepareStatement(update_suppliers_query);
-                updateSupplierStatement.setString(1, new_name);
-                updateSupplierStatement.setInt(2, id);
-                ResultSet res = updateSupplierStatement.executeQuery();
-
-                if (res.next()) {
-                    System.out.println("res update supplier: " + res.next());
-                    updateSupplierStatement.close();
-                    res.close();
-                    return 200;
-                }
-                else {
-                    updateSupplierStatement.close();
-                    res.close();
-                    return 401; // invalid product_id maybe...
-                }
-            }
-            else {
-                return 503; //connection error
-            }
-        }
-        catch (SQLException e) {
-            System.err.println("Database connection err: " + e.getMessage());
-            e.printStackTrace();
-            return 503;
-        }
-    }
-
-    public int updateSupplierContact(int id, String contact_info) {
-        String update_suppliers_query = "UPDATE suppliers SET contact_info=? WHERE supplier_id=?";
-
-        try (Connection conn = Server.getConnection()) {
-            if (conn != null) {
-                PreparedStatement updateSupplierStatement = conn.prepareStatement(update_suppliers_query);
-                updateSupplierStatement.setString(1, contact_info);
-                updateSupplierStatement.setInt(2, id);
+                updateSupplierStatement.setString(1, name);
+                updateSupplierStatement.setString(2, contact_info);
+                updateSupplierStatement.setInt(3, id);
                 ResultSet res = updateSupplierStatement.executeQuery();
 
                 if (res.next()) {
