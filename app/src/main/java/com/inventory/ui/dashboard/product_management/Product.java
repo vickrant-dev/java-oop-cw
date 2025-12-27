@@ -82,7 +82,7 @@ public class Product {
         return 200;
     }
 
-    public String updateName(String name) {
+    public String updateProductName(String name) {
         if(new handleValidateFields().validateString(name) == null) {
             int update_res = new ProductController().updateProductName(this.id, this.name);
             if (update_res == 200) {
@@ -98,7 +98,7 @@ public class Product {
         }
     }
 
-    public String updateCategory(String category) {
+    public String updateProductCategory(String category) {
         if(new handleValidateFields().validateString(category) == null) {
             int update_res = new ProductController().updateProductCategory(this.id, this.category);
             if (update_res == 200) {
@@ -115,7 +115,7 @@ public class Product {
     }
 
     // can be overridden if needed when recording transactions for customers
-    public double applyDiscount() {
+    public double applyProductDiscount() {
         return price * 0.15;
     }
 

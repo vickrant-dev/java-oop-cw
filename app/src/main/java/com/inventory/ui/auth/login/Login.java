@@ -69,9 +69,8 @@ public class Login extends JFrame {
                 if (status == 200) {
                     SuccessDialog loginSuccess = new SuccessDialog();
                     loginSuccess.setSuccessDialog("Login Success");
-                    Dashboard dashboard = new Dashboard();
+                    new Dashboard().setVisible(true);
                     Login.this.setVisible(false);
-                    dashboard.setVisible(true);
                     loginButton.setEnabled(true);
                 } else if (status == 4201) {
                     FailureDialog loginFailure = new FailureDialog();

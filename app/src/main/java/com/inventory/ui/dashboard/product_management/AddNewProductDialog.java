@@ -1,0 +1,98 @@
+package com.inventory.ui.dashboard.product_management;
+
+import com.inventory.ui.dashboard.supplier_management.Supplier;
+import com.inventory.utils.loadAllProducts;
+import com.inventory.utils.loadAllSuppliers;
+
+import javax.swing.*;
+import java.awt.*;
+import java.text.NumberFormat;
+import java.util.List;
+
+public class AddNewProductDialog extends JDialog {
+
+    private JTextField txtProductId;
+    private JTextField txtProductName;
+    private JTextField txtCategory;
+    private JFormattedTextField txtPrice;
+    private JSpinner spnStock;
+    private JComboBox<String> cmbSupplier;
+
+    public AddNewProductDialog(JFrame dashboard) {
+        super(dashboard, "Add New Product", true);
+        setSize(400, 300);
+        setLocationRelativeTo(dashboard);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        DialogUI();
+    }
+
+    private void DialogUI() {
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 10, 8, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        int row = 0;
+
+        txtProductId = new JTextField(15);
+        addRow(formPanel, gbc, row++, "Product ID:", txtProductId);
+
+        txtProductName = new JTextField(15);
+        addRow(formPanel, gbc, row++, "Product Name:", txtProductName);
+
+        txtCategory = new JTextField(15);
+        addRow(formPanel, gbc, row++, "Category:", txtCategory);
+
+        NumberFormat currency = NumberFormat.getNumberInstance();
+        txtPrice = new JFormattedTextField(currency);
+        txtPrice.setColumns(15);
+        addRow(formPanel, gbc, row++, "Price:", txtPrice);
+
+        spnStock = new JSpinner(new SpinnerNumberModel(0, 0, 100000, 1));
+        addRow(formPanel, gbc, row++, "Stock:", spnStock);
+
+        // flexible list of suppliers
+        List<Supplier> rows = new loadAllSuppliers().getSupplierList();
+
+        // contains the elements in the specified array
+        // ComboBox explicitly mentions that it expects a Supplier type.
+        JComboBox<Supplier> cmbSupplier = new JComboBox<>();
+        cmbSupplier.setModel(new DefaultComboBoxModel<>(
+                // Convert the List<Supplier> to a Supplier[] array explicitly
+                // Supplier[] is a fixed size row of suppliers of type Supplier.
+                rows.toArray(new Supplier[0])
+        ));
+
+        addRow(formPanel, gbc, row++, "Supplier:", cmbSupplier);
+
+        // button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnSave = new JButton("Save");
+        JButton btnCancel = new JButton("Cancel");
+
+        btnSave.addActionListener(e -> onSave());
+        btnCancel.addActionListener(e -> dispose());
+
+        buttonPanel.add(btnCancel);
+        buttonPanel.add(btnSave);
+
+        add(formPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void addRow(JPanel panel, GridBagConstraints gbc, int row,
+                        String labelText, JComponent field) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.weightx = 0;
+        panel.add(new JLabel(labelText), gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        panel.add(field, gbc);
+    }
+
+    private void onSave() {
+        dispose();
+    }
+}

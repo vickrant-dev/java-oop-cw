@@ -8,7 +8,6 @@ public class ProductPanel extends JPanel {
         setLayout(new BorderLayout());
         add(new JLabel("Product Management", SwingConstants.CENTER), BorderLayout.CENTER);
 
-        ManageProducts manageprod = new ManageProducts();
-        add(manageprod, BorderLayout.CENTER);
+        add(new ManageProducts(), BorderLayout.CENTER);
     }
 }

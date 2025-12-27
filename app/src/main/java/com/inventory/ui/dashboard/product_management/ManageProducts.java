@@ -1,12 +1,10 @@
 package com.inventory.ui.dashboard.product_management;
 
-import com.inventory.controller.ProductController;
+import com.inventory.utils.loadAllProducts;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class ManageProducts extends JPanel {
@@ -15,17 +13,20 @@ public class ManageProducts extends JPanel {
     private DefaultTableModel tableModel; // to store the cell value objects.
 
     public ManageProducts() {
-        setLayout(new BorderLayout());
+        // this represents the ManageProducts which is a JPanel as we have inherited.
+        this.setLayout(new BorderLayout());
 
         // table name attached to the border
-        setBorder(BorderFactory.createTitledBorder("All Products"));
-        add(new createTableScrollPane(), BorderLayout.CENTER);
-        add(new createRightPanel(), BorderLayout.EAST);
+        this.setBorder(BorderFactory.createTitledBorder("All Products"));
+        this.add(new createTableScrollPane(), BorderLayout.CENTER);
+
+        // sending this (ManageProducts) to right panel so it can refresh the data using getter methods.
+        this.add(new AddRightPanel(this), BorderLayout.EAST); // right panel with buttons.
     }
 
     // Table
     // JScrollPane -> Provides a scrollable view of a lightweight component
-    public class createTableScrollPane extends JScrollPane {
+    private class createTableScrollPane extends JScrollPane {
         public createTableScrollPane() {
             String[] columns = {"ID", "Name", "Category", "Price", "Stock", "Supplier name"};
 
@@ -44,50 +45,27 @@ public class ManageProducts extends JPanel {
             // a single contiguous interval, or multiple intervals
             productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+            // the JScrollPane links the table's scroll bars to the movement of the data and
+            // puts the table in a viewport under JScrollPane
+            // JTable -> JScrollPane -> Viewport -> setViewportView
             setViewportView(productTable);
 
-            loadAllProducts();
+            List<Object[]> rows = new loadAllProducts().getAllProductRows();
+
+            for (Object[] row: rows) {
+                tableModel.addRow(row);
+            }
         }
     }
 
-    // Separate panel on the right for adding products button
-    public class createRightPanel extends JPanel {
-        public createRightPanel() {
-            // Creates a layout manager that will lay out components along the given axis
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    // getter
+    public void refreshTableData() {
+        tableModel.setRowCount(0);
 
-            // Creates an empty border that takes up space but which does no drawing,
-            // specifying the width of the top,left, bottom, and right sides.
-            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        List<Object[]> rows = new loadAllProducts().getAllProductRows();
 
-            JButton addProductButton = new JButton("Add New Product");
-            addProductButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            addProductButton.addActionListener(e -> addNewProduct());
-
-            add(addProductButton);
+        for (Object[] row: rows) {
+            tableModel.addRow(row);
         }
-
-        private void addNewProduct() {
-            // add new product by calling controller
-        }
-    }
-
-    private void loadAllProducts() {
-        List<Product> all_products = new ProductController().fetchAllProducts();
-        for (Product prod: all_products) {
-            tableModel.addRow(new Object[] {
-                    prod.getProductId(),
-                    prod.getProductName(),
-                    prod.getProductCategory(),
-                    prod.getProductPrice(),
-                    prod.getProductStockQuantity(),
-                    prod.getProductSupplierId()
-            });
-        }
-    }
-
-    public JTable getProductTable() {
-        return productTable;
     }
 }
