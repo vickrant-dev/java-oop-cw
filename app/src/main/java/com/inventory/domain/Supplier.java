@@ -8,6 +8,13 @@ public class Supplier {
     private String name;
     private String contact_info;
 
+    // use this to create new suppliers from dashboard.
+    public Supplier(String name, String contact_info) {
+        this.name = name;
+        this.contact_info = contact_info;
+    }
+
+    // used when retrieving or updating existing suppliers
     public Supplier(int id, String name, String contact_info){
         this.id = id;
         this.name = name;
@@ -20,13 +27,13 @@ public class Supplier {
     public String getSupplierContactInfo() { return contact_info; }
 
     // setters (updaters basically)
-    public String setSupplierDetails(String name, String contact_info) {
+    public String updateSupplier(String name, String contact_info) {
         this.name = name;
         this.contact_info = contact_info;
         return updateSupplierDetails();
     }
-    public String addNewSupplier() {
-        return createNewSupplier();
+    public String addSupplier() {
+        return createSupplier();
     }
 
     // overriding the default toString method of an Object.
@@ -54,7 +61,7 @@ public class Supplier {
         }
     }
 
-    private String createNewSupplier() {
+    private String createSupplier() {
         if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
             int update_res = new SupplierController().updateSupplierDetails(this.id, this.name,
                     this.contact_info);

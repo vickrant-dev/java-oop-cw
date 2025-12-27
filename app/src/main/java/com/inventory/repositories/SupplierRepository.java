@@ -21,7 +21,7 @@ public class SupplierRepository {
                 ResultSet res = updateSupplierStatement.executeQuery();
                 while (res.next()) {
                     Supplier supplier = new Supplier(
-                            res.getInt("supplier_id"),
+                            res.getInt("id"),
                             res.getString("name"),
                             res.getString("contact_info")
                     );
@@ -43,7 +43,7 @@ public class SupplierRepository {
     }
 
     public int updateSupplierDetails(int id, String name, String contact_info) {
-        String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE supplier_id=?";
+        String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE id=?";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {

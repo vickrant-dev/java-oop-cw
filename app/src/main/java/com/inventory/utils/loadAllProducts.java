@@ -18,7 +18,7 @@ public class loadAllProducts {
             // addRow requires an Object array (Object[]) where each index represents a column
             // we use an anonymous array initialization by doing -> new Object[] that has no name,
             // created and destroyed almost instantly.
-            // the object is built with the exact no of columns mentioned inside the "{}"
+            // the object is built with the exact no of size (columns) mentioned inside the "{}"
             // values are pulled from the db on runtime and is dynamically inserted.
             table_data.add(new Object[] {
                     prod.getProductId(),

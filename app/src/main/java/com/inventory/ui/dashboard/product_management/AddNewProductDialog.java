@@ -58,6 +58,7 @@ public class AddNewProductDialog extends JDialog {
         JComboBox<Supplier> cmbSupplier = new JComboBox<>();
         cmbSupplier.setModel(new DefaultComboBoxModel<>(
                 // Convert the List<Supplier> to a Supplier[] array explicitly
+                // as it can only take any specified array and not a list array.
                 // Supplier[] is a fixed size row of suppliers of type Supplier.
                 rows.toArray(new Supplier[0])
         ));

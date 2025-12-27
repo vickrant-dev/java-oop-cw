@@ -21,4 +21,9 @@ public class ProductController {
         return productRepo.updateProductDetails(id, product_id, name, category, price,
                 stock_quantity);
     }
+
+    public int createProduct(int product_id, String name, String category,
+                             double price, int stock_quantity) {
+        return productRepo.createProduct(product_id, name, category, price, stock_quantity);
+    }
 }

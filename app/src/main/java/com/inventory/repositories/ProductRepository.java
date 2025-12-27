@@ -16,7 +16,7 @@ public class ProductRepository {
     {
         List<Product> all_products = new ArrayList<>();
         String fetch_products_query = """
-                    SELECT p.product_id, p.name, p.category, p.price,\s
+                    SELECT p.id, p.product_id, p.name, p.category, p.price,\s
                     p.stock_quantity, s.name AS supplier_name
                     FROM products p
                     LEFT JOIN suppliers s ON p.supplier_id = s.supplier_id
@@ -75,7 +75,7 @@ public class ProductRepository {
                 ResultSet res = updateStatement.executeQuery();
 
                 if (res.next()) {
-                    System.out.println("res update category: " + res.next());
+                    System.out.println("res update products: " + res.next());
                     updateStatement.close();
                     res.close();
                     return 200;
@@ -85,8 +85,49 @@ public class ProductRepository {
                     res.close();
                     return 401; // invalid product_id maybe...
                 }
+            }
+            else {
+                return 503;
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return 503;
+        }
+    }
 
+    public int createProduct(int product_id, String name, String category,
+                             double price, int stock_quantity)
+    {
+        String create_product_query =
+                """
+                    INSERT INTO products (product_id, name, category, price, stock_category)
+                    VALUES (?, ?, ?, ?, ?)
+                """;
 
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement createProdStatement = conn.prepareStatement(create_product_query);
+                createProdStatement.setInt(1, product_id);
+                createProdStatement.setString(2, name);
+                createProdStatement.setString(3, category);
+                createProdStatement.setDouble(4, price);
+                createProdStatement.setInt(5, stock_quantity);
+
+                ResultSet res = createProdStatement.executeQuery();
+
+                if (res.next()) {
+                    System.out.println("res create product: " + res.next());
+                    createProdStatement.close();
+                    res.close();
+                    return 200;
+                }
+                else {
+                    createProdStatement.close();
+                    res.close();
+                    return 401; // invalid product_id maybe...
+                }
             }
             else {
                 return 503;
