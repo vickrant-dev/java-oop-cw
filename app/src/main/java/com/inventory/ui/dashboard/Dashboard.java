@@ -2,6 +2,8 @@ package com.inventory.ui.dashboard;
 
 import com.inventory.ui.dashboard.customer_management.CustomerPanel;
 import com.inventory.ui.dashboard.product_management.ProductPanel;
+import com.inventory.ui.dashboard.supplier_management.SupplierPanel;
+import com.inventory.ui.dashboard.transactions.TransactionsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,15 +33,17 @@ public class Dashboard extends JFrame {
 
         // sidebar item actions
 
-        // Typical we use addActionListener to perform an event when a button is clicked.
+        // Typically we use addActionListener to perform an event when a button is clicked.
         // But, from newer java versions we can use something called "the lambda syntax" only because
         // addActionListener consists of only ONE method inside it. The addActionListener is actually
         // an interface and an interface with a single method is called a "functional interface" where
         // instead of writing it all, we could simply call the fn using a lambda syntax like the following:
-        // "e -> someFunction( -- logic here -- )"
+        // "e -> callSomeFunction( ...params )"
 
         sidebar.setProductButtonAction(e -> showPanel(new ProductPanel()));
         sidebar.setCustomerButtonAction(e -> showPanel(new CustomerPanel()));
+        sidebar.setSupplierButtonAction(e -> showPanel(new SupplierPanel()));
+        sidebar.setTransactionButton(e -> showPanel(new TransactionsPanel()));
     }
 
     private void showPanel(JPanel panel) {

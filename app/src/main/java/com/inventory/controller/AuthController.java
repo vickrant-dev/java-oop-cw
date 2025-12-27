@@ -10,12 +10,10 @@ public class AuthController {
     }
 
     public int LoginUser(String username, String password) {
-        int loginRes = authRepo.Login(username, password);
-        return loginRes;
+        return authRepo.Login(username, password);
     }
 
     public int SignupUser(String username, String email, String password) {
-        int signupRes = authRepo.Signup(username, email, password);
-        return signupRes;
+        return authRepo.Signup(username, email, password);
     }
 }
