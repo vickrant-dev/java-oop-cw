@@ -20,6 +20,9 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
     implementation("org.postgresql:postgresql:42.7.8")
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.13.2")
 }
 
 testing {

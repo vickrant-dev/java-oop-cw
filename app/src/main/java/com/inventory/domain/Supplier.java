@@ -49,7 +49,7 @@ public class Supplier {
     }
 
     private String updateSupplierDetails() {
-        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+        if(new handleValidateFields().validateFields(this.name, this.contact_info) == null) {
             int update_res = new SupplierController().updateSupplierDetails(this.id, this.name,
                     this.contact_info);
             if (update_res == 200) {
@@ -66,7 +66,7 @@ public class Supplier {
     }
 
     private String createSupplier() {
-        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+        if(new handleValidateFields().validateFields(this.name, this.contact_info) == null) {
             int create_res = new SupplierController().createSupplier(this.name,
                     this.contact_info);
             if (create_res == 200) {
@@ -83,7 +83,7 @@ public class Supplier {
     }
 
     private String deleteSupplier() {
-        if(new handleValidateFields().validateString(this.id) == null) {
+        if(new handleValidateFields().validateFields(this.id) == null) {
             int delete_res = new SupplierController().deleteSupplier(this.id);
             if (delete_res == 200) {
                 System.out.println("deleted Supplier successfully for: " + this.id);

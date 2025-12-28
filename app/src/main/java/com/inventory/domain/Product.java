@@ -76,7 +76,7 @@ public class Product {
 
     private String createProduct()
     {
-        if(new handleValidateFields().validateString(this.product_id, this.name, this.category,
+        if(new handleValidateFields().validateFields(this.product_id, this.name, this.category,
                 this.price, this.stock_quantity) == null) {
             int update_res = new ProductController().createProduct(this.product_id,
                     this.name, this.category, this.price, this.stock_quantity);
@@ -95,7 +95,7 @@ public class Product {
 
     private String updateProductDetails()
     {
-        if(new handleValidateFields().validateString(this.product_id, this.name, this.category,
+        if(new handleValidateFields().validateFields(this.product_id, this.name, this.category,
                 this.price, this.stock_quantity) == null) {
             int update_res = new ProductController().updateProductDetails(this.id, this.product_id,
                     this.name, this.category, this.price, this.stock_quantity);
@@ -114,7 +114,7 @@ public class Product {
 
     private String deleteProduct()
     {
-        if(new handleValidateFields().validateString(this.id) == null) {
+        if(new handleValidateFields().validateFields(this.id) == null) {
             int update_res = new ProductController().deleteProduct(this.id);
             if (update_res == 200) {
                 System.out.println("Deleted Product successfully for: " + this.product_id);

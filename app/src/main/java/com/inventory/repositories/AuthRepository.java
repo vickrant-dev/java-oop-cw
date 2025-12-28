@@ -44,7 +44,7 @@ public class AuthRepository {
 
                     // login success
                     if (res.next()) {
-                        new sessionManager(res.getString("role"));
+                        new sessionManager(res.getString("role"), res.getString("id"));
                         res.close();
                         user_login.close();
                         return 200;

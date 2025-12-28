@@ -45,7 +45,7 @@ public class Customer {
     }
 
     private String updateCustomerDetails() {
-        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+        if(new handleValidateFields().validateFields(this.name, this.contact_info) == null) {
             int update_res = new CustomerController().updateCustomerDetails(this.id, this.name,
                     this.contact_info);
             if (update_res == 200) {
@@ -61,7 +61,7 @@ public class Customer {
         }
     }
     private String createNewCustomer() {
-        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+        if(new handleValidateFields().validateFields(this.name, this.contact_info) == null) {
             int create_res = new CustomerController().createNewCustomer(this.name,
                     this.contact_info);
             if (create_res == 200) {
@@ -77,7 +77,7 @@ public class Customer {
         }
     }
     private String deleteCustomer() {
-        if(new handleValidateFields().validateString(this.name, this.contact_info) == null) {
+        if(new handleValidateFields().validateFields(this.name, this.contact_info) == null) {
             int delete_res = new CustomerController().deleteCustomer(this.id);
             if (delete_res == 200) {
                 System.out.println("Deleted customer successfully for: " + this.id);
