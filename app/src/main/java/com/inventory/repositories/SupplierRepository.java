@@ -21,7 +21,7 @@ public class SupplierRepository {
                 ResultSet res = updateSupplierStatement.executeQuery();
                 while (res.next()) {
                     Supplier supplier = new Supplier(
-                            res.getInt("id"),
+                            res.getString("id"),
                             res.getString("name"),
                             res.getString("contact_info")
                     );
@@ -42,7 +42,7 @@ public class SupplierRepository {
         }
     }
 
-    public int updateSupplierDetails(int id, String name, String contact_info) {
+    public int updateSupplierDetails(String id, String name, String contact_info) {
         String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE id=?";
 
         try (Connection conn = Server.getConnection()) {
@@ -50,7 +50,7 @@ public class SupplierRepository {
                 PreparedStatement updateSupplierStatement = conn.prepareStatement(update_suppliers_query);
                 updateSupplierStatement.setString(1, name);
                 updateSupplierStatement.setString(2, contact_info);
-                updateSupplierStatement.setInt(3, id);
+                updateSupplierStatement.setString(3, id);
                 ResultSet res = updateSupplierStatement.executeQuery();
 
                 if (res.next()) {
@@ -62,7 +62,72 @@ public class SupplierRepository {
                 else {
                     updateSupplierStatement.close();
                     res.close();
-                    return 401; // invalid product_id maybe...
+                    return 401; //  invalid...
+                }
+            }
+            else {
+                return 503; //connection error
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return 503;
+        }
+    }
+
+    public int createSupplier(String name, String contact_info) {
+        String create_suppliers_query = "INSERT INTO suppliers (name, contact_info) VALUES (?, ?)";
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement createSupplierStatement = conn.prepareStatement(create_suppliers_query);
+                createSupplierStatement.setString(1, name);
+                createSupplierStatement.setString(2, contact_info);
+                ResultSet res = createSupplierStatement.executeQuery();
+
+                if (res.next()) {
+                    System.out.println("res create supplier: " + res.next());
+                    createSupplierStatement.close();
+                    res.close();
+                    return 200;
+                }
+                else {
+                    createSupplierStatement.close();
+                    res.close();
+                    return 401; // invalid...
+                }
+            }
+            else {
+                return 503; //connection error
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return 503;
+        }
+    }
+
+    public int deleteSupplier(String id) {
+        String delete_suppliers_query = "DELETE FROM suppliers WHERE id=?";
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement deleteSupplierStatement = conn.prepareStatement(delete_suppliers_query);
+                deleteSupplierStatement.setString(1, id);
+                ResultSet res = deleteSupplierStatement.executeQuery();
+
+                if (res.next()) {
+                    System.out.println("res delete supplier: " + res.next());
+                    deleteSupplierStatement.close();
+                    res.close();
+                    return 200;
+                }
+                else {
+                    deleteSupplierStatement.close();
+                    res.close();
+                    return 401; // invalid...
                 }
             }
             else {

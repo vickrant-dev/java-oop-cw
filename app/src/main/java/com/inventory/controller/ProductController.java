@@ -26,4 +26,9 @@ public class ProductController {
                              double price, int stock_quantity) {
         return productRepo.createProduct(product_id, name, category, price, stock_quantity);
     }
+
+    public int deleteProduct(String id) {
+        return productRepo.deleteProduct(id);
+    }
+
 }

@@ -35,7 +35,7 @@ public class Product {
         this.supplier_name = supplier_name;
     }
 
-    // getters
+    // GETTERS
     public int getProductId() { return product_id; }
     public String getProductName() { return name; }
     public String getProductCategory() { return category; }
@@ -43,7 +43,8 @@ public class Product {
     public int getProductStockQuantity() { return stock_quantity; }
     public String getProductSupplierId() { return supplier_name; }
 
-    // setters (with updaters)
+
+    // SETTERS (with updaters)
     public String updateProduct(int product_id, String name, String category,
                                     double price, int stock_quantity)
     {
@@ -57,6 +58,10 @@ public class Product {
 
     public String addProduct() {
         return createProduct();
+    }
+
+    public String delProduct() {
+        return deleteProduct();
     }
 
     // default discount 15%
@@ -99,6 +104,23 @@ public class Product {
             }
             else {
                 System.out.println("Product updating failed for: " + this.product_id + ". Error: " + update_res);
+            }
+            return "200";
+        }
+        else {
+            return "401a";
+        }
+    }
+
+    private String deleteProduct()
+    {
+        if(new handleValidateFields().validateString(this.id) == null) {
+            int update_res = new ProductController().deleteProduct(this.id);
+            if (update_res == 200) {
+                System.out.println("Deleted Product successfully for: " + this.product_id);
+            }
+            else {
+                System.out.println("Product deletion failed for: " + this.product_id + ". Error: " + update_res);
             }
             return "200";
         }

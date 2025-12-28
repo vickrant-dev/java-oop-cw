@@ -140,4 +140,40 @@ public class ProductRepository {
         }
     }
 
+    public int deleteProduct(String id) {
+        String delete_product_query =
+                """
+                    DELETE FROM products WHERE id=?
+                """;
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement deleteProdStatement = conn.prepareStatement(delete_product_query);
+                deleteProdStatement.setString(1, id);
+
+                ResultSet res = deleteProdStatement.executeQuery();
+
+                if (res.next()) {
+                    System.out.println("res create product: " + res.next());
+                    deleteProdStatement.close();
+                    res.close();
+                    return 200;
+                }
+                else {
+                    deleteProdStatement.close();
+                    res.close();
+                    return 401; // invalid product_id maybe...
+                }
+            }
+            else {
+                return 503;
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return 503;
+        }
+    }
+
 }

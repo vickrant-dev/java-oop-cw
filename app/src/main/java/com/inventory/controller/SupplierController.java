@@ -16,7 +16,15 @@ public class SupplierController {
         return supplierRepo.getAllSuppliers();
     }
 
-    public int updateSupplierDetails(int id, String name, String contact_info) {
+    public int updateSupplierDetails(String id, String name, String contact_info) {
         return supplierRepo.updateSupplierDetails(id, name, contact_info);
+    }
+
+    public int createSupplier(String name, String contact_info) {
+        return supplierRepo.createSupplier(name, contact_info);
+    }
+
+    public int deleteSupplier(String id) {
+        return supplierRepo.deleteSupplier(id);
     }
 }
