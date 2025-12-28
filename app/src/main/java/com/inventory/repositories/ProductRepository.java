@@ -19,7 +19,7 @@ public class ProductRepository {
                     SELECT p.id, p.product_id, p.name, p.category, p.price,\s
                     p.stock_quantity, s.name AS supplier_name
                     FROM products p
-                    LEFT JOIN suppliers s ON p.supplier_id = s.supplier_id
+                    LEFT JOIN suppliers s ON p.supplier_id = s.id
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -102,7 +102,7 @@ public class ProductRepository {
     {
         String create_product_query =
                 """
-                    INSERT INTO products (product_id, name, category, price, stock_category)
+                    INSERT INTO products (product_id, name, category, price, stock_quantity)
                     VALUES (?, ?, ?, ?, ?)
                 """;
 
