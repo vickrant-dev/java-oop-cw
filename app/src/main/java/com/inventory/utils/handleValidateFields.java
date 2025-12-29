@@ -15,27 +15,25 @@ public class handleValidateFields {
     }
 
     // used for validating TRANSACTION fields
-    public String validateFields(String customer_id, String transaction_date,
-                                 double total_amount, String created_by)
+    public String validateFields(Transaction transaction)
     {
-        if (customer_id.trim().isEmpty() || transaction_date.trim().isEmpty()
-                || total_amount < 0 || created_by.trim().isEmpty()) {
+        if (transaction.getCustomerId().trim().isEmpty()
+                || transaction.getTransactionDate().trim().isEmpty()
+                || transaction.getTotalAmount() < 0
+                || transaction.getCreatedBy().trim().isEmpty()
+                || transaction.getTransactionDetails().isEmpty()) {
             return "401a";
         }
         return null;
     }
-
-    public String validateFields(String product_id, int quantity, double price)
-    {
+    public String validateFields(String product_id, int quantity, double price) {
         if (product_id.trim().isEmpty() || quantity <= 0 || price < 0) {
             return "401a";
         }
         return null;
     }
-
-    public String validateListFields(List<TransactionDetails> transaction_details)
-    {
-        for (TransactionDetails transaction : transaction_details) {
+    public String validateFields(List<TransactionDetails> transactionDetails) {
+        for (TransactionDetails transaction : transactionDetails) {
             if (validateFields(transaction.getProductId(), transaction.getQuantity(),
                     transaction.getPrice()) != null) {
                 return "401a";
@@ -43,7 +41,6 @@ public class handleValidateFields {
         }
         return null;
     }
-
 
     // used for validating SUPPLIER fields
     public String validateFields(Supplier supplier)

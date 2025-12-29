@@ -82,9 +82,7 @@ public class TransactionRepository {
         }
     }
 
-    public int createTransaction(String customer_id, String transaction_date,
-                                 double total_amount, String created_by,
-                                 List<TransactionDetails> transaction_details)
+    public int createTransaction(Transaction transaction)
     {
         String create_transaction_query =
                 """
@@ -95,13 +93,13 @@ public class TransactionRepository {
             if (conn != null) {
 
                 // we are using a Gson library to convert java obj to json format
-                String transaction_details_json = new Gson().toJson(transaction_details);
+                String transaction_details_json = new Gson().toJson(transaction.getTransactionDetails());
 
                 PreparedStatement createTransactionStatement = conn.prepareStatement(create_transaction_query);
-                createTransactionStatement.setString(1, customer_id);
-                createTransactionStatement.setString(2,transaction_date);
-                createTransactionStatement.setDouble(3, total_amount);
-                createTransactionStatement.setString(4, created_by);
+                createTransactionStatement.setString(1, transaction.getCustomerId());
+                createTransactionStatement.setString(2, transaction.getTransactionDate());
+                createTransactionStatement.setDouble(3, transaction.getTotalAmount());
+                createTransactionStatement.setString(4, transaction.getCreatedBy());
                 createTransactionStatement.setString(5, transaction_details_json);
 
                 ResultSet res = createTransactionStatement.executeQuery();
@@ -129,7 +127,7 @@ public class TransactionRepository {
         }
     }
 
-    public int deleteTransaction(String id)
+    public int deleteTransaction(Transaction transaction)
     {
         String create_transaction_query =
                 """
@@ -139,7 +137,7 @@ public class TransactionRepository {
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement deleteTransactionStatement = conn.prepareStatement(create_transaction_query);
-                deleteTransactionStatement.setString(1, id);
+                deleteTransactionStatement.setString(1, transaction.getTransactionId());
 
                 ResultSet res = deleteTransactionStatement.executeQuery();
 

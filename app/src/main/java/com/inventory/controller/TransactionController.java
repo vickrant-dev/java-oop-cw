@@ -1,30 +1,28 @@
 package com.inventory.controller;
 
 import com.inventory.domain.Transaction;
-import com.inventory.domain.TransactionDetails;
-import com.inventory.repositories.TransactionRepository;
+import com.inventory.service.TransactionService;
+import com.inventory.service_manager.TransactionMgr;
 
 import java.util.List;
 
 public class TransactionController {
-    private final TransactionRepository transactionRepo;
+    private final TransactionService transactionService;
 
     public TransactionController() {
-        this.transactionRepo = new TransactionRepository();
+        this.transactionService = new TransactionMgr();
     }
 
+    // CRUD ops
     public List<Transaction> getAllTransactions() {
-        return transactionRepo.fetchAllTransactions();
+        return transactionService.fetchAllTransactions();
     }
 
-    public int createTransaction(String customer_id, String transaction_date, double total_amount,
-                                    String created_by, List<TransactionDetails> transaction_details)
-    {
-        return transactionRepo.createTransaction(customer_id, transaction_date, total_amount,
-                created_by, transaction_details);
+    public String createTransaction(Transaction transaction) {
+        return transactionService.createTransaction(transaction);
     }
 
-    public int deleteTransaction(String id) {
-        return transactionRepo.deleteTransaction(id);
+    public String deleteTransaction(Transaction transaction) {
+        return transactionService.deleteTransaction(transaction);
     }
 }

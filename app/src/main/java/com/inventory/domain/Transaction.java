@@ -14,27 +14,6 @@ public class Transaction {
     private String created_by; // take it from sessionManager
     private List<TransactionDetails> transaction_details;
 
-    // GETTERS
-    public String getTransactionId() {
-        return id;
-    }
-    public String getCustomerId() {
-        return customer_id;
-    }
-    public String getTransactionDate() {
-        return  transaction_date;
-    }
-    public double getTotalAmount() {
-        return total_amount;
-    }
-    public String getCreatedBy() {
-        return created_by;
-    }
-    public List<TransactionDetails> getTransactionDetails() {
-        return transaction_details;
-    }
-
-
 
     // retrieving a transaction
     public Transaction(String id, String customer_id, String transaction_date, double total_amount,
@@ -60,60 +39,33 @@ public class Transaction {
     }
 
 
-    // SETTER
-    public String createNewTransaction() {
-        return createTransaction();
+    // GETTERS
+    public String getTransactionId() {
+        return id;
     }
-
-    public String delTransaction() {
-        return deleteTransaction();
+    public String getCustomerId() {
+        return customer_id;
     }
-
-    public void setTransactionDetails(List<TransactionDetails> transaction_details) {
-        this.transaction_details = transaction_details;
+    public String getTransactionDate() {
+        return  transaction_date;
     }
-
-    // services
-    private String createTransaction() {
-        if(new handleValidateFields().validateFields(this.customer_id, this.transaction_date,
-                this.total_amount, this.created_by) == null
-                && new handleValidateFields().validateListFields(this.transaction_details) == null)
-        {
-            int create_res = new TransactionController().createTransaction(this.customer_id,
-                    this.transaction_date, this.total_amount, this.created_by,
-                    this.transaction_details);
-            if (create_res == 200) {
-                System.out.println("Created new transaction successfully for: " + this.customer_id);
-            }
-            else {
-                System.out.println("Product updating failed for: " + this.customer_id + ". Error: " + create_res);
-            }
-            return "200";
-        }
-        else {
-            return "401a";
-        }
+    public double getTotalAmount() {
+        return total_amount;
     }
-
-    private String deleteTransaction() {
-        if(new handleValidateFields().validateFields(this.id) == null)
-        {
-            int delete_res = new TransactionController().deleteTransaction(this.id);
-            if (delete_res == 200) {
-                System.out.println("deleted transaction successfully for: " + this.id);
-            }
-            else {
-                System.out.println("deleting transaction updating failed for: " + this.id + ". Error: " + delete_res);
-            }
-            return "200";
-        }
-        else {
-            return "401a";
-        }
+    public String getCreatedBy() {
+        return created_by;
     }
-
+    public List<TransactionDetails> getTransactionDetails() {
+        return transaction_details;
+    }
     private String getSessionUserId() {
         return new sessionManager().getUserId();
+    }
+
+
+    // SETTERS
+    public void setTransactionDetails(List<TransactionDetails> transaction_details) {
+        this.transaction_details = transaction_details;
     }
 
 }
