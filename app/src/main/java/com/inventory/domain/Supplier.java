@@ -3,10 +3,10 @@ package com.inventory.domain;
 import com.inventory.controller.SupplierController;
 import com.inventory.utils.handleValidateFields;
 
-public class Supplier {
-    private String id;
-    private String name;
-    private String contact_info;
+public class Supplier extends Person {
+
+    // Linking products of a given supplier
+    private Product products;
 
     // use this to create new suppliers from dashboard.
     public Supplier(String name, String contact_info) {
@@ -20,12 +20,6 @@ public class Supplier {
         this.name = name;
         this.contact_info = contact_info;
     }
-
-    // GETTERS
-    public String getSupplierId() { return id; }
-    public String getSupplierName() { return name; }
-    public String getSupplierContactInfo() { return contact_info; }
-
 
     // SETTERS (updaters basically)
     public String updateSupplier(String name, String contact_info) {

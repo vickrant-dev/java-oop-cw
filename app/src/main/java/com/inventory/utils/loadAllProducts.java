@@ -26,7 +26,7 @@ public class loadAllProducts {
                     prod.getProductCategory(),
                     prod.getProductPrice(),
                     prod.getProductStockQuantity(),
-                    prod.getProductSupplierId()
+                    prod.getSupplierName()
             });
         }
         return table_data;

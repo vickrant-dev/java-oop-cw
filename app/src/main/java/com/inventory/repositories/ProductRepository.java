@@ -12,6 +12,8 @@ import java.util.List;
 
 public class ProductRepository {
 
+    public ProductRepository() {};
+
     public List<Product> fetchAllProducts()
     {
         List<Product> all_products = new ArrayList<>();
@@ -53,24 +55,23 @@ public class ProductRepository {
         }
     }
 
-    public int updateProductDetails(String id, int product_id, String name, String category, double price,
-                                    int stock_quantity)
+    public int updateProductDetails(Product product)
     {
         String update_product_stock_query =
                 """
-                    UPDATE products SET product_id=?, name=?, category=?, price=?, stock_quantity=? 
-                    WHERE id=?
+                    UPDATE products SET product_id=?, name=?, category=?, price=?,
+                    stock_quantity=? WHERE id=?
                 """;
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement updateStatement = conn.prepareStatement(update_product_stock_query);
-                updateStatement.setInt(1, product_id);
-                updateStatement.setString(2, name);
-                updateStatement.setString(3, category);
-                updateStatement.setDouble(4, price);
-                updateStatement.setInt(5, stock_quantity);
-                updateStatement.setString(6, id);
+                updateStatement.setInt(1, product.getProductId());
+                updateStatement.setString(2, product.getProductName());
+                updateStatement.setString(3, product.getProductCategory());
+                updateStatement.setDouble(4, product.getProductPrice());
+                updateStatement.setInt(5, product.getProductStockQuantity());
+                updateStatement.setString(6, product.getId());
 
                 ResultSet res = updateStatement.executeQuery();
 
@@ -97,8 +98,7 @@ public class ProductRepository {
         }
     }
 
-    public int createProduct(int product_id, String name, String category,
-                             double price, int stock_quantity)
+    public int createProduct(Product product)
     {
         String create_product_query =
                 """
@@ -109,11 +109,11 @@ public class ProductRepository {
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement createProdStatement = conn.prepareStatement(create_product_query);
-                createProdStatement.setInt(1, product_id);
-                createProdStatement.setString(2, name);
-                createProdStatement.setString(3, category);
-                createProdStatement.setDouble(4, price);
-                createProdStatement.setInt(5, stock_quantity);
+                createProdStatement.setInt(1, product.getProductId());
+                createProdStatement.setString(2, product.getProductName());
+                createProdStatement.setString(3, product.getProductCategory());
+                createProdStatement.setDouble(4, product.getProductPrice());
+                createProdStatement.setInt(5, product.getProductStockQuantity());
 
                 ResultSet res = createProdStatement.executeQuery();
 
@@ -140,7 +140,8 @@ public class ProductRepository {
         }
     }
 
-    public int deleteProduct(String id) {
+    public int deleteProduct(Product product)
+    {
         String delete_product_query =
                 """
                     DELETE FROM products WHERE id=?
@@ -149,7 +150,7 @@ public class ProductRepository {
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement deleteProdStatement = conn.prepareStatement(delete_product_query);
-                deleteProdStatement.setString(1, id);
+                deleteProdStatement.setString(1, product.getId());
 
                 ResultSet res = deleteProdStatement.executeQuery();
 

@@ -2,12 +2,11 @@ package com.inventory.domain;
 
 import com.inventory.controller.CustomerController;
 import com.inventory.utils.handleValidateFields;
+import com.inventory.utils.loadTransactions;
 
-public class Customer {
-    private String id;
-    private String name;
-    private String contact_info;
+import java.util.List;
 
+public class Customer extends Person {
     public Customer (String id, String name, String contact_info) {
         this.id = id;
         this.name = name;
@@ -20,16 +19,9 @@ public class Customer {
     }
 
     // GETTERS
-    public String getCustomerId() {
-        return this.id;
-    }
-    public String getCustomerName() {
-        return this.name;
-    }
-    public String getCustomerContactInfo() {
-        return this.contact_info;
-    }
-
+//    public List<Transaction> ViewCustomerTransactions() {
+//        return customerTransactions();
+//    }
 
     // SETTERS
     public String createCustomer() {
@@ -92,4 +84,17 @@ public class Customer {
         }
     }
 
+//    private List<Transaction> customerTransactions() {
+//        if(new handleValidateFields().validateFields(this.id) == null) {
+//            List<Transaction> cus_res = new loadTransactions().loadAllCustomerTransactions();
+//            if (!cus_res.isEmpty()) {
+//                System.out.println("Fetched all customer transactions for: " + this.id);
+//            }
+//            else {
+//                System.out.println("Fetching customer transactions failed for: " + this.id + ". Error: " + cus_res);
+//            }
+//            return cus_res;
+//        }
+//        return null;
+//    }
 }

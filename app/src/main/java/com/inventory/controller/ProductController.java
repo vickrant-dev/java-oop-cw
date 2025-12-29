@@ -2,33 +2,34 @@ package com.inventory.controller;
 
 import com.inventory.repositories.ProductRepository;
 import com.inventory.domain.Product;
+import com.inventory.service.ProductService;
+import com.inventory.service_manager.ProductMgr;
 
 import java.util.List;
 
+// call the service
 public class ProductController {
-    private final ProductRepository productRepo;
+    private final ProductService productService;
 
     public ProductController() {
-        this.productRepo = new ProductRepository();
+        this.productService = new ProductMgr();
     }
 
+    // CRUD ops
     public List<Product> fetchAllProducts() {
-        return productRepo.fetchAllProducts();
+        return productService.fetchAllProducts();
     }
 
-    public int updateProductDetails(String id, int product_id, String name, String category,
-                                    double price, int stock_quantity) {
-        return productRepo.updateProductDetails(id, product_id, name, category, price,
-                stock_quantity);
+    public String updateProductDetails(Product product) {
+        return productService.updateProductDetails(product);
     }
 
-    public int createProduct(int product_id, String name, String category,
-                             double price, int stock_quantity) {
-        return productRepo.createProduct(product_id, name, category, price, stock_quantity);
+    public String createProduct(Product product) {
+        return productService.createProduct(product);
     }
 
-    public int deleteProduct(String id) {
-        return productRepo.deleteProduct(id);
+    public String deleteProduct(Product product) {
+        return productService.deleteProduct(product);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.inventory.utils;
 
+import com.inventory.domain.Product;
 import com.inventory.domain.Transaction;
 import com.inventory.domain.TransactionDetails;
 
@@ -15,7 +16,7 @@ public class handleValidateFields {
         return null;
     }
 
-    // used for validating transaction fields
+    // used for validating TRANSACTION fields
     public String validateFields(String customer_id, String transaction_date,
                                  double total_amount, String created_by)
     {
@@ -45,7 +46,8 @@ public class handleValidateFields {
         return null;
     }
 
-    // used for validating supplier fields
+
+    // used for validating SUPPLIER fields
     public String validateFields(String name, String contact_info)
     {
         if (name.trim().isEmpty() || contact_info.trim().isEmpty()) {
@@ -54,33 +56,39 @@ public class handleValidateFields {
         return null;
     }
 
-    // used for validating product fields
-    public String validateFields(int product_id, String name, String category,
-                                 double price, int stock_quantity)
+
+    // used for validating PRODUCT fields
+    public String validateFields(Product product)
     {
 
-        if (product_id == 0 || product_id < 0) {
+        if (product.getProductId() == 0 || product.getProductId() < 0) {
             return "401a";
         }
-        if (name.trim().isEmpty()) {
+        if (product.getProductName().trim().isEmpty()) {
             return "401a"; // invalid name
         }
 
-        if (category.trim().isEmpty()) {
+        if (product.getProductCategory().trim().isEmpty()) {
             return "401a"; // invalid category
         }
 
-        if (price < 0) {
+        if (product.getProductPrice() < 0) {
             return "401a"; // invalid price
         }
 
-        if (stock_quantity < 0) {
+        if (product.getProductStockQuantity() < 0) {
             return "401a"; // invalid stock quantity
+        }
+
+        if (product.getSupplierName().trim().isEmpty()) {
+            return "401a";
         }
 
         return null; // valid
     }
 
+
+    // used for validating LOGIN/SIGNUP
     public String validateFields(JTextField field1, JPasswordField field2)
     {
         if (field1.getText().trim().isEmpty() || field2.getPassword().length == 0) {
