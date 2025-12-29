@@ -23,11 +23,12 @@ public class TransactionMgr implements TransactionService {
             int create_res = transactionRepo.createTransaction(transaction);
             if (create_res == 200) {
                 System.out.println("Created new transaction successfully for: " + transaction.getCustomerId());
+                return "200";
             }
             else {
                 System.out.println("Product updating failed for: " + transaction.getCustomerId() + ". Error: " + create_res);
+                return "401a";
             }
-            return "200";
         }
         else {
             return "401a";
@@ -44,11 +45,12 @@ public class TransactionMgr implements TransactionService {
             int delete_res = transactionRepo.deleteTransaction(transaction);
             if (delete_res == 200) {
                 System.out.println("deleted transaction successfully for: " + transaction.getTransactionId());
+                return "200";
             }
             else {
                 System.out.println("deleting transaction updating failed for: " + transaction.getTransactionId() + ". Error: " + delete_res);
+                return "401a";
             }
-            return "200";
         }
         else {
             return "401a";

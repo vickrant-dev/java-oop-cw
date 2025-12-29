@@ -23,11 +23,12 @@ public class ProductMgr implements ProductService {
             int update_res = productRepo.createProduct(product);
             if (update_res == 200) {
                 System.out.println("Updated Product successfully for: " + product.getProductId());
+                return "200";
             }
             else {
                 System.out.println("Product updating failed for: " + product.getProductId() + ". Error: " + update_res);
+                return "401a";
             }
-            return "200";
         }
         else {
             return "401a";
@@ -44,11 +45,12 @@ public class ProductMgr implements ProductService {
             int update_res = productRepo.updateProductDetails(product);
             if (update_res == 200) {
                 System.out.println("Updated Product successfully for: " + product.getProductId());
+                return "200";
             }
             else {
                 System.out.println("Product updating failed for: " + product.getProductId() + ". Error: " + update_res);
+                return "401a";
             }
-            return "200";
         }
         else {
             return "401a";
@@ -61,11 +63,12 @@ public class ProductMgr implements ProductService {
             int update_res = productRepo.deleteProduct(product);
             if (update_res == 200) {
                 System.out.println("Deleted Product successfully for: " + product.getProductId());
+                return "200";
             }
             else {
                 System.out.println("Product deletion failed for: " + product.getProductId() + ". Error: " + update_res);
+                return "401a";
             }
-            return "200";
         }
         else {
             return "401a";
