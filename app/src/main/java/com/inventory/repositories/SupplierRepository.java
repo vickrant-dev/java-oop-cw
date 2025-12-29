@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierRepository {
-    public List<Supplier> getAllSuppliers() {
+    public List<Supplier> fetchAllSuppliers()
+    {
         List<Supplier> all_suppliers = new ArrayList<>();
         String update_suppliers_query = "SELECT * FROM suppliers";
 
@@ -42,15 +43,16 @@ public class SupplierRepository {
         }
     }
 
-    public int updateSupplierDetails(String id, String name, String contact_info) {
+    public int updateSupplierDetails(Supplier supplier)
+    {
         String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE id=?";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement updateSupplierStatement = conn.prepareStatement(update_suppliers_query);
-                updateSupplierStatement.setString(1, name);
-                updateSupplierStatement.setString(2, contact_info);
-                updateSupplierStatement.setString(3, id);
+                updateSupplierStatement.setString(1, supplier.getSupplierName());
+                updateSupplierStatement.setString(2, supplier.getSupplierContactInfo());
+                updateSupplierStatement.setString(3, supplier.getSupplierId());
                 ResultSet res = updateSupplierStatement.executeQuery();
 
                 if (res.next()) {
@@ -76,14 +78,15 @@ public class SupplierRepository {
         }
     }
 
-    public int createSupplier(String name, String contact_info) {
+    public int createSupplier(Supplier supplier)
+    {
         String create_suppliers_query = "INSERT INTO suppliers (name, contact_info) VALUES (?, ?)";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement createSupplierStatement = conn.prepareStatement(create_suppliers_query);
-                createSupplierStatement.setString(1, name);
-                createSupplierStatement.setString(2, contact_info);
+                createSupplierStatement.setString(1, supplier.getSupplierName());
+                createSupplierStatement.setString(2, supplier.getSupplierContactInfo());
                 ResultSet res = createSupplierStatement.executeQuery();
 
                 if (res.next()) {
@@ -109,13 +112,14 @@ public class SupplierRepository {
         }
     }
 
-    public int deleteSupplier(String id) {
+    public int deleteSupplier(Supplier supplier)
+    {
         String delete_suppliers_query = "DELETE FROM suppliers WHERE id=?";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement deleteSupplierStatement = conn.prepareStatement(delete_suppliers_query);
-                deleteSupplierStatement.setString(1, id);
+                deleteSupplierStatement.setString(1, supplier.getSupplierId());
                 ResultSet res = deleteSupplierStatement.executeQuery();
 
                 if (res.next()) {

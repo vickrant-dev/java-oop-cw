@@ -1,30 +1,31 @@
 package com.inventory.controller;
 
 import com.inventory.domain.Customer;
-import com.inventory.repositories.CustomerRepository;
+import com.inventory.service.CustomerService;
+import com.inventory.service_manager.CustomerMgr;
 
 import java.util.List;
 
 public class CustomerController {
-    private final CustomerRepository customerRepo;
+    private final CustomerService customerService;
 
     public CustomerController() {
-        this.customerRepo = new CustomerRepository();
+        this.customerService = new CustomerMgr();
     }
 
     public List<Customer> getAllCustomers() {
-        return customerRepo.getAllCustomers();
+        return customerService.fetchAllCustomers();
     }
 
-    public int updateCustomerDetails(String id, String name, String contact_info) {
-        return customerRepo.updateCustomerDetails(id, name, contact_info);
+    public String updateCustomerDetails(Customer customer) {
+        return customerService.updateCustomerDetails(customer);
     }
 
-    public int createNewCustomer(String name, String contact_info) {
-        return customerRepo.createNewCustomer(name, contact_info);
+    public String createCustomer(Customer customer) {
+        return customerService.createCustomer(customer);
     }
 
-    public int deleteCustomer(String id) {
-        return customerRepo.deleteCustomer(id);
+    public String deleteCustomer(Customer customer) {
+        return customerService.deleteCustomer(customer);
     }
 }

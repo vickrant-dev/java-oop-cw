@@ -1,30 +1,34 @@
 package com.inventory.controller;
 
-import com.inventory.repositories.SupplierRepository;
 import com.inventory.domain.Supplier;
+import com.inventory.service.SupplierService;
+import com.inventory.service_manager.SupplierMgr;
 
 import java.util.List;
 
 public class SupplierController {
-    private final SupplierRepository supplierRepo;
+    private final SupplierService supplierService;
 
     public SupplierController() {
-        this.supplierRepo = new SupplierRepository();
+        this.supplierService = new SupplierMgr();
     }
 
+    // CRUD ops
     public List<Supplier> getAllSuppliers() {
-        return supplierRepo.getAllSuppliers();
+        return supplierService.fetchAllSuppliers();
     }
 
-    public int updateSupplierDetails(String id, String name, String contact_info) {
-        return supplierRepo.updateSupplierDetails(id, name, contact_info);
+    public String updateSupplierDetails(Supplier supplier)
+    {
+        return supplierService.updateSupplierDetails(supplier);
     }
 
-    public int createSupplier(String name, String contact_info) {
-        return supplierRepo.createSupplier(name, contact_info);
+    public String createSupplier(Supplier supplier) {
+        return supplierService.createSupplier(supplier);
     }
 
-    public int deleteSupplier(String id) {
-        return supplierRepo.deleteSupplier(id);
+    public String deleteSupplier(Supplier supplier) {
+        return supplierService.deleteSupplier(supplier);
     }
+
 }

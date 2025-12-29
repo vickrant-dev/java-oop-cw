@@ -14,6 +14,28 @@ public class Transaction {
     private String created_by; // take it from sessionManager
     private List<TransactionDetails> transaction_details;
 
+    // GETTERS
+    public String getTransactionId() {
+        return id;
+    }
+    public String getCustomerId() {
+        return customer_id;
+    }
+    public String getTransactionDate() {
+        return  transaction_date;
+    }
+    public double getTotalAmount() {
+        return total_amount;
+    }
+    public String getCreatedBy() {
+        return created_by;
+    }
+    public List<TransactionDetails> getTransactionDetails() {
+        return transaction_details;
+    }
+
+
+
     // retrieving a transaction
     public Transaction(String id, String customer_id, String transaction_date, double total_amount,
                        String created_by, List<TransactionDetails> transaction_details)
@@ -35,11 +57,6 @@ public class Transaction {
         this.total_amount = total_amount;
         this.created_by = getSessionUserId();
         this.transaction_details = transaction_details;
-    }
-
-    // GETTERS
-    public String getTransactionId() {
-        return this.id;
     }
 
 

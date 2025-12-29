@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository {
-    public List<Customer> getAllCustomers() {
+    public List<Customer> getAllCustomers()
+    {
         List<Customer> all_customers = new ArrayList<>();
         String get_customers_query = "SELECT * FROM customers";
 
@@ -42,15 +43,16 @@ public class CustomerRepository {
         }
     }
 
-    public int updateCustomerDetails(String id, String name, String contact_info) {
+    public int updateCustomerDetails(Customer customer)
+    {
         String update_customers_query = "UPDATE customers SET name=?, contact_info=? WHERE id=?";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement updateCustomersStatement = conn.prepareStatement(update_customers_query);
-                updateCustomersStatement.setString(1, name);
-                updateCustomersStatement.setString(2, contact_info);
-                updateCustomersStatement.setString(3, id);
+                updateCustomersStatement.setString(1, customer.getCustomerName());
+                updateCustomersStatement.setString(2, customer.getCustomerContactInfo());
+                updateCustomersStatement.setString(3, customer.getCustomerId());
                 ResultSet res = updateCustomersStatement.executeQuery();
 
                 if (res.next()) {
@@ -76,14 +78,15 @@ public class CustomerRepository {
         }
     }
 
-    public int createNewCustomer(String name, String contact_info) {
+    public int createCustomer(Customer customer)
+    {
         String create_customers_query = "INSERT INTO customers (name, contact_info) VALUES (?, ?)";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement createCustomerStatement = conn.prepareStatement(create_customers_query);
-                createCustomerStatement.setString(1, name);
-                createCustomerStatement.setString(2, contact_info);
+                createCustomerStatement.setString(1, customer.getCustomerName());
+                createCustomerStatement.setString(2, customer.getCustomerContactInfo());
                 ResultSet res = createCustomerStatement.executeQuery();
 
                 if (res.next()) {
@@ -109,13 +112,14 @@ public class CustomerRepository {
         }
     }
 
-    public int deleteCustomer(String id) {
+    public int deleteCustomer(Customer customer)
+    {
         String delete_customer_query = "DELETE FROM customers WHERE id=?";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement deleteCustomersStatement = conn.prepareStatement(delete_customer_query);
-                deleteCustomersStatement.setString(1, id);
+                deleteCustomersStatement.setString(1, customer.getCustomerId());
                 ResultSet res = deleteCustomersStatement.executeQuery();
 
                 if (res.next()) {

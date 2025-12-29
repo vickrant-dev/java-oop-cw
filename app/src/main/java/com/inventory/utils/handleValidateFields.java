@@ -1,8 +1,6 @@
 package com.inventory.utils;
 
-import com.inventory.domain.Product;
-import com.inventory.domain.Transaction;
-import com.inventory.domain.TransactionDetails;
+import com.inventory.domain.*;
 
 import javax.swing.*;
 import java.util.List;
@@ -48,9 +46,10 @@ public class handleValidateFields {
 
 
     // used for validating SUPPLIER fields
-    public String validateFields(String name, String contact_info)
+    public String validateFields(Supplier supplier)
     {
-        if (name.trim().isEmpty() || contact_info.trim().isEmpty()) {
+        if (supplier.getSupplierName().trim().isEmpty() ||
+                supplier.getSupplierContactInfo().trim().isEmpty()) {
             return "401a";
         }
         return null;
@@ -85,6 +84,21 @@ public class handleValidateFields {
         }
 
         return null; // valid
+    }
+
+
+    // used for validating CUSTOMER fields
+    public String validateFields(Customer customer) {
+        if (customer.getCustomerId().trim().isEmpty()) {
+            return "401a";
+        }
+        if (customer.getCustomerName().trim().isEmpty()) {
+            return "401a";
+        }
+        if (customer.getCustomerContactInfo().trim().isEmpty()) {
+            return "401a";
+        }
+        return null;
     }
 
 
