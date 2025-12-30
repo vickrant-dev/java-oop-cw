@@ -137,12 +137,12 @@ public class Login extends JFrame {
                 //Warning Sign
                 JLabel warnsign = new JLabel("⚠");
                 warnsign.setFont(new Font("Arial",Font.BOLD,24));
-                warnsign.setForeground(new Color(200,0,0));
+                warnsign.setForeground(new Color(200,225,0));
 
                 //Error Label (Words)
                 JLabel ErrorLabel = new JLabel(message);
                 //ErrorLabel.setText(message);
-                ErrorLabel.setForeground(new Color(200,0,0));
+                ErrorLabel.setForeground(new Color(0,0,0));
                 ErrorLabel.setFont(new Font("Arial", Font.BOLD,15));
                 //ErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
