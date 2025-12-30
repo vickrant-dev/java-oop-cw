@@ -78,6 +78,8 @@ public class Signup extends JFrame {
         // Password
         passwordLabel = new JLabel("Password");
         passwordField = new JPasswordField();
+        passwordLabel.setBounds(650, 270, 100, 25);
+        passwordField.setBounds(650, 300, 250, 25);
 
         //(Added a new checkbox to show password)
         char hidepass = passwordField.getEchoChar();
