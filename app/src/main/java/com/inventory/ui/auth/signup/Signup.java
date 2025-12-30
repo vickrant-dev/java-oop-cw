@@ -2,9 +2,11 @@ package com.inventory.ui.auth.signup;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 import javax.swing.*;
 
 import com.inventory.ui.auth.login.*;
+import com.inventory.ui.auth.login.Panel;
 import com.inventory.utils.handleAuth;
 import com.inventory.utils.handleEmailValidation;
 import com.inventory.utils.handleValidateFields;
@@ -28,36 +30,54 @@ public class Signup extends JFrame {
 
     private JButton loginButton;
     private JLabel loginLabel;
+    private Image image;
+    private JLabel SignupLabel;
 
     public Signup() {
 
         setTitle("Signup");
-        setSize(375, 325);
+        // set icon
+        URL iconURL = getClass().getResource("/shop.png");
+        if (iconURL != null) {
+            Image icon = new ImageIcon(iconURL).getImage();
+            setIconImage(icon);
+        }
+        setSize(1000, 540);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
 
+        // add image to signup
+        Panel ImagePanel = new Panel();
+        ImagePanel.setBounds(0, 0, 500,500);
+        add(ImagePanel);
+
+        //signup label
+        SignupLabel = new JLabel("Signup");
+        SignupLabel.setBounds(700, 40, 200, 40);
+        SignupLabel.setFont(new Font("Times New Roman", Font.BOLD, 27));
+        SignupLabel.setForeground(new Color(0, 70, 0));
+        add(SignupLabel);
+
         // Username
         usernameLabel = new JLabel("Username");
         usernameField = new JTextField();
-        usernameLabel.setBounds(30, 0, 100, 50);
-        usernameField.setBounds(30, 40, 200, 25);
+        usernameLabel.setBounds(650, 130, 100, 20);
+        usernameField.setBounds(650, 160, 250, 25);
         add(usernameLabel);
         add(usernameField);
 
         // Email
         emailLabel = new JLabel("Email");
         emailField = new JTextField();
-        emailLabel.setBounds(30, 70, 100, 25);
-        emailField.setBounds(30, 100, 200, 25);
+        emailLabel.setBounds(650, 200, 100, 25);
+        emailField.setBounds(650, 230, 250, 25);
         add(emailLabel);
         add(emailField);
 
         // Password
         passwordLabel = new JLabel("Password");
         passwordField = new JPasswordField();
-        passwordLabel.setBounds(30, 130, 100, 25);
-        passwordField.setBounds(30, 160, 200, 25);
 
         //(Added a new checkbox to show password)
         char hidepass = passwordField.getEchoChar();
@@ -80,7 +100,6 @@ public class Signup extends JFrame {
 
         // Signup button Rahul(Change the signup button for hover effect)
         signupButton = new JButton("Signup");
-        signupButton.setBounds(30, 210, 100, 30);
 
         signupButton.setFocusPainted(false);
         signupButton.setBorderPainted(false);
@@ -93,8 +112,11 @@ public class Signup extends JFrame {
         signupButton.setForeground(Color.WHITE);
         signupButton.setFont(new Font("Arial", Font.BOLD,14));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      
+        signupButton.setBounds(650, 350, 100, 30);
         add(signupButton);
-
+        
+      
         signupButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e){
@@ -228,12 +250,12 @@ public class Signup extends JFrame {
 
         // Login label
         loginLabel = new JLabel("Don't have an account?");
-        loginLabel.setBounds(30, 240, 150, 25);
+        loginLabel.setBounds(650, 400, 150, 25);
         add(loginLabel);
 
         // Login button
         loginButton = new JButton("Login");
-        loginButton.setBounds(180, 240, 250, 25);
+        loginButton.setBounds(680, 400, 250, 25);
         loginButton.setBorderPainted(false);
         loginButton.setContentAreaFilled(false);
 
