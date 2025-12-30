@@ -2,6 +2,7 @@ package com.inventory;
 
 import com.inventory.ui.auth.login.*;
 import com.inventory.ui.dashboard.customer_management.CustomerPanel;
+import com.inventory.ui.dashboard.product_management.ProductPanel;
 
 import javax.swing.*;
 

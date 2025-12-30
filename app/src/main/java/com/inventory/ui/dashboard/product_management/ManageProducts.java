@@ -22,6 +22,11 @@ public class ManageProducts extends JPanel {
 
         // sending this (ManageProducts) to right panel so it can refresh the data using getter methods.
         this.add(new AddRightPanel(this), BorderLayout.EAST); // right panel with buttons.
+
+        // change the appearance of the table
+        productTable.setRowHeight(25);
+        productTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        productTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
     }
 
     // Table

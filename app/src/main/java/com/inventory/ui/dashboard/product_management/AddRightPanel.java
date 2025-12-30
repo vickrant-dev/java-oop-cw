@@ -12,6 +12,7 @@ public class AddRightPanel extends JPanel {
     public AddRightPanel(ManageProducts product_manager) {
         this.product_manager = product_manager;
 
+
         // Creates a layout manager that will lay out components along the given axis
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -26,8 +27,41 @@ public class AddRightPanel extends JPanel {
         refreshProducts.setAlignmentX(Component.CENTER_ALIGNMENT);
         refreshProducts.addActionListener(e -> this.product_manager.refreshTableData());
 
+        add(Box.createVerticalStrut(20));
         add(addProductButton);
+        add(Box.createVerticalStrut(20));
         add(refreshProducts);
+
+        // Normal and hover colors for addProductButton
+
+        addProductButton.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                addProductButton.setBackground(new Color(100, 160, 210));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                addProductButton.setBackground(new Color(193, 213, 232));
+            }
+
+        });
+
+        // Normal and hover colors for Refresh Button
+        refreshProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                refreshProducts.setBackground(new Color(100, 160, 210));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                refreshProducts.setBackground(new Color(193, 213, 232));
+            }
+
+        });
+
+        // when the mouse cursor hover over these two buttons a small box appear with this message
+        addProductButton.setToolTipText("Add New Product to inventory");
+        refreshProducts.setToolTipText("Reload product list");
+
     }
 
     private void addNewProduct() {
