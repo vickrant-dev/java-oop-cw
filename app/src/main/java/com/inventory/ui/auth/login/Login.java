@@ -25,7 +25,7 @@ public class Login extends JFrame {
     public Login() {
 
         setTitle("Login");
-        setSize(400, 300);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // center the window
         setLayout(null);
