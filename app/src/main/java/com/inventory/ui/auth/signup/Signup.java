@@ -131,6 +131,18 @@ public class Signup extends JFrame {
             }
         });
 
+        signupButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                signupButton.setBackground(aftclr);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                signupButton.setBackground(nmlclr);
+            }
+        });
+
         signupButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 signupButton.setEnabled(false);
