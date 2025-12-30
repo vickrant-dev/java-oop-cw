@@ -5,6 +5,7 @@ import com.inventory.utils.loadAllSuppliers;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.List;
 
@@ -16,10 +17,17 @@ public class AddNewProductDialog extends JDialog {
     private JFormattedTextField txtPrice;
     private JSpinner spnStock;
     private JComboBox<String> cmbSupplier;
+    private Image image;
 
     public AddNewProductDialog(JFrame dashboard) {
         super(dashboard, "Add New Product", true);
-        setSize(400, 300);
+        setSize(400, 400);
+        // set icon
+        URL iconURL = getClass().getResource("/shop.png");
+        if (iconURL != null) {
+            Image icon = new ImageIcon(iconURL).getImage();
+            setIconImage(icon);
+        }
         setLocationRelativeTo(dashboard);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         DialogUI();
@@ -28,8 +36,10 @@ public class AddNewProductDialog extends JDialog {
     private void DialogUI() {
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 10, 8, 10);
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
+
 
         int row = 0;
 
@@ -66,9 +76,33 @@ public class AddNewProductDialog extends JDialog {
         addRow(formPanel, gbc, row++, "Supplier:", cmbSupplier);
 
         // button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
+
         JButton btnSave = new JButton("Save");
+
+        // Normal and hover colors for btnsave
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSave.setBackground(new Color(100, 160, 210));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnSave.setBackground(new Color(193, 213, 232));
+            }
+        });
+
         JButton btnCancel = new JButton("Cancel");
+
+        // Normal and hover colors for btnCancel
+        btnCancel.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCancel.setBackground(new Color(100, 160, 210));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCancel.setBackground(new Color(193, 213, 232));
+            }
+        });
 
         btnSave.addActionListener(e -> onSave());
         btnCancel.addActionListener(e -> dispose());
