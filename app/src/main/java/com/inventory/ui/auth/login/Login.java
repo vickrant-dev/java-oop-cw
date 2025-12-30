@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import com.inventory.ui.auth.signup.Signup;
 import com.inventory.ui.dashboard.Dashboard;
 import com.inventory.utils.*;
+import java.net.URL;
+
 
 public class Login extends JFrame {
 
@@ -21,33 +23,54 @@ public class Login extends JFrame {
     private JCheckBox passshowcheckbox;
     private JButton signupButton;
     private JLabel signupLabel;
+    private Panel imagePanel;
+    private Image image;
+    private JLabel LoginLabel;
 
     public Login() {
 
         setTitle("Login");
-        setSize(1000, 600);
+        // Set icon
+        URL iconURL = getClass().getResource("/shop.png");
+        if (iconURL != null) {
+            Image icon = new ImageIcon(iconURL).getImage();
+            setIconImage(icon);
+        }
+        setSize(1000, 540);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // center the window
         setLayout(null);
 
+        // add image
+        Panel ImagePanel = new Panel();
+        ImagePanel.setBounds(0, 0, 500,500);
+        add(ImagePanel);
+
+        // Login Label
+        LoginLabel = new JLabel("Login");
+        LoginLabel.setBounds(700, 40, 200, 40);
+        LoginLabel.setFont(new Font("Times New Roman", Font.BOLD, 27));
+        LoginLabel.setForeground(new Color(0,70,0));
+        add(LoginLabel);
+
         // Username
         usernameLabel = new JLabel("Username");
-        usernameLabel.setBounds(50, 30, 100, 25);
+        usernameLabel.setBounds(650, 130, 100, 25);
         usernameField = new JTextField();
-        usernameField.setBounds(50, 60, 250, 25);
+        usernameField.setBounds(650, 160, 250, 25);
         add(usernameLabel);
         add(usernameField);
 
         // Password
         passwordLabel = new JLabel("Password");
-        passwordLabel.setBounds(50, 100, 100, 25);
+        passwordLabel.setBounds(650, 200, 100, 25);
         passwordField = new JPasswordField();
-        passwordField.setBounds(50, 130, 250, 25);
+        passwordField.setBounds(650, 230, 250, 25);
 
         //Rahul(CheckBox if the user wants to see the password)
         char hidepass = passwordField.getEchoChar();
         passshowcheckbox = new JCheckBox("Show Password");
-        passshowcheckbox.setBounds(50,160,150,20);
+        passshowcheckbox.setBounds(650,260,150,20);
 
         passshowcheckbox.addActionListener(e ->{
             if(passshowcheckbox.isSelected()){
@@ -64,7 +87,8 @@ public class Login extends JFrame {
 
         // Login button
         loginButton = new JButton("Login");
-        loginButton.setBounds(50, 180, 200, 30); //change the width 100 to 200 and the height 30 to 40
+        loginButton.setBounds(650, 320, 200, 30); //change the width 100 to 200 and the height 30 to 40
+        loginButton.setForeground(new Color(0,70,0));
 
 
         //Rahul (Login button hover)
@@ -210,12 +234,12 @@ public class Login extends JFrame {
 
         // Signup label
         signupLabel = new JLabel("Don't have an account?");
-        signupLabel.setBounds(50, 220, 150, 25);
+        signupLabel.setBounds(650, 360, 150, 25);
         add(signupLabel);
 
         // Signup button. Link like style.
         signupButton = new JButton("Sign up");
-        signupButton.setBounds(180, 220, 80, 25);
+        signupButton.setBounds(770, 360, 80, 25);
         signupButton.setBorderPainted(false);
         signupButton.setContentAreaFilled(false);
         signupButton.setFocusPainted(false);
