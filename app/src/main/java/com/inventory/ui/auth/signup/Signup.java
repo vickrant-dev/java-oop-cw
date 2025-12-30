@@ -18,6 +18,7 @@ public class Signup extends JFrame {
     private JTextField usernameField;
     private JTextField emailField;
     private JPasswordField passwordField;
+    private JCheckBox shwpass;
 
     private JButton signupButton;
 
@@ -57,13 +58,54 @@ public class Signup extends JFrame {
         passwordField = new JPasswordField();
         passwordLabel.setBounds(30, 130, 100, 25);
         passwordField.setBounds(30, 160, 200, 25);
+
+        //(Added a new checkbox to show password)
+        char hidepass = passwordField.getEchoChar();
+        shwpass = new JCheckBox("Show password");
+        shwpass.setBounds(30, 185, 150, 20);
+
+        //(If the checkbox is clicked the password have to be shown)
+        shwpass.addActionListener(e ->{
+            if(shwpass.isSelected()){
+                passwordField.setEchoChar((char) 0);
+            }
+            else{
+                passwordField.setEchoChar(hidepass);
+            }
+        });
+
+        add(shwpass);
         add(passwordLabel);
         add(passwordField);
 
-        // Signup button
+        // Signup button Rahul(Change the signup button for hover effect)
         signupButton = new JButton("Signup");
-        signupButton.setBounds(30, 200, 100, 30);
+        signupButton.setBounds(30, 210, 100, 30);
+
+        signupButton.setFocusPainted(false);
+        signupButton.setBorderPainted(false);
+        signupButton.setOpaque(true);
+
+        Color nmlclr = new Color(33, 153, 243);
+        Color aftclr = new Color(30, 136, 229);
+
+        signupButton.setBackground(nmlclr);
+        signupButton.setForeground(Color.WHITE);
+        signupButton.setFont(new Font("Arial", Font.BOLD,14));
+        signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         add(signupButton);
+
+        signupButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                signupButton.setBackground(aftclr);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                signupButton.setBackground(nmlclr);
+            }
+        });
 
         signupButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -72,10 +114,76 @@ public class Signup extends JFrame {
                 handleValidateFields validate_fields = new handleValidateFields();
                 String field_err = validate_fields.validateFields(usernameField, emailField, passwordField);
 
+                //adding a new custom popbox for errors
+                class Validatebox{
+                    public static void vlidateshow(String msg){
+                        JDialog validatebox = new JDialog();
+                        validatebox.setModal(true);
+                        validatebox.setUndecorated(true);
+                        validatebox.setAlwaysOnTop(true);
+
+                        JPanel mnpanel = new JPanel(new BorderLayout(10,10));
+                        mnpanel.setBackground(new Color(222,222,222));
+                        mnpanel.setBorder(BorderFactory.createLineBorder(new Color(0,0,0),2));
+                        mnpanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+
+                        JLabel sign = new JLabel("⚠");
+                        sign.setFont(new Font("Segoe UI", Font.BOLD,20));
+                        sign.setForeground(new Color(200,225,0));
+
+                        JLabel message = new JLabel(msg);
+                        message.setFont(new Font("Segoe UI", Font.BOLD,15));
+                        message.setForeground(new Color(0,0,0));
+
+                        JPanel ctnmsg = new JPanel(new FlowLayout(FlowLayout.LEFT,10,0));
+                        ctnmsg.setBackground(new Color(222,222,222));
+                        ctnmsg.add(sign);
+                        ctnmsg.add(message);
+
+                        mnpanel.add(ctnmsg, BorderLayout.CENTER);
+
+                        JButton okbtn = new JButton("Ok");
+                        okbtn.setFocusPainted(false);
+                        okbtn.setBorderPainted(false);
+                        okbtn.setOpaque(true);
+                        okbtn.setBackground(new Color(222,222,222));
+                        okbtn.setForeground(Color.BLACK);
+                        okbtn.setFont(new Font("Arial", Font.BOLD,14));
+                        okbtn.setPreferredSize(new Dimension(100,35));
+
+
+                        Color dftcolor = new Color(245,245,245);
+                        Color hvcolor = new Color(171,171,171);
+
+                        okbtn.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseEntered(MouseEvent e) {
+                                okbtn.setBackground(hvcolor);
+                            }
+
+                            @Override
+                            public void mouseExited(MouseEvent e) {
+                                okbtn.setBackground(dftcolor);
+                            }
+                        });
+                        okbtn.addActionListener(e -> validatebox.dispose());
+
+                        JPanel buttonPanel = new JPanel();
+                        buttonPanel.setBackground(new Color(245,245,245));
+                        buttonPanel.add(okbtn);
+
+                        validatebox.add(buttonPanel, BorderLayout.SOUTH);
+
+                        validatebox.add(mnpanel);
+                        validatebox.pack();
+                        validatebox.setLocationRelativeTo(null);
+                        validatebox.setVisible(true);
+                    }
+                }
+
                 // validate fields (not empty)
                 if (field_err != null) {
-                    FailureDialog failure = new FailureDialog();
-                    failure.setFailureDialog("Invalid. Please fill in all the blanks");
+                    Validatebox.vlidateshow("Invalid. Please fill in all the blanks");
                     signupButton.setEnabled(true);
                     return;
                 }
@@ -84,9 +192,13 @@ public class Signup extends JFrame {
                 handleEmailValidation validate_email = new handleEmailValidation();
                 String email_err = validate_email.isEmailValid(emailField);
 
+                if (field_err != null){
+                    Validatebox.vlidateshow(field_err);
+                    signupButton.setEnabled(true);
+                    return;
+                }
                 if (email_err != null) {
-                    FailureDialog failure = new FailureDialog();
-                    failure.setFailureDialog("Invalid email. Please enter a valid email.");
+                    Validatebox.vlidateshow("Invalid email. Please enter a valid email.");
                     signupButton.setEnabled(true);
                     return;
                 }
@@ -99,20 +211,16 @@ public class Signup extends JFrame {
                 int status = signup.signupUser(); // assuming you have this method
 
                 if(status == 200) {
-                    SuccessDialog success = new SuccessDialog();
-                    success.setSuccessDialog("Signup Success");
+                    Validatebox.vlidateshow("✅ Signup Success!");
                     signupButton.setEnabled(true);
                 } else if (status == 503) {
-                    FailureDialog failure = new FailureDialog();
-                    failure.setFailureDialog("Connection failed.");
+                    Validatebox.vlidateshow("⚠ Connection failed.");
                     signupButton.setEnabled(true);
                 } else if (status == 409) {
-                    FailureDialog failure = new FailureDialog();
-                    failure.setFailureDialog("Username or email already exists.");
+                    Validatebox.vlidateshow("Username or email already exists.");
                     signupButton.setEnabled(true);
                 } else {
-                    FailureDialog failure = new FailureDialog();
-                    failure.setFailureDialog("Signup Failed. Invalid Details.");
+                    Validatebox.vlidateshow("Signup Failed. Invalid Details.");
                     signupButton.setEnabled(true);
                 }
             }
@@ -125,12 +233,32 @@ public class Signup extends JFrame {
 
         // Login button
         loginButton = new JButton("Login");
-        loginButton.setBounds(70, 240, 250, 25);
+        loginButton.setBounds(180, 240, 250, 25);
         loginButton.setBorderPainted(false);
         loginButton.setContentAreaFilled(false);
-        loginButton.setForeground(Color.BLUE);
+
+        loginButton.setFocusPainted(false);
+        Color nmllclr = new Color(33, 153, 243);
+        Color afttclr = new Color(30, 136, 229);
+        loginButton.setForeground(nmllclr); // when hovered.
         loginButton.setFont(new Font("Arial", Font.PLAIN, 12));
-        loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // making it like a link
+        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));// making it like a link
+
+        loginButton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseEntered(MouseEvent e){
+                loginButton.setForeground(afttclr);
+                loginButton.setText("<html><u>Login</u></html>");
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                loginButton.setForeground(nmlclr);
+                loginButton.setText("Login");
+            }
+        });
+
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Signup.this.setVisible(false);
