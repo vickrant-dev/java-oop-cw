@@ -7,6 +7,7 @@ import com.inventory.repositories.SupplierRepository;
 import com.inventory.service.SupplierService;
 import com.inventory.utils.handleValidateFields;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierMgr implements SupplierService {
@@ -74,6 +75,10 @@ public class SupplierMgr implements SupplierService {
         else {
             return "401a";
         }
+    }
+
+    public List<Product> getSupplierProducts(Supplier supplier) {
+        return supplierRepo.getSupplierProducts(supplier);
     }
 
 }

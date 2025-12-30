@@ -20,19 +20,23 @@ public class handleValidateFields {
         if (transaction.getCustomerId().trim().isEmpty()
                 || transaction.getTransactionDate().trim().isEmpty()
                 || transaction.getTotalAmount() < 0
+                || transaction.getPaymentMethod().trim().isEmpty()
                 || transaction.getCreatedBy().trim().isEmpty()
+                || transaction.getCreatedAt().trim().isEmpty()
                 || transaction.getTransactionDetails().isEmpty()) {
             return "401a";
         }
         return null;
     }
-    public String validateFields(String product_id, int quantity, double price) {
+    public String validateFields(String product_id, int quantity, double price)
+    {
         if (product_id.trim().isEmpty() || quantity <= 0 || price < 0) {
             return "401a";
         }
         return null;
     }
-    public String validateFields(List<TransactionDetails> transactionDetails) {
+    public String validateFields(List<TransactionDetails> transactionDetails)
+    {
         for (TransactionDetails transaction : transactionDetails) {
             if (validateFields(transaction.getProductId(), transaction.getQuantity(),
                     transaction.getPrice()) != null) {
