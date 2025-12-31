@@ -1,5 +1,7 @@
 package com.inventory.ui.dashboard.product_management;
 
+import com.inventory.controller.ProductController;
+import com.inventory.domain.Product;
 import com.inventory.domain.Supplier;
 import com.inventory.utils.loadAllSuppliers;
 
@@ -16,8 +18,7 @@ public class AddNewProductDialog extends JDialog {
     private JTextField txtCategory;
     private JFormattedTextField txtPrice;
     private JSpinner spnStock;
-    private JComboBox<String> cmbSupplier;
-    private Image image;
+    private JComboBox<Supplier> cmbSupplier;
 
     public AddNewProductDialog(JFrame dashboard) {
         super(dashboard, "Add New Product", true);
@@ -34,8 +35,8 @@ public class AddNewProductDialog extends JDialog {
     }
 
     private void DialogUI() {
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        JPanel formPanel = new JPanel(new GridBagLayout()); // layout manager
+        GridBagConstraints gbc = new GridBagConstraints(); // helps to place components inside grid bag layout
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
@@ -65,7 +66,7 @@ public class AddNewProductDialog extends JDialog {
 
         // contains the elements in the specified array
         // ComboBox explicitly mentions that it expects a Supplier type.
-        JComboBox<Supplier> cmbSupplier = new JComboBox<>();
+        cmbSupplier = new JComboBox<>();
         cmbSupplier.setModel(new DefaultComboBoxModel<>(
                 // Convert the List<Supplier> to a Supplier[] array explicitly
                 // as it can only take any specified array and not a list array.
@@ -78,11 +79,10 @@ public class AddNewProductDialog extends JDialog {
         // button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
 
-        JButton btnSave = new JButton("Save");
+        JButton btnSave = new JButton("Add");
 
         // Normal and hover colors for btnsave
         btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
-
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnSave.setBackground(new Color(100, 160, 210));
             }
@@ -116,17 +116,50 @@ public class AddNewProductDialog extends JDialog {
 
     private void addRow(JPanel panel, GridBagConstraints gbc, int row,
                         String labelText, JComponent field) {
+        // label
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.weightx = 0;
         panel.add(new JLabel(labelText), gbc);
 
+        // input field
         gbc.gridx = 1;
         gbc.weightx = 1;
         panel.add(field, gbc);
     }
 
     private void onSave() {
-        dispose();
+        // collect info from fields
+        // create product obj
+        Object price_value = txtPrice.getValue(); // extracting price value and it's an obj type.
+        Object stock_value = spnStock.getValue();
+
+        Product newProduct = new Product(
+                txtProductId.getText(),
+                txtProductName.getText(),
+                txtCategory.getText(),
+                ((Number) price_value).doubleValue(), // cast it as number and convert to double.
+                ((Number) stock_value).intValue(),
+                (Supplier)cmbSupplier.getSelectedItem() // type casting
+        );
+
+        // call controller to create product
+        ProductController productController = new ProductController();
+        String create_prod_res = productController.createProduct(newProduct);
+
+        // success/failure dialog pops up
+        if (create_prod_res.equals("200")) {
+            // success dialog
+            // auto refresh table
+            System.out.println("Success");
+            dispose();
+            return;
+        }
+        else {
+            // failure dialog
+            System.out.println("Failure");
+            dispose();
+            return;
+        }
     }
 }

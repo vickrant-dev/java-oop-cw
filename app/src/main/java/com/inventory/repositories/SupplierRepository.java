@@ -149,7 +149,15 @@ public class SupplierRepository {
     public List<Product> getSupplierProducts(Supplier supplier)
     {
         List<Product> supplier_products = new ArrayList<>();
-        String get_supplier_products = "SELECT * FROM products where supplier_id=?::uuid";
+        String get_supplier_products = """
+                    SELECT p.*,
+                    s.id AS supplier_name,
+                    s.name as supplier_name,
+                    s.contact_info AS supplier_contact_info
+                    FROM products p
+                    JOIN suppliers s ON p.supplier_id = s.id
+                    WHERE s.id=?::uuid
+                """;
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -157,14 +165,21 @@ public class SupplierRepository {
                 getSupplierProducts.setString(1, supplier.getSupplierId());
                 ResultSet res = getSupplierProducts.executeQuery();
                 while (res.next()) {
+
+                    Supplier prod_supplier = new Supplier(
+                            res.getString("supplier_id"),
+                            res.getString("supplier_name"),
+                            res.getString("supplier_contact_info")
+                    );
+
                     Product supplier_prod = new Product(
                             res.getString("id"),
-                            res.getInt("product_id"),
+                            res.getString("product_id"),
                             res.getString("name"),
                             res.getString("category"),
                             res.getDouble("price"),
                             res.getInt("stock_quantity"),
-                            res.getString("supplier_name")
+                            prod_supplier
                     );
                     supplier_products.add(supplier_prod);
                 }

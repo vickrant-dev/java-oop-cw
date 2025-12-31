@@ -1,5 +1,6 @@
 package com.inventory.repositories;
 
+import com.inventory.domain.Supplier;
 import com.inventory.server.Server;
 import com.inventory.domain.Product;
 
@@ -19,7 +20,8 @@ public class ProductRepository {
         List<Product> all_products = new ArrayList<>();
         String fetch_products_query = """
                     SELECT p.id, p.product_id, p.name, p.category, p.price,\s
-                    p.stock_quantity, s.name AS supplier_name
+                    p.stock_quantity, s.name AS supplier_name, s.id AS supplier_id,
+                    s.contact_info AS supplier_contact_info
                     FROM products p
                     LEFT JOIN suppliers s ON p.supplier_id = s.id
                 """;
@@ -29,14 +31,21 @@ public class ProductRepository {
                 PreparedStatement fetchProductsStatement = conn.prepareStatement(fetch_products_query);
                 ResultSet res = fetchProductsStatement.executeQuery();
                     while (res.next()) {
+
+                        Supplier prod_supplier = new Supplier(
+                                res.getString("supplier_id"),
+                                res.getString("supplier_name"),
+                                res.getString("supplier_contact_info")
+                        );
+
                         Product prod = new Product(
                                 res.getString("id"),
-                                res.getInt("product_id"),
+                                res.getString("product_id"),
                                 res.getString("name"),
                                 res.getString("category"),
                                 res.getDouble("price"),
                                 res.getInt("stock_quantity"),
-                                res.getString("supplier_name")
+                                prod_supplier
                         );
                         all_products.add(prod);
                     }
@@ -66,7 +75,7 @@ public class ProductRepository {
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement updateStatement = conn.prepareStatement(update_product_stock_query);
-                updateStatement.setInt(1, product.getProductId());
+                updateStatement.setString(1, product.getProductId());
                 updateStatement.setString(2, product.getProductName());
                 updateStatement.setString(3, product.getProductCategory());
                 updateStatement.setDouble(4, product.getProductPrice());
@@ -100,20 +109,23 @@ public class ProductRepository {
 
     public int createProduct(Product product)
     {
+        // replace this with functions
         String create_product_query =
                 """
-                    INSERT INTO products (product_id, name, category, price, stock_quantity)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO products (product_id, supplier_id, name, category, price,
+                    stock_quantity)
+                    VALUES (?, ?::uuid, ?, ?, ?, ?)
                 """;
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
                 PreparedStatement createProdStatement = conn.prepareStatement(create_product_query);
-                createProdStatement.setInt(1, product.getProductId());
-                createProdStatement.setString(2, product.getProductName());
-                createProdStatement.setString(3, product.getProductCategory());
-                createProdStatement.setDouble(4, product.getProductPrice());
-                createProdStatement.setInt(5, product.getProductStockQuantity());
+                createProdStatement.setString(1, product.getProductId());
+                createProdStatement.setString(2, product.getSupplierId());
+                createProdStatement.setString(3, product.getProductName());
+                createProdStatement.setString(4, product.getProductCategory());
+                createProdStatement.setDouble(5, product.getProductPrice());
+                createProdStatement.setInt(6, product.getProductStockQuantity());
 
                 ResultSet res = createProdStatement.executeQuery();
 

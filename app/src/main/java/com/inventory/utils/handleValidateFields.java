@@ -61,7 +61,7 @@ public class handleValidateFields {
     public String validateFields(Product product)
     {
 
-        if (product.getProductId() == 0 || product.getProductId() < 0) {
+        if (product.getProductId().trim().isEmpty()) {
             return "401a";
         }
         if (product.getProductName().trim().isEmpty()) {
