@@ -27,8 +27,6 @@ public class ManageProducts extends JPanel {
         productTable.setRowHeight(25);
         productTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         productTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-
-
     }
 
     // Table

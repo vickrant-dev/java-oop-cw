@@ -1,5 +1,6 @@
 package com.inventory.controller;
 
+import com.inventory.domain.Product;
 import com.inventory.domain.Supplier;
 import com.inventory.service.SupplierService;
 import com.inventory.service_manager.SupplierMgr;
@@ -14,7 +15,7 @@ public class SupplierController {
     }
 
     // CRUD ops
-    public List<Supplier> getAllSuppliers() {
+    public List<Supplier> fetchAllSuppliers() {
         return supplierService.fetchAllSuppliers();
     }
 
@@ -29,6 +30,10 @@ public class SupplierController {
 
     public String deleteSupplier(Supplier supplier) {
         return supplierService.deleteSupplier(supplier);
+    }
+
+    public List<Product> getSupplierProducts(Supplier supplier) {
+        return supplierService.getSupplierProducts(supplier);
     }
 
 }

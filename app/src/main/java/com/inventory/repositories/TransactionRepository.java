@@ -38,7 +38,9 @@ public class TransactionRepository {
                             res.getString("customer_id"),
                             res.getString("transaction_date"),
                             res.getDouble("total_amount"),
+                            res.getString("payment_method"),
                             res.getString("created_by"),
+                            res.getString("created_at"),
                             new ArrayList<>()
                     );
 

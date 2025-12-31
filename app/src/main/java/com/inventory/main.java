@@ -8,18 +8,16 @@ import javax.swing.*;
 
 public class main {
     public static void main (String[] args) {
-       /* System.out.println("Main");
-      Login login = new Login();
+        /*System.out.println("Main");
+        Login login = new Login();
         login.setVisible(true);*/
 
-        JFrame frame = new JFrame("Product Management Test");
+        JFrame frame = new JFrame("Product Management");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 500);
+        frame.setSize(900,500);
         frame.setLocationRelativeTo(null);
 
-        frame.add(new ProductPanel());
+        frame.add(new CustomerPanel());
         frame.setVisible(true);
-
-
     }
 }

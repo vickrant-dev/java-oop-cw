@@ -1,6 +1,7 @@
 package com.inventory.controller;
 
 import com.inventory.domain.Customer;
+import com.inventory.domain.Transaction;
 import com.inventory.service.CustomerService;
 import com.inventory.service_manager.CustomerMgr;
 
@@ -27,5 +28,9 @@ public class CustomerController {
 
     public String deleteCustomer(Customer customer) {
         return customerService.deleteCustomer(customer);
+    }
+
+    public List<Transaction> fetchCustomerTransactions(Customer customer) {
+        return customerService.fetchCustomerTransactions(customer);
     }
 }

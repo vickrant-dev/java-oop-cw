@@ -1,5 +1,6 @@
 package com.inventory.repositories;
 
+import com.inventory.domain.Product;
 import com.inventory.server.Server;
 import com.inventory.domain.Supplier;
 
@@ -14,12 +15,12 @@ public class SupplierRepository {
     public List<Supplier> fetchAllSuppliers()
     {
         List<Supplier> all_suppliers = new ArrayList<>();
-        String update_suppliers_query = "SELECT * FROM suppliers";
+        String get_suppliers_query = "SELECT * FROM suppliers";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
-                PreparedStatement updateSupplierStatement = conn.prepareStatement(update_suppliers_query);
-                ResultSet res = updateSupplierStatement.executeQuery();
+                PreparedStatement getSupplierStatement = conn.prepareStatement(get_suppliers_query);
+                ResultSet res = getSupplierStatement.executeQuery();
                 while (res.next()) {
                     Supplier supplier = new Supplier(
                             res.getString("id"),
@@ -28,7 +29,7 @@ public class SupplierRepository {
                     );
                     all_suppliers.add(supplier);
                 }
-                updateSupplierStatement.close();
+                getSupplierStatement.close();
                 res.close();
                 return all_suppliers;
             }
@@ -142,6 +143,43 @@ public class SupplierRepository {
             System.err.println("Database connection err: " + e.getMessage());
             e.printStackTrace();
             return 503;
+        }
+    }
+
+    public List<Product> getSupplierProducts(Supplier supplier)
+    {
+        List<Product> supplier_products = new ArrayList<>();
+        String get_supplier_products = "SELECT * FROM products where supplier_id=?";
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement getSupplierProducts = conn.prepareStatement(get_supplier_products);
+                getSupplierProducts.setString(1, supplier.getSupplierId());
+                ResultSet res = getSupplierProducts.executeQuery();
+                while (res.next()) {
+                    Product supplier_prod = new Product(
+                            res.getString("id"),
+                            res.getInt("product_id"),
+                            res.getString("name"),
+                            res.getString("category"),
+                            res.getDouble("price"),
+                            res.getInt("stock_quantity"),
+                            res.getString("supplier_name")
+                    );
+                    supplier_products.add(supplier_prod);
+                }
+                getSupplierProducts.close();
+                res.close();
+                return supplier_products;
+            }
+            else {
+                return supplier_products; // connection err.
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return supplier_products;
         }
     }
 }

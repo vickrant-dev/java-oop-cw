@@ -7,7 +7,6 @@ import java.util.List;
 
 public class loadAllSuppliers {
     public List<Supplier> getSupplierList() {
-        List<Supplier> all_suppliers = new SupplierController().getAllSuppliers();
-        return all_suppliers;
+        return new SupplierController().fetchAllSuppliers();
     }
 }

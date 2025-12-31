@@ -15,7 +15,8 @@ public class TransactionMgr implements TransactionService {
         this.transactionRepo = new TransactionRepository();
     }
 
-    public String createTransaction(Transaction transaction) {
+    public String createTransaction(Transaction transaction)
+    {
         if(new handleValidateFields().validateFields(transaction) == null
                 && new handleValidateFields().validateFields
                 (transaction.getTransactionDetails()) == null)
@@ -39,7 +40,8 @@ public class TransactionMgr implements TransactionService {
         return transactionRepo.fetchAllTransactions();
     }
 
-    public String deleteTransaction(Transaction transaction) {
+    public String deleteTransaction(Transaction transaction)
+    {
         if(new handleValidateFields().validateFields(transaction) == null)
         {
             int delete_res = transactionRepo.deleteTransaction(transaction);
