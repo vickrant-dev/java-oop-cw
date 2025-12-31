@@ -34,7 +34,7 @@ public class UpdateProduct  extends JFrame {
         setSize(450,390);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setVisible(true);
+
 
         // Create a panel for buttons
         JPanel buttonPanel = new JPanel();
@@ -108,4 +108,16 @@ public class UpdateProduct  extends JFrame {
 
 
     }
+
+    public UpdateProduct(String id, String Name, String Category, String Price){
+
+        this();
+        Productidfield.setText(id);
+        ProductNamefield.setText(Name);
+        Categoryfield.setText(Category);
+        Pricefield.setText(Price);
+
+    }
+
+
 }

@@ -25,7 +25,7 @@ public class PopupMenu  {
 
       Update.addActionListener(e ->  {
         popupMenu.setVisible(false);
-        new UpdateProduct();
+
 
       });
     // when the delete click message will appear

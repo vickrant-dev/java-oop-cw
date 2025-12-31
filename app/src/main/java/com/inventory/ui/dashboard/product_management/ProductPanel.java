@@ -19,13 +19,7 @@ public class ProductPanel extends JPanel {
         add(title, BorderLayout.NORTH);
         add(new ManageProducts(), BorderLayout.CENTER);
 
-        // create popup menu
 
-        PopupMenu popupMenu = new PopupMenu();
-
-        // add popup menu to the panel
-
-        this.setComponentPopupMenu(popupMenu.getPopupMenu());
 
 
 
