@@ -32,6 +32,7 @@ public class ManageProducts extends JPanel {
     // Table
     // JScrollPane -> Provides a scrollable view of a lightweight component
     private class createTableScrollPane extends JScrollPane {
+        private int hoveredRow;
         public createTableScrollPane() {
             String[] columns = {"ID", "Name", "Category", "Price", "Stock", "Supplier name"};
 
@@ -60,6 +61,13 @@ public class ManageProducts extends JPanel {
             for (Object[] row: rows) {
                 tableModel.addRow(row);
             }
+
+
+            // add popup menu to the table
+            PopupMenu popup = new PopupMenu();
+            productTable.setComponentPopupMenu(popup.getPopupMenu());
+
+
         }
     }
 
