@@ -63,9 +63,52 @@ public class ManageProducts extends JPanel {
             }
 
 
-            // add popup menu to the table
+            // Popup menu
             PopupMenu popup = new PopupMenu();
-            productTable.setComponentPopupMenu(popup.getPopupMenu());
+            JPopupMenu popupMenu = popup.getPopupMenu();
+            productTable.setComponentPopupMenu(popupMenu);
+
+            // UPDATE menu item (index 0)
+            JMenuItem updateItem = (JMenuItem) popupMenu.getComponent(0);
+
+            updateItem.addActionListener(e -> {
+
+                int row = productTable.getSelectedRow();
+                if (row >=0);
+                // assign column values to the variables
+                String id       = tableModel.getValueAt(row, 0).toString();
+                String name     = tableModel.getValueAt(row, 1).toString();
+                String category = tableModel.getValueAt(row, 2).toString();
+                String price    = tableModel.getValueAt(row, 3).toString();
+
+                // sending the vales as a parameters
+                new UpdateProduct(id, name, category, price);
+            });
+
+
+
+            // Select the row
+
+            productTable.addMouseListener(new java.awt.event.MouseAdapter() {
+
+
+                public void mousePressed(java.awt.event.MouseEvent e) {
+                    selectRow(e);
+                }
+
+
+                public void mouseReleased(java.awt.event.MouseEvent e) {
+                    selectRow(e);
+                }
+
+                private void selectRow(java.awt.event.MouseEvent e) {
+                    int row = productTable.rowAtPoint(e.getPoint());
+                    if (row >= 0) {
+                        productTable.setRowSelectionInterval(row, row);
+                    }
+                }
+            });
+
 
 
         }
