@@ -20,7 +20,7 @@ public class TransactionRepository {
                     SELECT * FROM transactions
                 """;
         String fetch_transaction_details_query = """
-                    SELECT * FROM transaction_details WHERE transaction_id = ?
+                    SELECT * FROM transaction_details WHERE transaction_id = ?::uuid
                 """;
 
         try (Connection conn = Server.getConnection()) {

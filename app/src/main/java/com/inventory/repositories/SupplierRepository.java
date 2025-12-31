@@ -46,7 +46,7 @@ public class SupplierRepository {
 
     public int updateSupplierDetails(Supplier supplier)
     {
-        String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE id=?";
+        String update_suppliers_query = "UPDATE suppliers SET name=?, contact_info=? WHERE id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -115,7 +115,7 @@ public class SupplierRepository {
 
     public int deleteSupplier(Supplier supplier)
     {
-        String delete_suppliers_query = "DELETE FROM suppliers WHERE id=?";
+        String delete_suppliers_query = "DELETE FROM suppliers WHERE id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -149,7 +149,7 @@ public class SupplierRepository {
     public List<Product> getSupplierProducts(Supplier supplier)
     {
         List<Product> supplier_products = new ArrayList<>();
-        String get_supplier_products = "SELECT * FROM products where supplier_id=?";
+        String get_supplier_products = "SELECT * FROM products where supplier_id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {

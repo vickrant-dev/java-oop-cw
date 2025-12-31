@@ -1,8 +1,12 @@
 package com.inventory.ui.dashboard.customer_management;
 
+import com.inventory.controller.CustomerController;
+import com.inventory.domain.Customer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 public class CustomerPanel extends JPanel {
 
@@ -18,13 +22,16 @@ public class CustomerPanel extends JPanel {
         header.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         add(header, BorderLayout.NORTH);
 
-        String[] colums = {"Username", "Email"};
+        String[] colums = {"Username", "Contact info"};
 
-        Object[][] data = {
-                {"Vickrant","viki@gmail.com"},
-                {"Gihan", "gihan@gmail.com"},
-                {"Juman", "bmb@gmail.com"}
-        };
+        List<Customer> all_customers = new CustomerController().getAllCustomers();
+
+        Object[][] data = new Object[all_customers.size()][];
+
+        for (int i = 0; i < all_customers.size(); i++) {
+            Customer cus = all_customers.get(i);
+            data[i] = new Object[] { cus.getCustomerName(), cus.getCustomerContactInfo() };
+        }
 
         model = new DefaultTableModel(data, colums){
             @Override
@@ -48,10 +55,7 @@ public class CustomerPanel extends JPanel {
                 if(e.getClickCount() == 2){
                     int row = custable.getSelectedRow();
 
-                    String username = model.getValueAt(row, 0).toString();
-                    String email = model.getValueAt(row, 1).toString();
-
-                    new TransactionForm(username , email);
+                    new TransactionForm(all_customers.get(row));
                 }
             }
         });

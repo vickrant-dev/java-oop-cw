@@ -60,7 +60,7 @@ public class ProductRepository {
         String update_product_stock_query =
                 """
                     UPDATE products SET product_id=?, name=?, category=?, price=?,
-                    stock_quantity=? WHERE id=?
+                    stock_quantity=? WHERE id=::uuid?
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -144,7 +144,7 @@ public class ProductRepository {
     {
         String delete_product_query =
                 """
-                    DELETE FROM products WHERE id=?
+                    DELETE FROM products WHERE id=?::uuid
                 """;
 
         try (Connection conn = Server.getConnection()) {

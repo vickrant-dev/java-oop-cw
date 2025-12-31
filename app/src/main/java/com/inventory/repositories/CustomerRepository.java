@@ -47,7 +47,7 @@ public class CustomerRepository {
 
     public int updateCustomerDetails(Customer customer)
     {
-        String update_customers_query = "UPDATE customers SET name=?, contact_info=? WHERE id=?";
+        String update_customers_query = "UPDATE customers SET name=?, contact_info=? WHERE id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -116,7 +116,7 @@ public class CustomerRepository {
 
     public int deleteCustomer(Customer customer)
     {
-        String delete_customer_query = "DELETE FROM customers WHERE id=?";
+        String delete_customer_query = "DELETE FROM customers WHERE id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -150,9 +150,14 @@ public class CustomerRepository {
     public List<Transaction> fetchCustomerTransactions(Customer customer)
     {
         List<Transaction> all_cus_transactions = new ArrayList<>();
-        String get_cus_transactions_query = "SELECT * FROM transactions where customer_id=?";
+        String get_cus_transactions_query = """
+                    SELECT t.*, u.username AS user_name
+                    FROM transactions t
+                    JOIN users u ON t.created_by = u.id
+                    WHERE t.customer_id=?::uuid;
+            """;
         String get_transaction_details_query = """
-                    SELECT * FROM transaction_details where transaction_id=?
+                    SELECT * FROM transaction_details where transaction_id=?::uuid
             """;
 
         try (Connection conn = Server.getConnection()) {
@@ -171,7 +176,7 @@ public class CustomerRepository {
                             res.getDouble("discount_percentage"),
                             res.getDouble("discount_amount"),
                             res.getString("payment_method"),
-                            res.getString("created_by"),
+                            res.getString("user_name"),
                             res.getString("created_at"),
                             new ArrayList<>()
                     );
