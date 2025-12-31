@@ -25,7 +25,7 @@ public class ProductPanel extends JPanel {
 
         // add popup menu to the panel
 
-       this.setComponentPopupMenu(popupMenu.getPopupMenu());
+        this.setComponentPopupMenu(popupMenu.getPopupMenu());
 
 
 

@@ -24,21 +24,18 @@ public class CustomerPanel extends JPanel {
 
         String[] colums = {"Username", "Contact info"};
 
-        List<Customer> all_customers = new CustomerController().getAllCustomers();
-
-        Object[][] data = new Object[all_customers.size()][];
-
-        for (int i = 0; i < all_customers.size(); i++) {
-            Customer cus = all_customers.get(i);
-            data[i] = new Object[] { cus.getCustomerName(), cus.getCustomerContactInfo() };
-        }
-
-        model = new DefaultTableModel(data, colums){
+        model = new DefaultTableModel(colums, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
+        List<Customer> all_customers = new CustomerController().getAllCustomers();
+
+        for (Customer cus : all_customers) {
+            model.addRow(new Object[] { cus.getCustomerName(), cus.getCustomerContactInfo() });
+        }
 
         custable = new JTable(model);
         custable.setRowHeight(30);
