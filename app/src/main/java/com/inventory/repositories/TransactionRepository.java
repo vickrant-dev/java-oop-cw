@@ -38,6 +38,8 @@ public class TransactionRepository {
                             res.getString("customer_id"),
                             res.getString("transaction_date"),
                             res.getDouble("total_amount"),
+                            res.getDouble("discount_percentage"),
+                            res.getDouble("discount_amount"),
                             res.getString("payment_method"),
                             res.getString("created_by"),
                             res.getString("created_at"),
@@ -101,6 +103,8 @@ public class TransactionRepository {
                 createTransactionStatement.setString(1, transaction.getCustomerId());
                 createTransactionStatement.setString(2, transaction.getTransactionDate());
                 createTransactionStatement.setDouble(3, transaction.getTotalAmount());
+                createTransactionStatement.setDouble(3, transaction.getDiscountAmount());
+                createTransactionStatement.setDouble(3, transaction.getDiscountPercentage());
                 createTransactionStatement.setString(4, transaction.getCreatedBy());
                 createTransactionStatement.setString(5, transaction_details_json);
 

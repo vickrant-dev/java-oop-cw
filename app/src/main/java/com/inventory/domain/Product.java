@@ -58,16 +58,4 @@ public class Product {
         this.price = price;
         this.stock_quantity = stock_quantity;
     }
-
-
-    // methods
-    public double applyProductDiscount() {
-        return this.price - (this.price * 0.15);
-    }
-
-    public double applyProductDiscount(int custom_discount)
-    {
-        return this.price - (this.price * custom_discount);
-    }
-
 }

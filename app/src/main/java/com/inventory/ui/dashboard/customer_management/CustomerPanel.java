@@ -11,23 +11,19 @@ public class CustomerPanel extends JPanel {
 
     public CustomerPanel() {
 
-
         setLayout(new BorderLayout());
-
-        // add(new JLabel("Customer Management", SwingConstants.CENTER), BorderLayout.CENTER);
-        // setBackground(Color.WHITE);
 
         JLabel header = new JLabel("Customer Management", SwingConstants.CENTER);
         header.setFont(new Font("Segoe UI", Font.BOLD, 20));
         header.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         add(header, BorderLayout.NORTH);
 
-        String[] colums = {"Username", "Email", "Password"};
+        String[] colums = {"Username", "Email"};
 
         Object[][] data = {
-                {"Vickrant","viki@gmail.com","********"},
-                {"Gihan", "gihan@gmail.com", "*********"},
-                {"Juman", "bmb@gmail.com", "********"}
+                {"Vickrant","viki@gmail.com"},
+                {"Gihan", "gihan@gmail.com"},
+                {"Juman", "bmb@gmail.com"}
         };
 
         model = new DefaultTableModel(data, colums){

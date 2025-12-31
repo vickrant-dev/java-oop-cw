@@ -28,12 +28,13 @@ public class TransactionForm extends JFrame{
         info.add(emaillbl);
         add(info, BorderLayout.SOUTH);
 
-        String[] colms = {"Transaction ID", "Date", "Amount", "Status"};
+        String[] colms = {"Transaction ID", "Created at", "Total amount", "Payment method",
+                "Created by"};
 
         Object[][] data = {
-                {"abc287", "2025-10-08", "Rs.5000", "Completed"},
-                {"abd548", "2025-06-12", "Rs.12500", "Completed"},
-                {"abd556", "2025-12-18", "Rs.49000", "Completed"}
+                {"abc287", "2025-10-08", "Rs.5000", "Cash", "some cashier guy"},
+                {"abd548", "2025-06-12", "Rs.12500", "Card", "some cashier guy"},
+                {"abd556", "2025-12-18", "Rs.49000", "Cash", "some cashier guy"}
         };
 
         JTable tbl = new JTable(new DefaultTableModel(data,colms));
