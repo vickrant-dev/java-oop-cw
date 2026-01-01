@@ -31,7 +31,6 @@ public class PopupMenu  {
     // when the delete click message will appear
     Delete.addActionListener(e ->  {
         popupMenu.setVisible(false);
-        System.out.println("Delete clicked");
     }) ;
 
     // when the cancel click popup meu close

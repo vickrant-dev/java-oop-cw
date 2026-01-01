@@ -1,5 +1,6 @@
 package com.inventory.service_manager;
 
+import com.inventory.domain.Product;
 import com.inventory.domain.Transaction;
 import com.inventory.repositories.TransactionRepository;
 import com.inventory.service.TransactionService;
@@ -56,6 +57,16 @@ public class TransactionMgr implements TransactionService {
         }
         else {
             return "401a";
+        }
+    }
+
+    public boolean checkTransaction(Product product) {
+        if(new handleValidateFields().validateFields(product) == null)
+        {
+            return transactionRepo.checkTransaction(product);
+        }
+        else {
+            return true;
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.inventory.controller;
 
+import com.inventory.domain.Product;
 import com.inventory.domain.Transaction;
 import com.inventory.service.TransactionService;
 import com.inventory.service_manager.TransactionMgr;
@@ -24,5 +25,9 @@ public class TransactionController {
 
     public String deleteTransaction(Transaction transaction) {
         return transactionService.deleteTransaction(transaction);
+    }
+
+    public boolean checkTransaction(Product product) {
+        return transactionService.checkTransaction(product);
     }
 }

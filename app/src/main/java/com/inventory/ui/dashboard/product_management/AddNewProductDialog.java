@@ -19,9 +19,11 @@ public class AddNewProductDialog extends JDialog {
     private JFormattedTextField txtPrice;
     private JSpinner spnStock;
     private JComboBox<Supplier> cmbSupplier;
+    private final ManageProducts manageProd;
 
-    public AddNewProductDialog(JFrame dashboard) {
+    public AddNewProductDialog(JFrame dashboard, ManageProducts manageProd) {
         super(dashboard, "Add New Product", true);
+        this.manageProd = manageProd;
         setSize(400, 400);
         // set icon
         URL iconURL = getClass().getResource("/shop.png");
@@ -151,13 +153,12 @@ public class AddNewProductDialog extends JDialog {
         if (create_prod_res.equals("200")) {
             // success dialog
             // auto refresh table
-            System.out.println("Success");
+            manageProd.refreshTableData();
             dispose();
             return;
         }
         else {
             // failure dialog
-            System.out.println("Failure");
             dispose();
             return;
         }

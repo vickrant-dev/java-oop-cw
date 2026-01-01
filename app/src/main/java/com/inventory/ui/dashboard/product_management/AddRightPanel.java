@@ -69,7 +69,7 @@ public class AddRightPanel extends JPanel {
         // getting the dashboard (ancestor) so that dialog blocks the usage of the dashboard
         // until dialog closes.
         Window window = SwingUtilities.getWindowAncestor(this);
-        AddNewProductDialog dialog = new AddNewProductDialog((JFrame) window);
+        AddNewProductDialog dialog = new AddNewProductDialog((JFrame) window, this.product_manager);
         dialog.setVisible(true);
 
         // once added, refresh the list

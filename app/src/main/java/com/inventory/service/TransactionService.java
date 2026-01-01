@@ -1,5 +1,6 @@
 package com.inventory.service;
 
+import com.inventory.domain.Product;
 import com.inventory.domain.Supplier;
 import com.inventory.domain.Transaction;
 
@@ -11,4 +12,6 @@ public interface TransactionService {
     List<Transaction> fetchAllTransactions();
 
     String deleteTransaction(Transaction transaction);
+
+    boolean checkTransaction(Product product);
 }

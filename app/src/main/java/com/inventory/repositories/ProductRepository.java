@@ -69,7 +69,7 @@ public class ProductRepository {
         String update_product_stock_query =
                 """
                     UPDATE products SET product_id=?, name=?, category=?, price=?,
-                    stock_quantity=? WHERE id=::uuid?
+                    stock_quantity=? WHERE id=?::uuid
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -82,17 +82,14 @@ public class ProductRepository {
                 updateStatement.setInt(5, product.getProductStockQuantity());
                 updateStatement.setString(6, product.getId());
 
-                ResultSet res = updateStatement.executeQuery();
+                int res = updateStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res update products: " + res.next());
+                if (res == 1) {
                     updateStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     updateStatement.close();
-                    res.close();
                     return 401; // invalid product_id maybe...
                 }
             }
@@ -127,17 +124,14 @@ public class ProductRepository {
                 createProdStatement.setDouble(5, product.getProductPrice());
                 createProdStatement.setInt(6, product.getProductStockQuantity());
 
-                ResultSet res = createProdStatement.executeQuery();
+                int res = createProdStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res create product: " + res.next());
+                if (res > 0) {
                     createProdStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     createProdStatement.close();
-                    res.close();
                     return 401; // invalid product_id maybe...
                 }
             }
@@ -164,17 +158,15 @@ public class ProductRepository {
                 PreparedStatement deleteProdStatement = conn.prepareStatement(delete_product_query);
                 deleteProdStatement.setString(1, product.getId());
 
-                ResultSet res = deleteProdStatement.executeQuery();
+                int res = deleteProdStatement.executeUpdate();
+                System.out.println("delete res: " + res);
 
-                if (res.next()) {
-                    System.out.println("res create product: " + res.next());
+                if (res == 1) {
                     deleteProdStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     deleteProdStatement.close();
-                    res.close();
                     return 401; // invalid product_id maybe...
                 }
             }
