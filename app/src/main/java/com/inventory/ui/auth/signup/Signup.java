@@ -84,7 +84,7 @@ public class Signup extends JFrame {
         //(Added a new checkbox to show password)
         char hidepass = passwordField.getEchoChar();
         shwpass = new JCheckBox("Show password");
-        shwpass.setBounds(30, 185, 150, 20);
+        shwpass.setBounds(650, 328, 150, 20);
 
         //(If the checkbox is clicked the password have to be shown)
         shwpass.addActionListener(e ->{
@@ -115,7 +115,7 @@ public class Signup extends JFrame {
         signupButton.setFont(new Font("Arial", Font.BOLD,14));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
       
-        signupButton.setBounds(650, 350, 100, 30);
+        signupButton.setBounds(650, 360, 100, 30);
         add(signupButton);
         
       

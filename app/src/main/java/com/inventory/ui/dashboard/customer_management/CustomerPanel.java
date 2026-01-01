@@ -11,7 +11,6 @@ public class CustomerPanel extends JPanel {
 
     public CustomerPanel() {
 
-
         setLayout(new BorderLayout());
 
         // add(new JLabel("Customer Management", SwingConstants.CENTER), BorderLayout.CENTER);
