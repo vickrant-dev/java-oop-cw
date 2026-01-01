@@ -1,115 +1,86 @@
 package com.inventory.ui.dashboard.supplier_management;
 
+import com.inventory.domain.Supplier;
+import com.inventory.controller.SupplierController;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.net.URL;
-import java.awt.event.ActionEvent;
 
+public class AddNewSupplier extends JFrame {
 
-public class AddNewSupplier extends JFrame{
+    private JLabel titleLabel, supplierIdLabel, supplierNameLabel, contactInfoLabel;
+    private JTextField supplierIdField, supplierNameField, contactInfoField;
+    private SupplierPanel parentPanel;
 
-    private Image image;
-    private JLabel supplierid;
-    private JLabel supplierName;
-    private JLabel email;
-    private JLabel phone;
-    private JLabel UpdateLabel;
+    public AddNewSupplier(SupplierPanel parent) {
+        this.parentPanel = parent;
 
-    private JTextField supplieridField;
-    private JTextField supplierNameField;
-    private JTextField emailField;
-    private JTextField phoneField;
+        setTitle("Add New Supplier");
+        setSize(450, 350); // Slightly reduced height
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(null);
 
-
-    public AddNewSupplier()
-    {
-
-        setTitle("Update Product");
         // Set icon
         URL iconURL = getClass().getResource("/shop.png");
         if (iconURL != null) {
-            Image icon = new ImageIcon(iconURL).getImage();
-            setIconImage(icon);
+            setIconImage(new ImageIcon(iconURL).getImage());
         }
-        setSize(450,390);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        titleLabel = new JLabel("Add New Supplier");
+        titleLabel.setBounds(140, 5, 200, 40);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titleLabel.setForeground(new Color(0, 70, 0));
+        add(titleLabel);
 
-        // Create a panel for buttons
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-
-        //create two buttons
-        JButton Updatebutton = new JButton("Update");
-        JButton Cancelbutton = new JButton("Cancel");
-
-        // add action to cancel button
-
-        Cancelbutton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-            }
-        });
-
-        //add two buttons to the panel
-        buttonPanel.add(Updatebutton);
-        buttonPanel.add(Cancelbutton);
-
-        // add button panel to the frame
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        setVisible(true);
-
-        //Set labels and text fields
-        setLayout(null);
-
-        UpdateLabel = new JLabel("Add Supplier");
-        UpdateLabel.setBounds(170, 5, 200, 40);
-        UpdateLabel.setFont(new Font("Times New Roman", Font.BOLD, 23));
-        UpdateLabel.setForeground(new Color(0,70,0));
-        add(UpdateLabel);
-
-        supplierid = new JLabel("Supplier ID");
-        supplierid.setBounds(4, 30, 250, 80);
-        supplierid.setForeground(new Color(0,70,0));
-        supplieridField = new JTextField();
-        supplieridField.setBounds(130, 55, 250, 25);
-        add(supplierid);
-        add(supplieridField);
-
-
-        supplierName = new JLabel("Supplier Name");
-        supplierName.setBounds(4, 100, 200, 40);
-        supplierName.setForeground(new Color(0,70,0));
+        // name
+        supplierNameLabel = new JLabel("Name:");
+        supplierNameLabel.setBounds(30, 110, 100, 25);
         supplierNameField = new JTextField();
-        supplierNameField.setBounds(130, 107, 250, 25);
-        add(supplierName);
+        supplierNameField.setBounds(140, 110, 240, 25);
+        add(supplierNameLabel);
         add(supplierNameField);
 
+        // contact info
+        contactInfoLabel = new JLabel("Contact Info:");
+        contactInfoLabel.setBounds(30, 160, 100, 25);
+        contactInfoField = new JTextField();
+        contactInfoField.setBounds(140, 160, 240, 25);
+        add(contactInfoLabel);
+        add(contactInfoField);
 
-        email = new JLabel("Email");
-        email.setBounds(4, 150, 200, 40);
-        email.setForeground(new Color(0,70,0));
-        emailField = new JTextField();
-        emailField.setBounds(130, 157, 250, 25);
-        add(email);
-        add(emailField);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        buttonPanel.setBounds(0, 240, 450, 50);
 
+        JButton addBtn = new JButton("Add");
+        JButton cancelBtn = new JButton("Cancel");
 
-        phone = new JLabel("Phone ");
-        phone.setBounds(4, 205, 200, 40);
-        phone.setForeground(new Color(0,70,0));
-        phoneField = new JTextField();
-        phoneField.setBounds(130, 207, 250, 25);
-        add(phone);
-        add(phoneField);
+        buttonPanel.add(addBtn);
+        buttonPanel.add(cancelBtn);
+        add(buttonPanel);
 
+        cancelBtn.addActionListener(e -> dispose());
 
+        addBtn.addActionListener(e -> {
+            Supplier newSupplier = new Supplier(supplierNameField.getText(),
+                    contactInfoField.getText());
 
+            SupplierController supplierController = new SupplierController();
+            String create_supplier_res = supplierController.createSupplier(newSupplier);
+            if (create_supplier_res.equals("200")) {
+                parentPanel.refreshTableData();
+                dispose();
+            }
+            else if (create_supplier_res.equals("401a")) {
+                JOptionPane.showMessageDialog(this, "Please fill in all the blanks!");
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Failed to create supplier");
+            }
 
+        });
 
+        setVisible(true);
     }
-
 }

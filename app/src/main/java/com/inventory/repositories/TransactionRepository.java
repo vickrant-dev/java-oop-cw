@@ -171,7 +171,8 @@ public class TransactionRepository {
         }
     }
 
-    public boolean checkTransaction(Product product) {
+    public boolean checkTransaction(Product product)
+    {
         String check_query =
                 """
                    SELECT EXISTS (
@@ -185,7 +186,6 @@ public class TransactionRepository {
                 PreparedStatement checkStatement = conn.prepareStatement(check_query);
                 checkStatement.setString(1, product.getId());
                 ResultSet res = checkStatement.executeQuery();
-                System.out.println("res: " + res);
                 if (res.next()) {
                     return res.getBoolean(1);
                 }

@@ -54,17 +54,14 @@ public class SupplierRepository {
                 updateSupplierStatement.setString(1, supplier.getSupplierName());
                 updateSupplierStatement.setString(2, supplier.getSupplierContactInfo());
                 updateSupplierStatement.setString(3, supplier.getSupplierId());
-                ResultSet res = updateSupplierStatement.executeQuery();
+                int res = updateSupplierStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res update supplier: " + res.next());
+                if (res == 1) {
                     updateSupplierStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     updateSupplierStatement.close();
-                    res.close();
                     return 401; //  invalid...
                 }
             }
@@ -88,17 +85,14 @@ public class SupplierRepository {
                 PreparedStatement createSupplierStatement = conn.prepareStatement(create_suppliers_query);
                 createSupplierStatement.setString(1, supplier.getSupplierName());
                 createSupplierStatement.setString(2, supplier.getSupplierContactInfo());
-                ResultSet res = createSupplierStatement.executeQuery();
+                int res = createSupplierStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res create supplier: " + res.next());
+                if (res > 0) {
                     createSupplierStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     createSupplierStatement.close();
-                    res.close();
                     return 401; // invalid...
                 }
             }
@@ -121,17 +115,14 @@ public class SupplierRepository {
             if (conn != null) {
                 PreparedStatement deleteSupplierStatement = conn.prepareStatement(delete_suppliers_query);
                 deleteSupplierStatement.setString(1, supplier.getSupplierId());
-                ResultSet res = deleteSupplierStatement.executeQuery();
+                int res = deleteSupplierStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res delete supplier: " + res.next());
+                if (res == 1) {
                     deleteSupplierStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     deleteSupplierStatement.close();
-                    res.close();
                     return 401; // invalid...
                 }
             }
@@ -195,6 +186,38 @@ public class SupplierRepository {
             System.err.println("Database connection err: " + e.getMessage());
             e.printStackTrace();
             return supplier_products;
+        }
+    }
+
+    public boolean checkSupplierProds(Supplier supplier)
+    {
+        String check_products_query = """
+                    SELECT EXISTS (
+                        SELECT 1
+                        FROM products
+                        WHERE supplier_id = ?::uuid
+                    );
+                """;
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement checkProductStatement = conn.prepareStatement(check_products_query);
+                checkProductStatement.setString(1, supplier.getSupplierId());
+                ResultSet res = checkProductStatement.executeQuery();
+
+                if (res.next()) {
+                    return res.getBoolean(1); // result's column index where a boolean is the result.
+                };
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return true;
         }
     }
 }

@@ -81,4 +81,13 @@ public class SupplierMgr implements SupplierService {
         return supplierRepo.getSupplierProducts(supplier);
     }
 
+    public boolean checkSupplierProds(Supplier supplier) {
+        if(new handleValidateFields().validateFields(supplier) == null) {
+            return supplierRepo.checkSupplierProds(supplier);
+        }
+        else {
+            return true;
+        }
+    }
+
 }

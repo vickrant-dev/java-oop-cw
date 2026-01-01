@@ -36,4 +36,8 @@ public class SupplierController {
         return supplierService.getSupplierProducts(supplier);
     }
 
+    public boolean checkSupplierProds(Supplier supplier) {
+        return supplierService.checkSupplierProds(supplier);
+    }
+
 }

@@ -15,4 +15,7 @@ public interface SupplierService {
     String deleteSupplier(Supplier supplier);
 
     List<Product> getSupplierProducts(Supplier supplier);
+
+    boolean checkSupplierProds(Supplier supplier);
+
 }
