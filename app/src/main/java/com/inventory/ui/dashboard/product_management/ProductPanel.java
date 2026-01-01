@@ -14,8 +14,6 @@ public class ProductPanel extends JPanel {
         title.setForeground(new Color(0, 70, 0));
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-
-
         add(title, BorderLayout.NORTH);
         add(new ManageProducts(), BorderLayout.CENTER);
 
