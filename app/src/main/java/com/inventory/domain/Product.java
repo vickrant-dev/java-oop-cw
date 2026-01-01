@@ -51,6 +51,7 @@ public class Product {
     public String getSupplierContactInfo() { return supplier.getSupplierContactInfo(); }
 
     // SETTERS
+    // used when updating an existing product
     public void updateDetails(String product_id, String name, String category,
                                     double price, int stock_quantity)
     {
