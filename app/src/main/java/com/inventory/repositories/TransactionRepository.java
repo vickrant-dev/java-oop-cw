@@ -91,7 +91,7 @@ public class TransactionRepository {
     {
         String create_transaction_query =
                 """
-                    SELECT create_transaction(?, ?, ?, ?, ?::jsonb);
+                    SELECT create_transaction(?, ?, ?, ?, ?, ?, ?, ?::jsonb);
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -99,27 +99,23 @@ public class TransactionRepository {
 
                 // we are using a Gson library to convert java obj to json format
                 String transaction_details_json = new Gson().toJson(transaction.getTransactionDetails());
-
                 PreparedStatement createTransactionStatement = conn.prepareStatement(create_transaction_query);
                 createTransactionStatement.setString(1, transaction.getCustomerId());
                 createTransactionStatement.setString(2, transaction.getTransactionDate());
                 createTransactionStatement.setDouble(3, transaction.getTotalAmount());
-                createTransactionStatement.setDouble(3, transaction.getDiscountAmount());
-                createTransactionStatement.setDouble(3, transaction.getDiscountPercentage());
-                createTransactionStatement.setString(4, transaction.getCreatedBy());
-                createTransactionStatement.setString(5, transaction_details_json);
+                createTransactionStatement.setDouble(4, transaction.getDiscountAmount());
+                createTransactionStatement.setDouble(5, transaction.getDiscountPercentage());
+                createTransactionStatement.setString(6, transaction.getPaymentMethod());
+                createTransactionStatement.setString(7, transaction.getCreatedBy());
+                createTransactionStatement.setString(8, transaction_details_json);
 
                 ResultSet res = createTransactionStatement.executeQuery();
 
                 if (res.next()) {
-                    System.out.println("res create transaction: " + res.next());
-                    createTransactionStatement.close();
-                    res.close();
-                    return 200;
+                    return res.getInt(1);
                 }
                 else {
                     createTransactionStatement.close();
-                    res.close();
                     return 401; // invalid product_id maybe...
                 }
             }

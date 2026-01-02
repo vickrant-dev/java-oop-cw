@@ -2,8 +2,8 @@ package com.inventory.utils;
 
 // We use this to check if the user can perform certain tasks (role based access)
 public class sessionManager {
-    private String user_id = "";
-    private String user_role = "";
+    private static String user_id = "";
+    private static String user_role = "";
 
     // retrieving session data
     public sessionManager() {}

@@ -3,6 +3,7 @@ package com.inventory.utils;
 import com.inventory.domain.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 public class handleValidateFields {
@@ -18,33 +19,77 @@ public class handleValidateFields {
     // used for validating TRANSACTION fields
     public String validateFields(Transaction transaction)
     {
-        if (transaction.getCustomerId().trim().isEmpty()
-                || transaction.getTransactionDate().trim().isEmpty()
+        if (transaction == null) return "401_null";
+
+        if (isInvalid(transaction.getCustomerId())
+                || isInvalid(transaction.getTransactionDate())
                 || transaction.getTotalAmount() < 0
-                || transaction.getPaymentMethod().trim().isEmpty()
-                || transaction.getCreatedBy().trim().isEmpty()
-                || transaction.getCreatedAt().trim().isEmpty()
+                || isInvalid(transaction.getPaymentMethod())
+                || transaction.getTransactionDetails() == null
                 || transaction.getTransactionDetails().isEmpty()) {
             return "401a";
         }
         return null;
     }
+
+    private boolean isInvalid(String str) {
+        return str == null || str.trim().isEmpty();
+    }
+
     public String validateFields(String product_id, int quantity, double price)
     {
-        if (product_id.trim().isEmpty() || quantity <= 0 || price < 0) {
+        if (product_id == null || product_id.trim().isEmpty() || quantity <= 0 || price < 0) {
             return "401a";
         }
         return null;
     }
+
     public String validateFields(List<TransactionDetails> transactionDetails)
     {
-        for (TransactionDetails transaction : transactionDetails) {
-            if (validateFields(transaction.getProductId(), transaction.getQuantity(),
-                    transaction.getPrice()) != null) {
+        if (transactionDetails == null || transactionDetails.isEmpty()) {
+            return "401_empty_list";
+        }
+
+        for (TransactionDetails detail : transactionDetails) {
+            if (validateFields(detail.getProductId(), detail.getQuantity(), detail.getPrice()) != null) {
                 return "401a";
             }
         }
         return null;
+    }
+    public String validateFields(JTextField txtCustomerName, JTextField txtContactInfo,
+                                 DefaultTableModel detailsModel, JComboBox<String> cmbPayment)
+    {
+        StringBuilder errors = new StringBuilder();
+        if (txtCustomerName == null || txtCustomerName.getText().trim().isEmpty()) {
+            errors.append("- Customer name is required.\n");
+        }
+        if (txtContactInfo == null || txtContactInfo.getText().trim().isEmpty()) {
+            errors.append("- Contact info is required.\n");
+        }
+        if (detailsModel == null || detailsModel.getRowCount() == 0) {
+            errors.append("- At least one product must be added to the transaction.\n");
+        } else {
+            // validate each row has valid product id/qty/price
+            for (int i = 0; i < detailsModel.getRowCount(); i++) {
+                Object productIdObj = detailsModel.getValueAt(i, 0);
+                Object qtyObj = detailsModel.getValueAt(i, 2);
+                Object priceObj = detailsModel.getValueAt(i, 3);
+                String productId = productIdObj == null ? "" : productIdObj.toString().trim();
+                int qty = 0;
+                double price = -1;
+                try { qty = Integer.parseInt(qtyObj.toString()); } catch (Exception ignored) {}
+                try { price = Double.parseDouble(priceObj.toString()); } catch (Exception ignored) {}
+                if (productId.isEmpty() || qty <= 0 || price < 0) {
+                    errors.append(String.format("- Invalid product entry on row %d.\n", i+1));
+                }
+            }
+        }
+        if (cmbPayment == null || cmbPayment.getSelectedItem() == null) {
+            errors.append("- Please select a payment method.\n");
+        }
+
+        return errors.length() == 0 ? null : errors.toString();
     }
 
 

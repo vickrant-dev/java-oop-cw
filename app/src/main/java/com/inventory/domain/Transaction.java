@@ -49,9 +49,9 @@ public class Transaction {
         this.discount_percentage = discount_percentage;
         this.discount_amount = discount_amount;
         this.created_by = getSessionUserId();
+        this.payment_method = payment_method;
         this.created_at = created_at;
         this.transaction_details = transaction_details;
-        this.payment_method = payment_method;
     }
 
 

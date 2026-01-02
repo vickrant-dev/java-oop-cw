@@ -28,12 +28,12 @@ public class TransactionMgr implements TransactionService {
                 return "200";
             }
             else {
-                System.out.println("Product updating failed for: " + transaction.getCustomerId() + ". Error: " + create_res);
+                System.out.println("Failed creating transaction for: " + transaction.getCustomerId() + ". Error: " + create_res);
                 return "401a";
             }
         }
         else {
-            return "401a";
+            return "401b";
         }
     }
 
