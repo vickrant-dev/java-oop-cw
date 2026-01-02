@@ -1,6 +1,8 @@
 package com.inventory.repositories;
 
 import com.inventory.domain.Customer;
+import com.inventory.domain.Transaction;
+import com.inventory.domain.TransactionDetails;
 import com.inventory.server.Server;
 
 import java.sql.Connection;
@@ -45,7 +47,7 @@ public class CustomerRepository {
 
     public int updateCustomerDetails(Customer customer)
     {
-        String update_customers_query = "UPDATE customers SET name=?, contact_info=? WHERE id=?";
+        String update_customers_query = "UPDATE customers SET name=?, contact_info=? WHERE id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -114,7 +116,7 @@ public class CustomerRepository {
 
     public int deleteCustomer(Customer customer)
     {
-        String delete_customer_query = "DELETE FROM customers WHERE id=?";
+        String delete_customer_query = "DELETE FROM customers WHERE id=?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
@@ -142,6 +144,77 @@ public class CustomerRepository {
             System.err.println("Database connection err: " + e.getMessage());
             e.printStackTrace();
             return 503;
+        }
+    }
+
+    public List<Transaction> fetchCustomerTransactions(Customer customer)
+    {
+        List<Transaction> all_cus_transactions = new ArrayList<>();
+        String get_cus_transactions_query = """
+                    SELECT t.*, u.username AS user_name
+                    FROM transactions t
+                    JOIN users u ON t.created_by = u.id
+                    WHERE t.customer_id=?::uuid;
+            """;
+        String get_transaction_details_query = """
+                    SELECT * FROM transaction_details where transaction_id=?::uuid
+            """;
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement getCusTransactionStatement = conn.prepareStatement(
+                        get_cus_transactions_query
+                );
+                getCusTransactionStatement.setString(1, customer.getCustomerId());
+                ResultSet res = getCusTransactionStatement.executeQuery();
+                while (res.next()) {
+                    Transaction cus_transaction = new Transaction(
+                            res.getString("id"),
+                            res.getString("customer_id"),
+                            res.getString("transaction_date"),
+                            res.getDouble("total_amount"),
+                            res.getDouble("discount_percentage"),
+                            res.getDouble("discount_amount"),
+                            res.getString("payment_method"),
+                            res.getString("user_name"),
+                            res.getString("created_at"),
+                            new ArrayList<>()
+                    );
+
+                    PreparedStatement fetchTransactionsDetailsStatement = conn.prepareStatement(get_transaction_details_query);
+                    fetchTransactionsDetailsStatement.setString(1, cus_transaction.getTransactionId());
+                    ResultSet details_res = fetchTransactionsDetailsStatement.executeQuery();
+
+                    // we get all transaction details for a given transaction
+                    List<TransactionDetails> transaction_details = new ArrayList<>();
+                    while(details_res.next()) {
+                        TransactionDetails details = new TransactionDetails(
+                                details_res.getString("transaction_id"),
+                                details_res.getString("product_id"),
+                                details_res.getInt("quantity"),
+                                details_res.getDouble("price")
+                        );
+                        // for every transaction details row we add it to a List
+                        transaction_details.add(details);
+                    }
+
+                    cus_transaction.setTransactionDetails(transaction_details);
+                    all_cus_transactions.add(cus_transaction);
+                    fetchTransactionsDetailsStatement.close();
+                    details_res.close();
+                }
+                getCusTransactionStatement.close();
+                res.close();
+                return all_cus_transactions;
+            }
+            else {
+                return all_cus_transactions; // connection err.
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return all_cus_transactions;
         }
     }
 }

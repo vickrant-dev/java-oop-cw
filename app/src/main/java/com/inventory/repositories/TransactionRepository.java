@@ -1,6 +1,7 @@
 package com.inventory.repositories;
 
 import com.google.gson.Gson;
+import com.inventory.domain.Product;
 import com.inventory.domain.Transaction;
 import com.inventory.domain.TransactionDetails;
 import com.inventory.server.Server;
@@ -20,7 +21,7 @@ public class TransactionRepository {
                     SELECT * FROM transactions
                 """;
         String fetch_transaction_details_query = """
-                    SELECT * FROM transaction_details WHERE transaction_id = ?
+                    SELECT * FROM transaction_details WHERE transaction_id = ?::uuid
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -38,7 +39,11 @@ public class TransactionRepository {
                             res.getString("customer_id"),
                             res.getString("transaction_date"),
                             res.getDouble("total_amount"),
+                            res.getDouble("discount_percentage"),
+                            res.getDouble("discount_amount"),
+                            res.getString("payment_method"),
                             res.getString("created_by"),
+                            res.getString("created_at"),
                             new ArrayList<>()
                     );
 
@@ -99,6 +104,8 @@ public class TransactionRepository {
                 createTransactionStatement.setString(1, transaction.getCustomerId());
                 createTransactionStatement.setString(2, transaction.getTransactionDate());
                 createTransactionStatement.setDouble(3, transaction.getTotalAmount());
+                createTransactionStatement.setDouble(3, transaction.getDiscountAmount());
+                createTransactionStatement.setDouble(3, transaction.getDiscountPercentage());
                 createTransactionStatement.setString(4, transaction.getCreatedBy());
                 createTransactionStatement.setString(5, transaction_details_json);
 
@@ -161,6 +168,39 @@ public class TransactionRepository {
             System.err.println("Database connection err: " + e.getMessage());
             e.printStackTrace();
             return 503;
+        }
+    }
+
+    public boolean checkTransaction(Product product)
+    {
+        String check_query =
+                """
+                   SELECT EXISTS (
+                    SELECT 1
+                    FROM transaction_details
+                    WHERE product_id = ?::uuid
+                   );
+                """;
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement checkStatement = conn.prepareStatement(check_query);
+                checkStatement.setString(1, product.getId());
+                ResultSet res = checkStatement.executeQuery();
+                if (res.next()) {
+                    return res.getBoolean(1);
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 

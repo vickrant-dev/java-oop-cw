@@ -1,10 +1,12 @@
 package com.inventory.service_manager;
 
 import com.inventory.domain.Customer;
+import com.inventory.domain.Transaction;
 import com.inventory.repositories.CustomerRepository;
 import com.inventory.service.CustomerService;
 import com.inventory.utils.handleValidateFields;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerMgr implements CustomerService {
@@ -66,6 +68,17 @@ public class CustomerMgr implements CustomerService {
         }
         else {
             return "401a";
+        }
+    }
+
+    public List<Transaction> fetchCustomerTransactions(Customer customer) {
+        List<Transaction> customer_transactions = new ArrayList<>();
+        if(new handleValidateFields().validateFields(customer) == null) {
+            customer_transactions = customerRepo.fetchCustomerTransactions(customer);
+            return customer_transactions;
+        }
+        else {
+            return customer_transactions;
         }
     }
 }

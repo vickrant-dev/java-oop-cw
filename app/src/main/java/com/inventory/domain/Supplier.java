@@ -30,6 +30,12 @@ public class Supplier extends Person {
         return contact_info;
     }
 
+    // SETTERS
+    public void updateSupplierDetails(String name, String contact_info) {
+        this.name = name;
+        this.contact_info = contact_info;
+    }
+
     // overriding the default toString method of an Object.
     // Typically, the default Object comes with toString that returns like this:
     // -> return getClass().getName() + "@" + Integer.toHexString(hashCode());

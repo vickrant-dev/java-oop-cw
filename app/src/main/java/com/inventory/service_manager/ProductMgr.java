@@ -22,11 +22,11 @@ public class ProductMgr implements ProductService {
         {
             int update_res = productRepo.createProduct(product);
             if (update_res == 200) {
-                System.out.println("Updated Product successfully for: " + product.getProductId());
+                System.out.println("Product created successfully for: " + product.getProductId());
                 return "200";
             }
             else {
-                System.out.println("Product updating failed for: " + product.getProductId() + ". Error: " + update_res);
+                System.out.println("Product creation failed for: " + product.getProductId() + ". Error: " + update_res);
                 return "401a";
             }
         }

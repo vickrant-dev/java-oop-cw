@@ -1,5 +1,6 @@
 package com.inventory.service_manager;
 
+import com.inventory.domain.Product;
 import com.inventory.domain.Transaction;
 import com.inventory.repositories.TransactionRepository;
 import com.inventory.service.TransactionService;
@@ -15,7 +16,8 @@ public class TransactionMgr implements TransactionService {
         this.transactionRepo = new TransactionRepository();
     }
 
-    public String createTransaction(Transaction transaction) {
+    public String createTransaction(Transaction transaction)
+    {
         if(new handleValidateFields().validateFields(transaction) == null
                 && new handleValidateFields().validateFields
                 (transaction.getTransactionDetails()) == null)
@@ -39,7 +41,8 @@ public class TransactionMgr implements TransactionService {
         return transactionRepo.fetchAllTransactions();
     }
 
-    public String deleteTransaction(Transaction transaction) {
+    public String deleteTransaction(Transaction transaction)
+    {
         if(new handleValidateFields().validateFields(transaction) == null)
         {
             int delete_res = transactionRepo.deleteTransaction(transaction);
@@ -54,6 +57,16 @@ public class TransactionMgr implements TransactionService {
         }
         else {
             return "401a";
+        }
+    }
+
+    public boolean checkTransaction(Product product) {
+        if(new handleValidateFields().validateFields(product) == null)
+        {
+            return transactionRepo.checkTransaction(product);
+        }
+        else {
+            return true;
         }
     }
 }

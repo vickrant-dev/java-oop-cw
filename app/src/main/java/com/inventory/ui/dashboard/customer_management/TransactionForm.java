@@ -1,12 +1,17 @@
 package com.inventory.ui.dashboard.customer_management;
 
+import com.inventory.controller.CustomerController;
+import com.inventory.domain.Customer;
+import com.inventory.domain.Transaction;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
 
 
 public class TransactionForm extends JFrame{
-    public  TransactionForm(String username, String email){
+    public  TransactionForm(Customer customer){
         setTitle("Customer Transaction");
         setSize(600,400);
         setLocationRelativeTo(null);
@@ -21,22 +26,35 @@ public class TransactionForm extends JFrame{
         JPanel info = new JPanel(new GridLayout(2,1));
         info.setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
 
-        JLabel userlbl = new JLabel("Username: " +username);
-        JLabel emaillbl = new JLabel("Email: " + email);
+        JLabel userlbl = new JLabel("Username: " + customer.getCustomerName());
+        JLabel contactlbl = new JLabel("Contact info: " + customer.getCustomerContactInfo());
 
         info.add(userlbl);
-        info.add(emaillbl);
+        info.add(contactlbl);
         add(info, BorderLayout.SOUTH);
 
-        String[] colms = {"Transaction ID", "Date", "Amount", "Status"};
+        String[] colms = {"Transaction ID", "Created at", "Total amount", "Payment method",
+                "Created by"};
 
-        Object[][] data = {
-                {"abc287", "2025-10-08", "Rs.5000", "Completed"},
-                {"abd548", "2025-06-12", "Rs.12500", "Completed"},
-                {"abd556", "2025-12-18", "Rs.49000", "Completed"}
+        List<Transaction> cus_transactions = new CustomerController().fetchCustomerTransactions(customer);
+
+        Object[][] data = new Object[cus_transactions.size()][];
+
+        for (int i = 0; i < cus_transactions.size(); i++) {
+            Transaction cus_transaction = cus_transactions.get(i);
+            data[i] =  new Object[] { cus_transaction.getTransactionId(),
+                    cus_transaction.getCreatedAt(), cus_transaction.getTotalAmount(),
+                    cus_transaction.getPaymentMethod(), cus_transaction.getCreatedBy()
+            };
+        }
+
+        DefaultTableModel model = new DefaultTableModel(data, colms) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
 
-        JTable tbl = new JTable(new DefaultTableModel(data,colms));
+        JTable tbl = new JTable(model);
         tbl.setRowHeight(28);
 
         add(new JScrollPane(tbl), BorderLayout.CENTER);

@@ -1,8 +1,12 @@
 package com.inventory.ui.dashboard.customer_management;
 
+import com.inventory.controller.CustomerController;
+import com.inventory.domain.Customer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 public class CustomerPanel extends JPanel {
 
@@ -13,28 +17,25 @@ public class CustomerPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        // add(new JLabel("Customer Management", SwingConstants.CENTER), BorderLayout.CENTER);
-        // setBackground(Color.WHITE);
-
         JLabel header = new JLabel("Customer Management", SwingConstants.CENTER);
         header.setFont(new Font("Segoe UI", Font.BOLD, 20));
         header.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         add(header, BorderLayout.NORTH);
 
-        String[] colums = {"Username", "Email", "Password"};
+        String[] colums = {"Username", "Contact info"};
 
-        Object[][] data = {
-                {"Vickrant","viki@gmail.com","********"},
-                {"Gihan", "gihan@gmail.com", "*********"},
-                {"Juman", "bmb@gmail.com", "********"}
-        };
-
-        model = new DefaultTableModel(data, colums){
+        model = new DefaultTableModel(colums, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
+        List<Customer> all_customers = new CustomerController().getAllCustomers();
+
+        for (Customer cus : all_customers) {
+            model.addRow(new Object[] { cus.getCustomerName(), cus.getCustomerContactInfo() });
+        }
 
         custable = new JTable(model);
         custable.setRowHeight(30);
@@ -51,10 +52,7 @@ public class CustomerPanel extends JPanel {
                 if(e.getClickCount() == 2){
                     int row = custable.getSelectedRow();
 
-                    String username = model.getValueAt(row, 0).toString();
-                    String email = model.getValueAt(row, 1).toString();
-
-                    new TransactionForm(username , email);
+                    new TransactionForm(all_customers.get(row));
                 }
             }
         });

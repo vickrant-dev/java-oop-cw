@@ -1,23 +1,156 @@
 package com.inventory.ui.dashboard.supplier_management;
 
+import com.inventory.controller.SupplierController;
+import com.inventory.domain.Supplier;
+import com.inventory.ui.dashboard.product_management.PopupMenu;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SupplierPanel extends JPanel {
+
+    private JTable table;
+    private DefaultTableModel model;
+    private List<Supplier> supplierRows = new ArrayList<>();
+
     public SupplierPanel() {
         setLayout(new BorderLayout());
-        add(new JLabel("Supplier Management", SwingConstants.CENTER), BorderLayout.CENTER);
+
+        JLabel title = new JLabel("Supplier Management");
+        title.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        title.setForeground(new Color(0, 70, 0));
+        title.setBorder(BorderFactory.createEmptyBorder(10, 0, 12, 0));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        add(title, BorderLayout.NORTH);
+
+        setupTable();
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        setupRightPanel();
+        refreshTableData();
+    }
+
+    private void setupTable() {
+        String[] columns = {"ID", "Name", "Contact Info"};
+        model = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table = new JTable(model);
+        table.setRowHeight(25);
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        PopupMenu popup = new PopupMenu();
+        JPopupMenu popupMenu = popup.getPopupMenu();
+        table.setComponentPopupMenu(popupMenu);
+
+        JMenuItem updateItem = (JMenuItem) popupMenu.getComponent(0);
+        updateItem.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row >= 0) {
+                Supplier selected = supplierRows.get(row);
+                new UpdateSupplier(selected, this);
+            }
+        });
+
+        // delete supplier
+        JMenuItem deleteItem = (JMenuItem) popupMenu.getComponent(1);
+        deleteItem.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row >= 0) {
+                Supplier selectedSupplier = supplierRows.get(row);
+
+                // confirm
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Are you sure you want to delete supplier: " + selectedSupplier.getSupplierName() + "?",
+                        "Confirm Deletion",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // check if supplier has products
+                    SupplierController supplierController = new SupplierController();
+                    boolean checkSupplierProds = supplierController.checkSupplierProds(selectedSupplier);
+
+                    if (checkSupplierProds) {
+                        JOptionPane.showMessageDialog(this,
+                                "Unable to delete suppler. " +
+                                        "\nSupplier is currently providing products",
+                                "Dependency Error",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                    else {
+                        supplierController.deleteSupplier(selectedSupplier);
+                        refreshTableData();
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a supplier to delete.");
+            }
+        });
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    int row = table.getSelectedRow();
+                        new ProductofSupplier(supplierRows.get(row));
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent e) { selectRow(e); }
+            @Override
+            public void mouseReleased(MouseEvent e) { selectRow(e); }
+            private void selectRow(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                if (row >= 0) table.setRowSelectionInterval(row, row);
+            }
+        });
+    }
+
+    private void setupRightPanel() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+
+        JButton addButton = new JButton("Add new Supplier");
+        JButton refreshButton = new JButton("Refresh");
+
+        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        buttonPanel.add(Box.createVerticalStrut(20));
+        buttonPanel.add(addButton);
+        buttonPanel.add(Box.createVerticalStrut(20));
+        buttonPanel.add(refreshButton);
+
+        add(buttonPanel, BorderLayout.EAST);
+
+        addButton.addActionListener(e -> new AddNewSupplier(this));
+        refreshButton.addActionListener(e -> refreshTableData());
+    }
+
+    public void refreshTableData() {
+        model.setRowCount(0);
+        supplierRows = new SupplierController().fetchAllSuppliers();
+
+        for (Supplier s : supplierRows) {
+            Object[] rowData = {
+                    s.getSupplierId(),
+                    s.getSupplierName(),
+                    s.getSupplierContactInfo()
+            };
+            model.addRow(rowData);
+        }
     }
 }
-
-// JFrame -> main application window. contains title, menu, buttons and other components
-// JDialog -> temporary window. pop-up window basically
-// JWindow -> window without borders or title bar. often used in splash screens.
-
-// JPanel -> container that is used to group components
-// JScrollPane -> adds scrollbar to another component
-// JSplitPane -> Splits an area into two resizable sections
-// JTabbedPane -> displays components with tabs
-// JLayeredPane -> allow components to overlap each other
-// JDesktopPane -> holds internal frames (we rarely use this)
-// JInternalPane -> a window inside a window
