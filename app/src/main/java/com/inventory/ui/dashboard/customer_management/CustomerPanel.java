@@ -45,14 +45,13 @@ public class CustomerPanel extends JPanel {
         JScrollPane scroll = new JScrollPane(custable);
         add(scroll, BorderLayout.CENTER);
 
+        Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
         custable.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e){
                 if(e.getClickCount() == 2){
                     int row = custable.getSelectedRow();
-
-                    new TransactionForm(all_customers.get(row));
+                    new TransactionForm(parentFrame, all_customers.get(row));
                 }
             }
         });

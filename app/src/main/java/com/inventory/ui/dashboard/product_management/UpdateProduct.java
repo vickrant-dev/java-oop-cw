@@ -2,17 +2,20 @@ package com.inventory.ui.dashboard.product_management;
 
 import com.inventory.controller.ProductController;
 import com.inventory.domain.Product;
+import com.inventory.utils.handleValidateFields;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class UpdateProduct extends JFrame {
+public class UpdateProduct extends JDialog {
 
     private JTextField Productidfield, ProductNamefield, Categoryfield, Pricefield, StockField;
     private Product localProduct;
     private ManageProducts parentPanel;
 
-    public UpdateProduct(Product product, ManageProducts parent) {
+    public UpdateProduct(Frame owner, Product product, ManageProducts parent) {
+        super(owner, "Update Product", true);
         this.localProduct = product;
         this.parentPanel = parent;
 
@@ -21,8 +24,8 @@ public class UpdateProduct extends JFrame {
         if (iconURL != null) { setIconImage(new ImageIcon(iconURL).getImage()); }
 
         setSize(450, 390);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(owner);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(null);
 
         // labels and fields
@@ -53,21 +56,32 @@ public class UpdateProduct extends JFrame {
         Cancelbutton.addActionListener(e -> dispose());
 
         Updatebutton.addActionListener(e -> {
-            // use setters to update fields locally
-            localProduct.updateDetails(
-                    Productidfield.getText(),
-                    ProductNamefield.getText(),
-                    Categoryfield.getText(),
-                    Double.parseDouble(Pricefield.getText()),
-                    Integer.parseInt(StockField.getText())
-            );
 
-            // passing updated local prod object to controller
-            ProductController update_prod_controller = new ProductController();
-            update_prod_controller.updateProductDetails(localProduct);
+            String errorMsg = new handleValidateFields().validateFields(Productidfield,
+                    ProductNamefield, Categoryfield, Pricefield, StockField);
 
-            parentPanel.refreshTableData();
-            dispose();
+            if (!errorMsg.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Please correct the following: \n"
+                                + errorMsg, "Input invalid", JOptionPane.WARNING_MESSAGE);
+            }
+            else {
+                // use setters to update fields locally
+                localProduct.updateDetails(
+                        Productidfield.getText(),
+                        ProductNamefield.getText(),
+                        Categoryfield.getText(),
+                        Double.parseDouble(Pricefield.getText()),
+                        Integer.parseInt(StockField.getText())
+                );
+
+                // passing updated local prod object to controller
+                ProductController update_prod_controller = new ProductController();
+                update_prod_controller.updateProductDetails(localProduct);
+
+                parentPanel.refreshTableData();
+                dispose();
+            }
         });
 
         buttonPanel.add(Updatebutton);

@@ -3,6 +3,7 @@ package com.inventory.ui.dashboard.product_management;
 import com.inventory.controller.ProductController;
 import com.inventory.domain.Product;
 import com.inventory.domain.Supplier;
+import com.inventory.utils.handleValidateFields;
 import com.inventory.utils.loadAllSuppliers;
 
 import javax.swing.*;
@@ -133,34 +134,46 @@ public class AddNewProductDialog extends JDialog {
     private void onSave() {
         // collect info from fields
         // create product obj
-        Object price_value = txtPrice.getValue(); // extracting price value and it's an obj type.
-        Object stock_value = spnStock.getValue();
 
-        Product newProduct = new Product(
+        String errorMsg = new handleValidateFields().validateFields(txtProductId, txtProductName, txtCategory,
+                txtPrice, spnStock, cmbSupplier);
+
+        if (!errorMsg.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please correct the following: \n"
+                    + errorMsg, "Input invalid", JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            Object price_value = txtPrice.getValue(); // extracting price value and it's an obj type.
+            Object stock_value = spnStock.getValue();
+
+            Product newProduct = new Product(
                 txtProductId.getText(),
                 txtProductName.getText(),
                 txtCategory.getText(),
                 ((Number) price_value).doubleValue(), // cast it as number and convert to double.
                 ((Number) stock_value).intValue(),
                 (Supplier)cmbSupplier.getSelectedItem() // type casting
-        );
+            );
 
-        // call controller to create product
-        ProductController productController = new ProductController();
-        String create_prod_res = productController.createProduct(newProduct);
+            // call controller to create product
+            ProductController productController = new ProductController();
+            String create_prod_res = productController.createProduct(newProduct);
 
-        // success/failure dialog pops up
-        if (create_prod_res.equals("200")) {
-            // success dialog
-            // auto refresh table
-            manageProd.refreshTableData();
-            dispose();
-            return;
+            // success/failure handling
+            if (create_prod_res.equals("200")) {
+                // auto refresh table
+                manageProd.refreshTableData();
+                dispose();
+            }
+            else {
+                // failure dialog
+                JOptionPane.showMessageDialog(this,
+                        "Failed to create product. " +
+                                JOptionPane.WARNING_MESSAGE);
+                dispose();
+            }
         }
-        else {
-            // failure dialog
-            dispose();
-            return;
-        }
+
     }
 }

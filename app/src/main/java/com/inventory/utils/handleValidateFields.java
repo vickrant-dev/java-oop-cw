@@ -14,6 +14,7 @@ public class handleValidateFields {
         return null;
     }
 
+    // THE TRANSACTION VALIDATION
     // used for validating TRANSACTION fields
     public String validateFields(Transaction transaction)
     {
@@ -46,6 +47,8 @@ public class handleValidateFields {
         return null;
     }
 
+
+    // THE SUPPLIER VALIDATION
     // used for validating SUPPLIER fields
     public String validateFields(Supplier supplier)
     {
@@ -57,7 +60,8 @@ public class handleValidateFields {
     }
 
 
-    // used for validating PRODUCT fields
+    // THE PRODUCTS VALIDATION
+    // used for validating PRODUCT field when deleting
     public String validateFields(Product product)
     {
 
@@ -87,7 +91,58 @@ public class handleValidateFields {
         return null; // valid
     }
 
+    // used for validating when creating PRODUCT
+    public String validateFields(JTextField txtProductId, JTextField txtProductName,
+                                 JTextField txtCategory, JFormattedTextField txtPrice,
+                                 JSpinner spnStock, JComboBox<Supplier> cmbSupplier)
+    {
+        StringBuilder errors = new StringBuilder(); // allows insert and append fn
 
+        if (txtProductId.getText().trim().isEmpty()) errors.append("- Product ID is required.\n");
+        if (txtProductName.getText().trim().isEmpty()) errors.append("- Product Name is required.\n");
+        if (txtCategory.getText().trim().isEmpty()) errors.append("- Category is required.\n");
+
+        if (txtPrice.getValue() == null || ((Number) txtPrice.getValue()).doubleValue() <= 0) {
+            errors.append("- Price must be greater than 0.\n");
+        }
+
+        if (spnStock.getValue() == null || (int) spnStock.getValue() <= 0) {
+            errors.append("- Stock cannot be negative.\n");
+        }
+
+        if (cmbSupplier.getSelectedItem() == null) {
+            errors.append("- Please select a valid Supplier.\n");
+        }
+
+        return errors.toString();
+    }
+
+    // used for validating when updating PRODUCT
+    public String validateFields(JTextField product_id, JTextField product_name,
+                                 JTextField product_category, JTextField price_field,
+                                 JTextField stock_field)
+    {
+        StringBuilder errors = new StringBuilder(); // allows insert and append fn
+
+        if (product_id.getText().trim().isEmpty()) errors.append("- Product ID is required.\n");
+        if (product_name.getText().trim().isEmpty()) errors.append("- Product Name is required.\n");
+        if (product_category.getText().trim().isEmpty()) errors.append("- Category is required.\n");
+
+        if (price_field.getText().trim().isEmpty() || Double.parseDouble(price_field.getText()) <= 0 ) {
+            errors.append("- Price must be greater than 0.\n");
+        }
+
+        if (stock_field.getText().trim().isEmpty() || Integer.parseInt(stock_field.getText()) <= 0) {
+            errors.append("- Stock cannot be negative or empty.\n");
+        }
+
+        return errors.toString();
+
+    }
+
+
+
+    // THE CUSTOMER VALIDATION
     // used for validating CUSTOMER fields
     public String validateFields(Customer customer) {
         if (customer.getCustomerId().trim().isEmpty()) {
@@ -103,6 +158,7 @@ public class handleValidateFields {
     }
 
 
+    // THE AUTH VALIDATION
     // used for validating LOGIN/SIGNUP
     public String validateFields(JTextField field1, JPasswordField field2)
     {

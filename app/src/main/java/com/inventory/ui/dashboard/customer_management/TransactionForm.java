@@ -10,12 +10,13 @@ import java.awt.*;
 import java.util.List;
 
 
-public class TransactionForm extends JFrame{
-    public  TransactionForm(Customer customer){
+public class TransactionForm extends JDialog{
+    public  TransactionForm(Frame owner, Customer customer){
+        super(owner, "Customer Transaction", true);
         setTitle("Customer Transaction");
         setSize(600,400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(owner);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JLabel header = new JLabel("Transaction History", SwingConstants.CENTER);

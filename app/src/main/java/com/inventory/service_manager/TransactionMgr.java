@@ -60,7 +60,8 @@ public class TransactionMgr implements TransactionService {
         }
     }
 
-    public boolean checkTransaction(Product product) {
+    public boolean checkTransaction(Product product)
+    {
         if(new handleValidateFields().validateFields(product) == null)
         {
             return transactionRepo.checkTransaction(product);

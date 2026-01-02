@@ -10,7 +10,7 @@ import java.awt.*;
 import java.net.URL;
 import java.util.List;
 
-public class ProductofSupplier extends JFrame {
+public class ProductofSupplier extends JDialog {
 
     JTable table;
     DefaultTableModel model;
@@ -18,9 +18,9 @@ public class ProductofSupplier extends JFrame {
     private Supplier selectedSupplier;
     private SupplierController supplierController;
 
-    public ProductofSupplier(Supplier supplier)
+    public ProductofSupplier(Frame owner, Supplier supplier)
     {
-
+        super(owner, "Product(s) of Supplier", true);
         this.supplierController = new SupplierController();
         this.selectedSupplier = supplier;
         setTitle("Product(s) of Supplier");
@@ -31,8 +31,8 @@ public class ProductofSupplier extends JFrame {
             setIconImage(icon);
         }
         setSize(600,400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(owner);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
 
@@ -50,7 +50,11 @@ public class ProductofSupplier extends JFrame {
 
         // create table
         model = new DefaultTableModel(columns, 0);
-        table = new JTable(model);
+        table = new JTable(model) {
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
 
         List<Product> supplierProducts = supplierController.getSupplierProducts(selectedSupplier);
 

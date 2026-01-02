@@ -7,19 +7,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class AddNewSupplier extends JFrame {
+public class AddNewSupplier extends JDialog {
 
     private JLabel titleLabel, supplierIdLabel, supplierNameLabel, contactInfoLabel;
     private JTextField supplierIdField, supplierNameField, contactInfoField;
     private SupplierPanel parentPanel;
 
-    public AddNewSupplier(SupplierPanel parent) {
+    public AddNewSupplier(Frame owner, SupplierPanel parent) {
+        super(owner, "Add New Supplier", true);
         this.parentPanel = parent;
 
         setTitle("Add New Supplier");
         setSize(450, 350); // Slightly reduced height
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(owner);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(null);
 
         // Set icon

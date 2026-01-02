@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class UpdateSupplier extends JFrame {
+public class UpdateSupplier extends JDialog {
 
     private JTextField supplieridField;
     private JTextField supplierNameField;
@@ -16,7 +16,8 @@ public class UpdateSupplier extends JFrame {
     private Supplier supplier;
     private SupplierPanel parentPanel;
 
-    public UpdateSupplier(Supplier supplier, SupplierPanel parentPanel) {
+    public UpdateSupplier(Frame owner, Supplier supplier, SupplierPanel parentPanel) {
+        super(owner, "Update Supplier", true);
         this.supplier = supplier;
         this.parentPanel = parentPanel;
 
@@ -25,8 +26,8 @@ public class UpdateSupplier extends JFrame {
         if (iconURL != null) setIconImage(new ImageIcon(iconURL).getImage());
 
         setSize(400, 300);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(owner);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JLabel updateLabel = new JLabel("Update Supplier", SwingConstants.CENTER);

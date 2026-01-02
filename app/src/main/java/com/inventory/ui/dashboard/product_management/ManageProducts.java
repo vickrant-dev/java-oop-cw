@@ -4,6 +4,7 @@ import com.inventory.controller.ProductController;
 import com.inventory.controller.TransactionController;
 import com.inventory.domain.Product;
 import com.inventory.domain.Transaction;
+import com.inventory.utils.handleValidateFields;
 import com.inventory.utils.loadAllProducts;
 
 import javax.swing.*;
@@ -66,7 +67,8 @@ public class ManageProducts extends JPanel {
             if (row >= 0) {
                 // product from the productRows based on row index
                 Product selectedProduct = productRows.get(row);
-                new UpdateProduct(selectedProduct, this);
+                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
+                new UpdateProduct(parentFrame, selectedProduct, this);
             }
         });
 
@@ -90,10 +92,21 @@ public class ManageProducts extends JPanel {
                         );
                     }
                     else {
-                        // proceed to delete product.
-                        ProductController del_prod_controller = new ProductController();
-                        del_prod_controller.deleteProduct(productToDelete);
-                        refreshTableData();
+                        // Check product fields before deleting
+                        String errorMsg = new handleValidateFields().validateFields(productToDelete);
+
+                        if (!errorMsg.isEmpty()) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Please correct the following: \n"
+                                            + errorMsg, "Invalid fields", JOptionPane.WARNING_MESSAGE);
+                        }
+                        else {
+                            // proceed to delete product.
+                            ProductController del_prod_controller = new ProductController();
+                            del_prod_controller.deleteProduct(productToDelete);
+                            refreshTableData();
+                        }
+
                     }
                 }
             }

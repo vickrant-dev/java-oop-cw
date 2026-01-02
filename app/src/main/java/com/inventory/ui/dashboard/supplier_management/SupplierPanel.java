@@ -59,7 +59,8 @@ public class SupplierPanel extends JPanel {
             int row = table.getSelectedRow();
             if (row >= 0) {
                 Supplier selected = supplierRows.get(row);
-                new UpdateSupplier(selected, this);
+                Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
+                new UpdateSupplier(parentFrame, selected, this);
             }
         });
 
@@ -100,12 +101,13 @@ public class SupplierPanel extends JPanel {
             }
         });
 
+        Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     int row = table.getSelectedRow();
-                        new ProductofSupplier(supplierRows.get(row));
+                        new ProductofSupplier(parentFrame, supplierRows.get(row));
                 }
             }
             @Override
@@ -136,7 +138,8 @@ public class SupplierPanel extends JPanel {
 
         add(buttonPanel, BorderLayout.EAST);
 
-        addButton.addActionListener(e -> new AddNewSupplier(this));
+        Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
+        addButton.addActionListener(e -> new AddNewSupplier(parentFrame, this));
         refreshButton.addActionListener(e -> refreshTableData());
     }
 
