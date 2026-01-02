@@ -150,68 +150,72 @@ public class CustomerRepository {
     public List<Transaction> fetchCustomerTransactions(Customer customer)
     {
         List<Transaction> all_cus_transactions = new ArrayList<>();
+
         String get_cus_transactions_query = """
-                    SELECT t.*, u.username AS user_name
-                    FROM transactions t
-                    JOIN users u ON t.created_by = u.id
-                    WHERE t.customer_id=?::uuid;
+                SELECT t.*, u.username AS created_by_name
+                FROM transactions t
+                JOIN users u ON t.created_by = u.id
+                WHERE t.customer_id = ?::uuid;
             """;
+
+        // joining products table here to get the actual name
         String get_transaction_details_query = """
-                    SELECT * FROM transaction_details where transaction_id=?::uuid
+                SELECT td.*, p.name as product_name
+                FROM transaction_details td
+                JOIN products p ON td.product_id = p.id
+                WHERE td.transaction_id = ?::uuid;
             """;
 
         try (Connection conn = Server.getConnection()) {
-            if (conn != null) {
-                PreparedStatement getCusTransactionStatement = conn.prepareStatement(
-                        get_cus_transactions_query
-                );
-                getCusTransactionStatement.setString(1, customer.getCustomerId());
-                ResultSet res = getCusTransactionStatement.executeQuery();
-                while (res.next()) {
-                    Transaction cus_transaction = new Transaction(
-                            res.getString("id"),
-                            res.getString("customer_id"),
-                            res.getString("transaction_date"),
-                            res.getDouble("total_amount"),
-                            res.getDouble("discount_percentage"),
-                            res.getDouble("discount_amount"),
-                            res.getString("payment_method"),
-                            res.getString("user_name"),
-                            res.getString("created_at"),
-                            new ArrayList<>()
-                    );
+            if (conn == null) return all_cus_transactions;
 
-                    PreparedStatement fetchTransactionsDetailsStatement = conn.prepareStatement(get_transaction_details_query);
-                    fetchTransactionsDetailsStatement.setString(1, cus_transaction.getTransactionId());
-                    ResultSet details_res = fetchTransactionsDetailsStatement.executeQuery();
+            // prepare both statements up front
+            try (PreparedStatement getCusTxStmt = conn.prepareStatement(get_cus_transactions_query);
+                 PreparedStatement getDetailsStmt = conn.prepareStatement(get_transaction_details_query)) {
 
-                    // we get all transaction details for a given transaction
-                    List<TransactionDetails> transaction_details = new ArrayList<>();
-                    while(details_res.next()) {
-                        TransactionDetails details = new TransactionDetails(
-                                details_res.getString("transaction_id"),
-                                details_res.getString("product_id"),
-                                details_res.getInt("quantity"),
-                                details_res.getDouble("price")
+                getCusTxStmt.setString(1, customer.getCustomerId());
+
+                try (ResultSet res = getCusTxStmt.executeQuery()) {
+                    while (res.next()) {
+                        Transaction cus_transaction = new Transaction(
+                                res.getString("id"),
+                                res.getString("customer_id"),
+                                res.getString("transaction_date"),
+                                res.getDouble("total_amount"),
+                                res.getDouble("discount_percentage"),
+                                res.getDouble("discount_amount"),
+                                res.getString("payment_method"),
+                                res.getString("created_by"),
+                                res.getString("created_by_name"),
+                                res.getString("created_at"),
+                                new ArrayList<>()
                         );
-                        // for every transaction details row we add it to a List
-                        transaction_details.add(details);
-                    }
 
-                    cus_transaction.setTransactionDetails(transaction_details);
-                    all_cus_transactions.add(cus_transaction);
-                    fetchTransactionsDetailsStatement.close();
-                    details_res.close();
+                        // reuse the same prepared statement for efficiency
+                        getDetailsStmt.setString(1, cus_transaction.getTransactionId());
+
+                        try (ResultSet details_res = getDetailsStmt.executeQuery()) {
+                            List<TransactionDetails> transaction_details = new ArrayList<>();
+                            while(details_res.next()) {
+                                TransactionDetails details = new TransactionDetails(
+                                        details_res.getString("transaction_id"),
+                                        details_res.getString("product_id"),
+                                        details_res.getString("product_name"), // from joined table
+                                        details_res.getInt("quantity"),
+                                        details_res.getDouble("price")
+                                );
+                                transaction_details.add(details);
+                            }
+                            cus_transaction.setTransactionDetails(transaction_details);
+                        }
+
+                        all_cus_transactions.add(cus_transaction);
+                    }
                 }
-                getCusTransactionStatement.close();
-                res.close();
-                return all_cus_transactions;
             }
-            else {
-                return all_cus_transactions; // connection err.
-            }
-        }
-        catch (SQLException e) {
+            return all_cus_transactions;
+
+        } catch (SQLException e) {
             System.err.println("Database connection err: " + e.getMessage());
             e.printStackTrace();
             return all_cus_transactions;

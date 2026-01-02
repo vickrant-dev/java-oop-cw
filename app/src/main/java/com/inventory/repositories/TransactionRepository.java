@@ -18,10 +18,17 @@ public class TransactionRepository {
     {
         List<Transaction> all_transactions = new ArrayList<>();
         String fetch_transactions_query = """
-                    SELECT * FROM transactions
+                    SELECT
+                        t.*,
+                        u.username AS created_by_name
+                    FROM transactions t
+                    LEFT JOIN users u ON t.created_by = u.id::uuid
                 """;
         String fetch_transaction_details_query = """
-                    SELECT * FROM transaction_details WHERE transaction_id = ?::uuid
+                    SELECT td.*, p.name AS product_name
+                    FROM transaction_details td
+                    JOIN products p ON td.product_id = p.id
+                    WHERE td.transaction_id = ?::uuid
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -43,6 +50,7 @@ public class TransactionRepository {
                             res.getDouble("discount_amount"),
                             res.getString("payment_method"),
                             res.getString("created_by"),
+                            res.getString("created_by_name"),
                             res.getString("created_at"),
                             new ArrayList<>()
                     );
@@ -56,6 +64,7 @@ public class TransactionRepository {
                         TransactionDetails details = new TransactionDetails(
                                 details_res.getString("transaction_id"),
                                 details_res.getString("product_id"),
+                                details_res.getString("product_name"),
                                 details_res.getInt("quantity"),
                                 details_res.getDouble("price")
                         );
@@ -134,7 +143,7 @@ public class TransactionRepository {
     {
         String create_transaction_query =
                 """
-                    SELECT delete_transaction(?);
+                    DELETE FROM transactions where id = ?::uuid;
                 """;
 
         try (Connection conn = Server.getConnection()) {
@@ -142,17 +151,14 @@ public class TransactionRepository {
                 PreparedStatement deleteTransactionStatement = conn.prepareStatement(create_transaction_query);
                 deleteTransactionStatement.setString(1, transaction.getTransactionId());
 
-                ResultSet res = deleteTransactionStatement.executeQuery();
+                int res = deleteTransactionStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res delete transaction: " + res.next());
+                if (res > 0) {
                     deleteTransactionStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     deleteTransactionStatement.close();
-                    res.close();
                     return 401; // invalid product_id maybe...
                 }
             }

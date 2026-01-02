@@ -7,60 +7,49 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import java.awt.Window;
 
 public class TransactionDetailsForm extends JDialog {
 
-    JTable prdtbl;
-    DefaultTableModel prdmdl;
+    private JTable prdtbl;
+    private DefaultTableModel prdmdl;
 
     public TransactionDetailsForm(Window owner, Transaction transaction) {
         super(owner, "Transaction Details", ModalityType.APPLICATION_MODAL);
+
         setTitle("Transaction Details");
-        setSize(600, 420);
+        setSize(600, 450);
         setLocationRelativeTo(owner);
-        setModal(true);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        // header
         JLabel header = new JLabel("Transaction Details", SwingConstants.CENTER);
         header.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        header.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        header.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         add(header, BorderLayout.NORTH);
 
-        JPanel upperpanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        upperpanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // transaction info
+        JPanel upperpanel = new JPanel(new GridLayout(2, 2, 15, 15));
+        upperpanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
 
-        JPanel p1 = new JPanel(new BorderLayout());
-        p1.add(new JLabel("Date:"), BorderLayout.NORTH);
-        p1.add(new JLabel(transaction.getTransactionDate()), BorderLayout.CENTER);
+        upperpanel.add(createInfoSection("Date:", transaction.getTransactionDate()));
+        upperpanel.add(createInfoSection("Total:", String.format("Rs.%.2f", transaction.getTotalAmount())));
+        upperpanel.add(createInfoSection("Payment:", transaction.getPaymentMethod()));
+        upperpanel.add(createInfoSection("Created By:", transaction.getCreatedByName()));
 
-        JPanel p2 = new JPanel(new BorderLayout());
-        p2.add(new JLabel("Total:"), BorderLayout.NORTH);
-        p2.add(new JLabel(String.format("Rs.%.2f", transaction.getTotalAmount())), BorderLayout.CENTER);
+        JPanel topWrapper = new JPanel(new BorderLayout());
+        topWrapper.add(header, BorderLayout.NORTH);
+        topWrapper.add(upperpanel, BorderLayout.CENTER);
+        add(topWrapper, BorderLayout.NORTH);
 
-        JPanel p3 = new JPanel(new BorderLayout());
-        p3.add(new JLabel("Payment:"), BorderLayout.NORTH);
-        p3.add(new JLabel(transaction.getPaymentMethod()), BorderLayout.CENTER);
-
-        JPanel p4 = new JPanel(new BorderLayout());
-        p4.add(new JLabel("Created By:"), BorderLayout.NORTH);
-        p4.add(new JLabel(transaction.getCreatedBy()), BorderLayout.CENTER);
-
-        upperpanel.add(p1);
-        upperpanel.add(p2);
-        upperpanel.add(p3);
-        upperpanel.add(p4);
-
-        add(upperpanel, BorderLayout.NORTH);
-
-        String[] columns = {"Product Id", "Quantity", "Price"};
-
+        // table
+        String[] columns = {"Product name", "Quantity", "Price"};
         List<TransactionDetails> details = transaction.getTransactionDetails();
         Object[][] data = new Object[details.size()][3];
+
         for (int i = 0; i < details.size(); i++) {
             TransactionDetails d = details.get(i);
-            data[i][0] = d.getProductId();
+            data[i][0] = d.getProductName();
             data[i][1] = d.getQuantity();
             data[i][2] = String.format("Rs.%.2f", d.getPrice());
         }
@@ -73,7 +62,7 @@ public class TransactionDetailsForm extends JDialog {
         };
 
         prdtbl = new JTable(prdmdl);
-        prdtbl.setRowHeight(28);
+        prdtbl.setRowHeight(30);
         prdtbl.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         prdtbl.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
         prdtbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -82,27 +71,32 @@ public class TransactionDetailsForm extends JDialog {
         scroll.setBorder(BorderFactory.createTitledBorder("Products in this Transaction"));
         add(scroll, BorderLayout.CENTER);
 
-        JPanel bottom = new JPanel();
-        bottom.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-        bottom.setLayout(new BorderLayout());
+        // bottom panel
+        JPanel bottom = new JPanel(new BorderLayout());
+        bottom.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
-        JLabel createdAtLabel = new JLabel("Created At: " + transaction.getCreatedAt());
-        bottom.add(createdAtLabel, BorderLayout.WEST);
+        JButton btnClose = new JButton("Close");
+        btnClose.setFocusPainted(false);
+        btnClose.setBackground(new Color(33, 153, 243));
+        btnClose.setForeground(Color.WHITE);
+        btnClose.setPreferredSize(new Dimension(100, 35));
+        btnClose.addActionListener(e -> dispose());
 
-        JButton btn = new JButton("Close");
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false);
-        btn.setOpaque(true);
-        btn.setBackground(new Color(33, 153, 243));
-        btn.setForeground(Color.WHITE);
-        btn.setFont(new Font("Arial",Font.BOLD,14));
-        btn.setPreferredSize(new Dimension(100, 35));
-        btn.addActionListener(e -> dispose());
-
-        JPanel btnPanel = new JPanel();
-        btnPanel.add(btn);
-        bottom.add(btnPanel, BorderLayout.EAST);
-
+        bottom.add(btnClose, BorderLayout.EAST);
         add(bottom, BorderLayout.SOUTH);
+    }
+
+    private JPanel createInfoSection(String title, String value) {
+        JPanel p = new JPanel(new BorderLayout());
+        JLabel lTitle = new JLabel(title);
+        lTitle.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lTitle.setForeground(Color.GRAY);
+
+        JLabel lValue = new JLabel(value);
+        lValue.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        p.add(lTitle, BorderLayout.NORTH);
+        p.add(lValue, BorderLayout.CENTER);
+        return p;
     }
 }

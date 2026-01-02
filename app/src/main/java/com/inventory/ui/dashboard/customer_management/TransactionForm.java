@@ -45,7 +45,7 @@ public class TransactionForm extends JDialog{
             Transaction cus_transaction = cus_transactions.get(i);
             data[i] =  new Object[] { cus_transaction.getTransactionId(),
                     cus_transaction.getCreatedAt(), cus_transaction.getTotalAmount(),
-                    cus_transaction.getPaymentMethod(), cus_transaction.getCreatedBy()
+                    cus_transaction.getPaymentMethod(), cus_transaction.getCreatedByName()
             };
         }
 

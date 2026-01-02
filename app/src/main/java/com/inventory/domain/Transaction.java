@@ -15,6 +15,7 @@ public class Transaction {
     private double discount_amount;
     private String payment_method;
     private String created_by; // taken from sessionManager
+    private String created_by_name; // used as reference when viewing transactions
     private String created_at;
     private List<TransactionDetails> transaction_details;
 
@@ -22,8 +23,8 @@ public class Transaction {
     // retrieving a transaction
     public Transaction(String id, String customer_id, String transaction_date, double total_amount,
                        double discount_percentage, double discount_amount,
-                       String payment_method, String created_by, String created_at,
-                       List<TransactionDetails> transaction_details)
+                       String payment_method, String created_by, String created_by_name,
+                       String created_at, List<TransactionDetails> transaction_details)
     {
         this.id = id;
         this.customer_id = customer_id;
@@ -35,6 +36,7 @@ public class Transaction {
         this.created_by = created_by;
         this.created_at = created_at;
         this.transaction_details = transaction_details;
+        this.created_by_name = created_by_name;
     }
 
     // create a new transaction
@@ -79,6 +81,9 @@ public class Transaction {
     }
     public String getCreatedBy() {
         return created_by;
+    }
+    public String getCreatedByName() {
+        return created_by_name;
     }
     public String getCreatedAt() {
         return created_at;
