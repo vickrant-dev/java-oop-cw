@@ -55,17 +55,14 @@ public class CustomerRepository {
                 updateCustomersStatement.setString(1, customer.getCustomerName());
                 updateCustomersStatement.setString(2, customer.getCustomerContactInfo());
                 updateCustomersStatement.setString(3, customer.getCustomerId());
-                ResultSet res = updateCustomersStatement.executeQuery();
+                int res = updateCustomersStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res update supplier: " + res.next());
+                if (res > 0) {
                     updateCustomersStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     updateCustomersStatement.close();
-                    res.close();
                     return 401; //  invalid...
                 }
             }
@@ -89,17 +86,15 @@ public class CustomerRepository {
                 PreparedStatement createCustomerStatement = conn.prepareStatement(create_customers_query);
                 createCustomerStatement.setString(1, customer.getCustomerName());
                 createCustomerStatement.setString(2, customer.getCustomerContactInfo());
-                ResultSet res = createCustomerStatement.executeQuery();
 
-                if (res.next()) {
-                    System.out.println("res create customer: " + res.next());
+                int res = createCustomerStatement.executeUpdate();
+
+                if (res > 0) {
                     createCustomerStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     createCustomerStatement.close();
-                    res.close();
                     return 401; // invalid...
                 }
             }
@@ -114,6 +109,41 @@ public class CustomerRepository {
         }
     }
 
+    public boolean checkCusTransactions(Customer customer)
+    {
+        String check_cus_query = """
+                    SELECT EXISTS (
+                        SELECT 1 FROM transactions
+                        WHERE customer_id = ?::uuid
+                    );
+                """;
+
+        try (Connection conn = Server.getConnection()) {
+            if (conn != null) {
+                PreparedStatement check_cus_statement = conn.prepareStatement(check_cus_query);
+                check_cus_statement.setString(1, customer.getCustomerId());
+
+                ResultSet res = check_cus_statement.executeQuery();
+
+                if (res.next()) {
+                    return res.getBoolean(1);
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("DB Connection err: ");
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public int deleteCustomer(Customer customer)
     {
         String delete_customer_query = "DELETE FROM customers WHERE id=?::uuid";
@@ -122,17 +152,14 @@ public class CustomerRepository {
             if (conn != null) {
                 PreparedStatement deleteCustomersStatement = conn.prepareStatement(delete_customer_query);
                 deleteCustomersStatement.setString(1, customer.getCustomerId());
-                ResultSet res = deleteCustomersStatement.executeQuery();
+                int res = deleteCustomersStatement.executeUpdate();
 
-                if (res.next()) {
-                    System.out.println("res delete customer: " + res.next());
+                if (res > 0) {
                     deleteCustomersStatement.close();
-                    res.close();
                     return 200;
                 }
                 else {
                     deleteCustomersStatement.close();
-                    res.close();
                     return 401; // invalid...
                 }
             }
@@ -152,13 +179,16 @@ public class CustomerRepository {
         List<Transaction> all_cus_transactions = new ArrayList<>();
 
         String get_cus_transactions_query = """
-                SELECT t.*, u.username AS created_by_name
+                SELECT
+                    t.*,
+                    u.username AS created_by_name,
+                    c.name AS customer_name
                 FROM transactions t
-                JOIN users u ON t.created_by = u.id
+                LEFT JOIN users u ON t.created_by = u.id::uuid
+                LEFT JOIN customers c ON t.customer_id = c.id::uuid
                 WHERE t.customer_id = ?::uuid;
             """;
 
-        // joining products table here to get the actual name
         String get_transaction_details_query = """
                 SELECT td.*, p.name as product_name
                 FROM transaction_details td
@@ -188,7 +218,8 @@ public class CustomerRepository {
                                 res.getString("created_by"),
                                 res.getString("created_by_name"),
                                 res.getString("created_at"),
-                                new ArrayList<>()
+                                new ArrayList<>(),
+                                res.getString("customer_name")
                         );
 
                         // reuse the same prepared statement for efficiency

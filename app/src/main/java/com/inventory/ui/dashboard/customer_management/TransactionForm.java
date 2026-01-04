@@ -3,14 +3,19 @@ package com.inventory.ui.dashboard.customer_management;
 import com.inventory.controller.CustomerController;
 import com.inventory.domain.Customer;
 import com.inventory.domain.Transaction;
+import com.inventory.ui.dashboard.transactions.TransactionDetailsForm;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
-
 public class TransactionForm extends JDialog{
+    private JTable tbl;
+    private List<Transaction> cusTransactions;
+
     public  TransactionForm(Frame owner, Customer customer){
         super(owner, "Customer Transaction", true);
         setTitle("Customer Transaction");
@@ -37,12 +42,12 @@ public class TransactionForm extends JDialog{
         String[] colms = {"Transaction ID", "Created at", "Total amount", "Payment method",
                 "Created by"};
 
-        List<Transaction> cus_transactions = new CustomerController().fetchCustomerTransactions(customer);
+        cusTransactions = new CustomerController().fetchCustomerTransactions(customer);
 
-        Object[][] data = new Object[cus_transactions.size()][];
+        Object[][] data = new Object[cusTransactions.size()][];
 
-        for (int i = 0; i < cus_transactions.size(); i++) {
-            Transaction cus_transaction = cus_transactions.get(i);
+        for (int i = 0; i < cusTransactions.size(); i++) {
+            Transaction cus_transaction = cusTransactions.get(i);
             data[i] =  new Object[] { cus_transaction.getTransactionId(),
                     cus_transaction.getCreatedAt(), cus_transaction.getTotalAmount(),
                     cus_transaction.getPaymentMethod(), cus_transaction.getCreatedByName()
@@ -55,8 +60,24 @@ public class TransactionForm extends JDialog{
             }
         };
 
-        JTable tbl = new JTable(model);
+        tbl = new JTable(model);
         tbl.setRowHeight(28);
+
+        // double click on a transaction row -> open TransactionDetailsForm from transactions package
+        tbl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e)) {
+                    int row = tbl.getSelectedRow();
+                    if (row >= 0 && row < cusTransactions.size()) {
+                        Transaction tx = cusTransactions.get(row);
+                        Window ownerWindow = SwingUtilities.getWindowAncestor(TransactionForm.this);
+                        TransactionDetailsForm details = new TransactionDetailsForm(ownerWindow, tx);
+                        details.setVisible(true);
+                    }
+                }
+            }
+        });
 
         add(new JScrollPane(tbl), BorderLayout.CENTER);
         setVisible(true);

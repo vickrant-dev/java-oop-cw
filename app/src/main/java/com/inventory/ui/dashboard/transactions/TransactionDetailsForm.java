@@ -29,12 +29,13 @@ public class TransactionDetailsForm extends JDialog {
         add(header, BorderLayout.NORTH);
 
         // transaction info
-        JPanel upperpanel = new JPanel(new GridLayout(2, 2, 15, 15));
+        JPanel upperpanel = new JPanel(new GridLayout(3, 1, 15, 15));
         upperpanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
 
+        upperpanel.add(createInfoSection("Customer Name:", transaction.getCustomerName()));
         upperpanel.add(createInfoSection("Date:", transaction.getTransactionDate()));
         upperpanel.add(createInfoSection("Total:", String.format("Rs.%.2f", transaction.getTotalAmount())));
-        upperpanel.add(createInfoSection("Payment:", transaction.getPaymentMethod()));
+        upperpanel.add(createInfoSection("Payment method:", transaction.getPaymentMethod()));
         upperpanel.add(createInfoSection("Created By:", transaction.getCreatedByName()));
 
         JPanel topWrapper = new JPanel(new BorderLayout());

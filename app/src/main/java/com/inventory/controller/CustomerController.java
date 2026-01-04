@@ -26,6 +26,10 @@ public class CustomerController {
         return customerService.createCustomer(customer);
     }
 
+    public boolean checkCusTransactions(Customer customer) {
+        return customerService.checkCusTransactions(customer);
+    }
+
     public String deleteCustomer(Customer customer) {
         return customerService.deleteCustomer(customer);
     }

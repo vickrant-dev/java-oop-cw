@@ -20,9 +20,11 @@ public class TransactionRepository {
         String fetch_transactions_query = """
                     SELECT
                         t.*,
-                        u.username AS created_by_name
+                        u.username AS created_by_name,
+                        c.name AS customer_name
                     FROM transactions t
                     LEFT JOIN users u ON t.created_by = u.id::uuid
+                    LEFT JOIN customers c on t.customer_id = c.id::uuid;
                 """;
         String fetch_transaction_details_query = """
                     SELECT td.*, p.name AS product_name
@@ -52,7 +54,8 @@ public class TransactionRepository {
                             res.getString("created_by"),
                             res.getString("created_by_name"),
                             res.getString("created_at"),
-                            new ArrayList<>()
+                            new ArrayList<>(),
+                            res.getString("customer_name")
                     );
 
                     PreparedStatement fetchTransactionsDetailsStatement = conn.prepareStatement(fetch_transaction_details_query);

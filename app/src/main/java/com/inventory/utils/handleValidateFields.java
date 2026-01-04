@@ -190,13 +190,16 @@ public class handleValidateFields {
     // THE CUSTOMER VALIDATION
     // used for validating CUSTOMER fields
     public String validateFields(Customer customer) {
-        if (customer.getCustomerId().trim().isEmpty()) {
-            return "401a";
-        }
         if (customer.getCustomerName().trim().isEmpty()) {
             return "401a";
         }
         if (customer.getCustomerContactInfo().trim().isEmpty()) {
+            return "401a";
+        }
+        return null;
+    }
+    public String validateFields(String name, String contact_info) {
+        if (name == null || contact_info == null || name.trim().isEmpty() || contact_info.trim().isEmpty()) {
             return "401a";
         }
         return null;

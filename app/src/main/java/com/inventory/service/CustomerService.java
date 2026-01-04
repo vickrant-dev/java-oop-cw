@@ -12,6 +12,8 @@ public interface CustomerService {
 
     String updateCustomerDetails(Customer customer);
 
+    boolean checkCusTransactions(Customer customer);
+
     String deleteCustomer(Customer customer);
 
     List<Transaction> fetchCustomerTransactions(Customer customer);

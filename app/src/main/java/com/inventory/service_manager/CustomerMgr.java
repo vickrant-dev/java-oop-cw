@@ -21,52 +21,41 @@ public class CustomerMgr implements CustomerService {
     }
 
     public String updateCustomerDetails(Customer customer) {
-        if(new handleValidateFields().validateFields(customer) == null) {
-            int update_res = customerRepo.updateCustomerDetails(customer);
-            if (update_res == 200) {
-                System.out.println("Updated customer successfully for: " + customer.getCustomerId());
-                return "200";
-            }
-            else {
-                System.out.println("Customer updating failed for: " + customer.getCustomerId() + ". Error: " + update_res);
-                return "401a";
-            }
+        int update_res = customerRepo.updateCustomerDetails(customer);
+        if (update_res == 200) {
+            System.out.println("Updated customer successfully for: " + customer.getCustomerId());
+            return "200";
         }
         else {
+            System.out.println("Customer updating failed for: " + customer.getCustomerId() + ". Error: " + update_res);
             return "401a";
         }
     }
 
     public String createCustomer(Customer customer) {
-        if(new handleValidateFields().validateFields(customer) == null) {
-            int create_res = customerRepo.createCustomer(customer);
-            if (create_res == 200) {
-                System.out.println("created a new customer successfully for: " + customer.getCustomerId());
-                return "200";
-            }
-            else {
-                System.out.println("Customer creation failed for: " + customer.getCustomerId() + ". Error: " + create_res);
-                return "401a";
-            }
+        int create_res = customerRepo.createCustomer(customer);
+        if (create_res == 200) {
+            System.out.println("created a new customer successfully for: " + customer.getCustomerId());
+            return "200";
         }
         else {
+            System.out.println("Customer creation failed for: " + customer.getCustomerId() + ". Error: " + create_res);
             return "401a";
         }
     }
 
+    public boolean checkCusTransactions(Customer customer) {
+        return customerRepo.checkCusTransactions(customer);
+    }
+
     public String deleteCustomer(Customer customer) {
-        if(new handleValidateFields().validateFields(customer) == null) {
-            int delete_res = customerRepo.deleteCustomer(customer);
-            if (delete_res == 200) {
-                System.out.println("Deleted customer successfully for: " + customer.getCustomerId());
-                return "200";
-            }
-            else {
-                System.out.println("Customer deletion failed for: " + customer.getCustomerId() + ". Error: " + delete_res);
-                return "401a";
-            }
+        int delete_res = customerRepo.deleteCustomer(customer);
+        if (delete_res == 200) {
+            System.out.println("Deleted customer successfully for: " + customer.getCustomerId());
+            return "200";
         }
         else {
+            System.out.println("Customer deletion failed for: " + customer.getCustomerId() + ". Error: " + delete_res);
             return "401a";
         }
     }

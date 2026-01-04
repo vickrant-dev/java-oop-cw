@@ -17,6 +17,7 @@ public class Customer extends Person {
         this.contact_info = contact_info;
     }
 
+    // GETTERS
     public String getCustomerId() {
         return id;
     }
@@ -25,6 +26,13 @@ public class Customer extends Person {
     }
     public String getCustomerContactInfo() {
         return contact_info;
+    }
+
+
+    // SETTERS
+    public void updateCustomer(String name, String contact_info) {
+        this.name = name;
+        this.contact_info = contact_info;
     }
 
 }
