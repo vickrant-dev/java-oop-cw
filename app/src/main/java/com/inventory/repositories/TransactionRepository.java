@@ -111,7 +111,8 @@ public class TransactionRepository {
 
                 // we are using a Gson library to convert java obj to json format
                 String transaction_details_json = new Gson().toJson(transaction.getTransactionDetails());
-                PreparedStatement createTransactionStatement = conn.prepareStatement(create_transaction_query);
+                PreparedStatement createTransactionStatement = conn.prepareStatement(create_transaction_query,
+                        new String[] { "id" });
                 createTransactionStatement.setString(1, transaction.getCustomerId());
                 createTransactionStatement.setString(2, transaction.getTransactionDate());
                 createTransactionStatement.setDouble(3, transaction.getTotalAmount());
@@ -124,6 +125,12 @@ public class TransactionRepository {
                 ResultSet res = createTransactionStatement.executeQuery();
 
                 if (res.next()) {
+                    ResultSet res_keys = createTransactionStatement.getGeneratedKeys();
+                    if (res_keys.next()) {
+                        String gen_key = res_keys.getString(1);
+                        transaction.setId(gen_key);
+                        System.out.println(gen_key);
+                    }
                     return res.getInt(1);
                 }
                 else {

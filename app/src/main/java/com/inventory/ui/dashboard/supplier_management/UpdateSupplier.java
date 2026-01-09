@@ -2,10 +2,12 @@ package com.inventory.ui.dashboard.supplier_management;
 
 import com.inventory.controller.SupplierController;
 import com.inventory.domain.Supplier;
+import com.inventory.utils.handleValidateFields;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.List;
 
 public class UpdateSupplier extends JDialog {
 
@@ -79,14 +81,19 @@ public class UpdateSupplier extends JDialog {
         );
 
         SupplierController supplier_controller = new SupplierController();
+        List<String> errMsg = new handleValidateFields().validateFields(supplier);
+
+        if (!errMsg.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Invalid supplier fields," +
+                            "Please fill in all the blanks. " + "Error: " + errMsg,
+                    "Invalid Supplier Fields: ", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String update_res = supplier_controller.updateSupplierDetails(supplier);
 
         if ("200".equals(update_res)) {
             parentPanel.refreshTableData();
             dispose();
-        }
-        else if ("401a".equals(update_res)) {
-            JOptionPane.showMessageDialog(this, "Please fill in all the blanks!");
         }
          else {
             System.out.println("Failed updating suppliers");

@@ -35,4 +35,8 @@ public class Customer extends Person {
         this.contact_info = contact_info;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

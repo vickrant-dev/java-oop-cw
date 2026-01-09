@@ -3,6 +3,7 @@ package com.inventory.ui.dashboard.supplier_management;
 import com.inventory.controller.SupplierController;
 import com.inventory.domain.Supplier;
 import com.inventory.ui.dashboard.product_management.PopupMenu;
+import com.inventory.utils.handleValidateFields;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -80,6 +81,15 @@ public class SupplierPanel extends JPanel {
                 );
 
                 if (confirm == JOptionPane.YES_OPTION) {
+                    // check supplier fields before checking
+                    List<String> errMsg = new handleValidateFields().validateFields(selectedSupplier);
+                    if (!errMsg.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Invalid supplier fields," +
+                                        "Supplier is missing important fields. " + "Error: " + errMsg,
+                                "Invalid Supplier Fields: ", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+
                     // check if supplier has products
                     SupplierController supplierController = new SupplierController();
                     boolean checkSupplierProds = supplierController.checkSupplierProds(selectedSupplier);
@@ -90,6 +100,7 @@ public class SupplierPanel extends JPanel {
                                         "\nSupplier is currently providing products",
                                 "Dependency Error",
                                 JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
                     else {
                         supplierController.deleteSupplier(selectedSupplier);

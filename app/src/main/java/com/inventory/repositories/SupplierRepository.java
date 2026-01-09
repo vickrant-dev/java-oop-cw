@@ -82,12 +82,18 @@ public class SupplierRepository {
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
-                PreparedStatement createSupplierStatement = conn.prepareStatement(create_suppliers_query);
+                PreparedStatement createSupplierStatement = conn.prepareStatement(create_suppliers_query,
+                        new String[] { "id" });
                 createSupplierStatement.setString(1, supplier.getSupplierName());
                 createSupplierStatement.setString(2, supplier.getSupplierContactInfo());
                 int res = createSupplierStatement.executeUpdate();
 
                 if (res > 0) {
+                    ResultSet res_keys = createSupplierStatement.getGeneratedKeys();
+                    if (res_keys.next()) {
+                        String gen_key = res_keys.getString(1);
+                        supplier.setId(gen_key);
+                    }
                     createSupplierStatement.close();
                     return 200;
                 }
@@ -206,9 +212,11 @@ public class SupplierRepository {
                 ResultSet res = checkProductStatement.executeQuery();
 
                 if (res.next()) {
-                    return res.getBoolean(1); // result's column index where a boolean is the result.
+                    Boolean bool = res.getBoolean(1);
+                    System.out.println("bool: " + bool);
+                    return bool; // result's column index where a boolean is the result.
                 };
-                return false;
+                return true;
             }
             else {
                 return true;

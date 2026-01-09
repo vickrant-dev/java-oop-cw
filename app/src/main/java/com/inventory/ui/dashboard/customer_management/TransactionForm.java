@@ -4,6 +4,7 @@ import com.inventory.controller.CustomerController;
 import com.inventory.domain.Customer;
 import com.inventory.domain.Transaction;
 import com.inventory.ui.dashboard.transactions.TransactionDetailsForm;
+import com.inventory.utils.handleValidateFields;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -41,6 +42,15 @@ public class TransactionForm extends JDialog{
 
         String[] colms = {"Transaction ID", "Created at", "Total amount", "Payment method",
                 "Created by"};
+
+        List<String> errMsg = new handleValidateFields().validateFields(customer);
+        if (!errMsg.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No transactions found. " +
+                            "Error: " + errMsg,
+                    "Transactions not found for customer: " + customer.getCustomerName(),
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         cusTransactions = new CustomerController().fetchCustomerTransactions(customer);
 

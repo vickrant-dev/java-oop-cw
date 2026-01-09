@@ -116,7 +116,8 @@ public class ProductRepository {
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
-                PreparedStatement createProdStatement = conn.prepareStatement(create_product_query);
+                PreparedStatement createProdStatement = conn.prepareStatement(create_product_query,
+                        new String[] { "id" });
                 createProdStatement.setString(1, product.getProductId());
                 createProdStatement.setString(2, product.getSupplierId());
                 createProdStatement.setString(3, product.getProductName());
@@ -127,6 +128,11 @@ public class ProductRepository {
                 int res = createProdStatement.executeUpdate();
 
                 if (res > 0) {
+                    ResultSet res_keys = createProdStatement.getGeneratedKeys();
+                    if (res_keys.next()) {
+                        String gen_key = res_keys.getString(1);
+                        product.setId(gen_key);
+                    }
                     createProdStatement.close();
                     return 200;
                 }

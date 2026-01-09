@@ -61,4 +61,8 @@ public class Product {
         this.price = price;
         this.stock_quantity = stock_quantity;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

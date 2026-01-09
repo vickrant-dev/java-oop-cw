@@ -39,7 +39,7 @@ public class CustomerMgr implements CustomerService {
             return "200";
         }
         else {
-            System.out.println("Customer creation failed for: " + customer.getCustomerId() + ". Error: " + create_res);
+            System.out.println("Customer creation failed for: " + customer.getCustomerName() + ". Error: " + create_res);
             return "401a";
         }
     }
@@ -61,13 +61,8 @@ public class CustomerMgr implements CustomerService {
     }
 
     public List<Transaction> fetchCustomerTransactions(Customer customer) {
-        List<Transaction> customer_transactions = new ArrayList<>();
-        if(new handleValidateFields().validateFields(customer) == null) {
-            customer_transactions = customerRepo.fetchCustomerTransactions(customer);
-            return customer_transactions;
-        }
-        else {
-            return customer_transactions;
-        }
+        List<Transaction> customer_transactions;
+        customer_transactions = customerRepo.fetchCustomerTransactions(customer);
+        return customer_transactions;
     }
 }

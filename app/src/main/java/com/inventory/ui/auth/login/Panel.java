@@ -22,6 +22,7 @@ public class Panel extends JPanel {
 
      }
 
+    // Overrides paintComponent in class JComponent
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 

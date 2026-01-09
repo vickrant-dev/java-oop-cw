@@ -106,6 +106,9 @@ public class Transaction {
     public void setTransactionDetails(List<TransactionDetails> transaction_details) {
         this.transaction_details = transaction_details;
     }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public double applyProductDiscount() {
         return this.total_amount - (this.total_amount * 0.15);

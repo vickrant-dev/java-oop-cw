@@ -83,13 +83,19 @@ public class CustomerRepository {
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {
-                PreparedStatement createCustomerStatement = conn.prepareStatement(create_customers_query);
+                PreparedStatement createCustomerStatement = conn.prepareStatement(create_customers_query,
+                        new String[] { "id" });
                 createCustomerStatement.setString(1, customer.getCustomerName());
                 createCustomerStatement.setString(2, customer.getCustomerContactInfo());
 
                 int res = createCustomerStatement.executeUpdate();
 
                 if (res > 0) {
+                    ResultSet res_keys = createCustomerStatement.getGeneratedKeys();
+                    if (res_keys.next()) {
+                        String gen_key = res_keys.getString(1);
+                        customer.setId(gen_key);
+                    }
                     createCustomerStatement.close();
                     return 200;
                 }

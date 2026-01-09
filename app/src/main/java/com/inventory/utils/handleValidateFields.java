@@ -4,6 +4,7 @@ import com.inventory.domain.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public class handleValidateFields {
@@ -95,13 +96,16 @@ public class handleValidateFields {
 
     // THE SUPPLIER VALIDATION
     // used for validating SUPPLIER fields
-    public String validateFields(Supplier supplier)
+    public List<String> validateFields(Supplier supplier)
     {
-        if (supplier.getSupplierName().trim().isEmpty() ||
-                supplier.getSupplierContactInfo().trim().isEmpty()) {
-            return "401a";
+        List<String> errMsg = new ArrayList<>();
+        if (supplier.getSupplierName() == null || supplier.getSupplierName().isBlank()) {
+            errMsg.add("Invalid supplier name.");
         }
-        return null;
+        if (supplier.getSupplierContactInfo() == null || supplier.getSupplierContactInfo().isBlank()) {
+            errMsg.add("Invalid supplier contact info.");
+        }
+        return errMsg;
     }
 
 
@@ -189,20 +193,25 @@ public class handleValidateFields {
 
     // THE CUSTOMER VALIDATION
     // used for validating CUSTOMER fields
-    public String validateFields(Customer customer) {
+    public List<String> validateFields(Customer customer) {
+        List<String> errMsg = new ArrayList<>();
         if (customer.getCustomerName().trim().isEmpty()) {
-            return "401a";
+            errMsg.add("Customer name cannot be empty");
         }
         if (customer.getCustomerContactInfo().trim().isEmpty()) {
-            return "401a";
+            errMsg.add("Customer contact info cannot be empty");
         }
-        return null;
+        return errMsg;
     }
-    public String validateFields(String name, String contact_info) {
-        if (name == null || contact_info == null || name.trim().isEmpty() || contact_info.trim().isEmpty()) {
-            return "401a";
+    public List<String> validateFields(String name, String contact_info) {
+        List<String> errMsg = new ArrayList<>();
+        if (name == null || name.trim().isEmpty()) {
+            errMsg.add("Name cannot be empty");
         }
-        return null;
+        if (contact_info == null || contact_info.trim().isEmpty()) {
+            errMsg.add("Contact info cannot be empty");
+        }
+        return errMsg;
     }
 
 

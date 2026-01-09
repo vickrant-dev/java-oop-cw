@@ -132,10 +132,12 @@ public class CustomerPanel extends JPanel {
                     if (res.equals("200")) {
                         loadCustomers();
                     }
-                    JOptionPane.showMessageDialog(this,
-                            "Failed to delete customer",
-                            "Failed to delete customer",
-                            JOptionPane.WARNING_MESSAGE);
+                    else {
+                        JOptionPane.showMessageDialog(this,
+                                "Failed to delete customer",
+                                "Failed to delete customer",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             }
         });

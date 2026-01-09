@@ -2,10 +2,12 @@ package com.inventory.ui.dashboard.supplier_management;
 
 import com.inventory.domain.Supplier;
 import com.inventory.controller.SupplierController;
+import com.inventory.utils.handleValidateFields;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.List;
 
 public class AddNewSupplier extends JDialog {
 
@@ -68,6 +70,15 @@ public class AddNewSupplier extends JDialog {
                     contactInfoField.getText());
 
             SupplierController supplierController = new SupplierController();
+            List<String> errMsg = new handleValidateFields().validateFields(newSupplier);
+
+            if (!errMsg.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Invalid supplier fields," +
+                                "please fill in all the blanks. " + "Error: " + errMsg,
+                        "Invalid Supplier Fields: ", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             String create_supplier_res = supplierController.createSupplier(newSupplier);
             if (create_supplier_res.equals("200")) {
                 parentPanel.refreshTableData();

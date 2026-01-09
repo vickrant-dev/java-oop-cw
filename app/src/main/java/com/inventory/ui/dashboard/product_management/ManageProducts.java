@@ -95,7 +95,7 @@ public class ManageProducts extends JPanel {
                         // Check product fields before deleting
                         String errorMsg = new handleValidateFields().validateFields(productToDelete);
 
-                        if (!errorMsg.isEmpty()) {
+                        if (errorMsg != null) {
                             JOptionPane.showMessageDialog(this,
                                     "Please correct the following: \n"
                                             + errorMsg, "Invalid fields", JOptionPane.WARNING_MESSAGE);

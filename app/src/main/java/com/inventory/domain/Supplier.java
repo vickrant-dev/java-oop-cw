@@ -35,6 +35,9 @@ public class Supplier extends Person {
         this.name = name;
         this.contact_info = contact_info;
     }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     // overriding the default toString method of an Object.
     // Typically, the default Object comes with toString that returns like this:

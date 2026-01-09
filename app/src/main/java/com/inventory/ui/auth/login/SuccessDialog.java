@@ -8,7 +8,8 @@ public class SuccessDialog extends JFrame {
     private JOptionPane successDialog;
 
     public void setSuccessDialog(String text) {
-        this.successDialog.showMessageDialog(SuccessDialog.this, text);
+        this.successDialog.showMessageDialog(
+                SuccessDialog.this, text);
     }
 
 }

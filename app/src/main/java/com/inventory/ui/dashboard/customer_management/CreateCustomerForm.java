@@ -6,6 +6,7 @@ import com.inventory.utils.handleValidateFields;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class CreateCustomerForm extends BaseCustomerForm {
     private final CustomerController controller = new CustomerController();
@@ -17,9 +18,9 @@ public class CreateCustomerForm extends BaseCustomerForm {
 
         btnAction.addActionListener(e -> {
             // validate fields
-            String errMsg = handleValidateFields.validateFields(nameField.getText(),
+            List<String> errMsg = handleValidateFields.validateFields(nameField.getText(),
                     contactField.getText());
-            if (errMsg != null) {
+            if (!errMsg.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Invalid details: " + errMsg);
                 return;
             }
