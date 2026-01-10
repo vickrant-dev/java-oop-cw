@@ -3,7 +3,6 @@ package com.inventory.service_manager;
 import com.inventory.domain.Product;
 import com.inventory.repositories.ProductRepository;
 import com.inventory.service.ProductService;
-import com.inventory.utils.handleValidateFields;
 
 import java.util.List;
 
