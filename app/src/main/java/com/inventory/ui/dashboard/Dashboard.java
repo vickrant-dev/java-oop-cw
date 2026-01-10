@@ -3,7 +3,7 @@ package com.inventory.ui.dashboard;
 import com.inventory.ui.dashboard.customer_management.CustomerPanel;
 import com.inventory.ui.dashboard.product_management.ProductPanel;
 import com.inventory.ui.dashboard.supplier_management.SupplierPanel;
-import com.inventory.ui.dashboard.transactions.TransactionsPanel;
+import com.inventory.ui.dashboard.transactions_management.TransactionsPanel;
 
 import javax.swing.*;
 import java.awt.*;

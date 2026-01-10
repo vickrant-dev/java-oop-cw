@@ -1,4 +1,4 @@
-package com.inventory.ui.dashboard.transactions;
+package com.inventory.ui.dashboard.transactions_management;
 
 import com.inventory.controller.*;
 import com.inventory.domain.*;
@@ -84,7 +84,7 @@ public class CreateTransactionForm extends JDialog {
         add(topPanel, BorderLayout.NORTH);
 
         // table
-        String[] header = {"Product ID", "Name", "Qty", "Price", "Total"};
+        String[] header = {"ID", "Name", "Qty", "Price", "Total"};
         detailsModel = new DefaultTableModel(header, 0) {
             @Override public boolean isCellEditable(int r, int col) { return false; }
         };
@@ -183,7 +183,9 @@ public class CreateTransactionForm extends JDialog {
         String uid = null;
         try {
             uid = new sessionManager().getUserId();
-        } catch (Exception e) { /* log it if needed */ }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (uid == null || uid.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Session expired. Please login again.");
@@ -217,14 +219,17 @@ public class CreateTransactionForm extends JDialog {
         String now = LocalDateTime.now().toString();
         String method = cmbPayment.getSelectedItem().toString();
 
-        Transaction trans = new Transaction(selectedCustomerId, now, grandTotal, 0.0, 0.0, method, now, items);
+        Transaction trans = new Transaction(selectedCustomerId, now, grandTotal,
+                0.0, 0.0, method, now, items);
         String result = transactionController.createTransaction(trans);
 
         if ("200".equals(result)) {
-            JOptionPane.showMessageDialog(this, "Transaction Saved Successfully!");
+            JOptionPane.showMessageDialog(this,
+                    "Transaction Saved Successfully!");
             this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Something went wrong. Check DB logs.");
+            JOptionPane.showMessageDialog(this,
+                    "Something went wrong. Check DB logs.");
         }
     }
 }

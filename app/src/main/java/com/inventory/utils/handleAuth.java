@@ -23,15 +23,17 @@ public class handleAuth {
         this.password = new String(password); // converting char arr to a string
     }
 
+    // Call controller
     public int loginUser () {
-        // Call controller
-        int loginRes = authController.LoginUser(username, password);
-        return loginRes;
+        return authController.LoginUser(username, password);
     }
 
     public int signupUser() {
-        int signupRes = authController.SignupUser(username, email, password);
-        return signupRes;
+        return authController.SignupUser(username, email, password);
+    }
+
+    public int deleteUser() {
+        return authController.DeleteUser(email, password);
     }
 
 }

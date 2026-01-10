@@ -135,4 +135,61 @@ public class AuthRepository {
         }
     }
 
+    public int DeleteUser(String email, String password) {
+        String check_user_exists_query = "SELECT * FROM users WHERE email = ?";
+        String delete_user_query = """
+                    DELETE FROM users WHERE id = ?::uuid AND email = ? AND password = ?
+                """;
+
+        String encryptedPassword = "";
+        try {
+            Encryptor encryptor = new Encryptor();
+            encryptedPassword = encryptor.encrypt(password);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return 503;
+        }
+
+        try (Connection deleteConn = Server.getConnection()) {
+            if (deleteConn != null) {
+                // Check if username or email already exists
+                PreparedStatement check_user = deleteConn.prepareStatement(check_user_exists_query);
+                check_user.setString(1, email);
+
+                ResultSet user_exists = check_user.executeQuery();
+
+                if (!user_exists.next()) {
+                    user_exists.close();
+                    check_user.close();
+                    return 550; // email doesn't exist
+                }
+                user_exists.close();
+                check_user.close();
+
+                // Delete user
+                PreparedStatement delete_user = deleteConn.prepareStatement(delete_user_query);
+                delete_user.setString(1, new sessionManager().getUserId());
+                delete_user.setString(2, email);
+                delete_user.setString(3, encryptedPassword);
+
+                int no_of_rows_affected = delete_user.executeUpdate();
+                delete_user.close();
+
+                if (no_of_rows_affected > 0) {
+                    return 200; // delete success
+                } else {
+                    return 401; // delete failed
+                }
+
+            } else {
+                System.out.println("Connection failed!");
+                return 503;
+            }
+        } catch (SQLException e) {
+            System.err.println("Database connection err: " + e.getMessage());
+            return 503;
+        }
+
+    }
+
 }

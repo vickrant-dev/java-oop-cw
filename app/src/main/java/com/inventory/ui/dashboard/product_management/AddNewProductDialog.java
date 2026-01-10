@@ -131,7 +131,7 @@ public class AddNewProductDialog extends JDialog {
         panel.add(field, gbc);
     }
 
-    private void onSave() {
+    protected void onSave() {
         // collect info from fields
         // create product obj
 

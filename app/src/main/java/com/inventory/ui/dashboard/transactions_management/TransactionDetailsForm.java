@@ -1,4 +1,4 @@
-package com.inventory.ui.dashboard.transactions;
+package com.inventory.ui.dashboard.transactions_management;
 
 import com.inventory.domain.Transaction;
 import com.inventory.domain.TransactionDetails;

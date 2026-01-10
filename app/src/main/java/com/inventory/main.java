@@ -2,10 +2,7 @@ package com.inventory;
 
 import com.inventory.ui.auth.login.*;
 //import com.inventory.ui.dashboard.product_management.AddNewProductDialog;
-import com.inventory.ui.dashboard.product_management.ProductPanel;
-import com.inventory.ui.dashboard.transactions.TransactionsPanel;
 
-import javax.swing.*;
 
 public class main {
     public static void main (String[] args) {

@@ -3,7 +3,7 @@ package com.inventory.ui.dashboard.customer_management;
 import com.inventory.controller.CustomerController;
 import com.inventory.domain.Customer;
 import com.inventory.domain.Transaction;
-import com.inventory.ui.dashboard.transactions.TransactionDetailsForm;
+import com.inventory.ui.dashboard.transactions_management.TransactionDetailsForm;
 import com.inventory.utils.handleValidateFields;
 
 import javax.swing.*;

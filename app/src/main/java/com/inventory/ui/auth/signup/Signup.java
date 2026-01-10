@@ -244,13 +244,13 @@ public class Signup extends JFrame {
                         usernameField.getText(), emailField.getText(), passwordField.getPassword()
                 );
 
-                int status = signup.signupUser(); // assuming you have this method
+                int status = signup.signupUser();
 
                 if(status == 200) {
-                    Validatebox.vlidateshow("✅ Signup Success!");
+                    Validatebox.vlidateshow("Signup Success!");
                     signupButton.setEnabled(true);
                 } else if (status == 503) {
-                    Validatebox.vlidateshow("⚠ Connection failed.");
+                    Validatebox.vlidateshow("Connection failed.");
                     signupButton.setEnabled(true);
                 } else if (status == 409) {
                     Validatebox.vlidateshow("Username or email already exists.");

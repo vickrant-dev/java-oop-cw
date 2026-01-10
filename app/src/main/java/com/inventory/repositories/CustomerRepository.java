@@ -152,7 +152,7 @@ public class CustomerRepository {
 
     public int deleteCustomer(Customer customer)
     {
-        String delete_customer_query = "DELETE FROM customers WHERE id=?::uuid";
+        String delete_customer_query = "DELETE FROM customers WHERE id = ?::uuid";
 
         try (Connection conn = Server.getConnection()) {
             if (conn != null) {

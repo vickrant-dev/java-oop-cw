@@ -16,4 +16,8 @@ public class AuthController {
     public int SignupUser(String username, String email, String password) {
         return authRepo.Signup(username, email, password);
     }
+
+    public int DeleteUser(String email, String password) {
+        return authRepo.DeleteUser(email, password);
+    }
 }

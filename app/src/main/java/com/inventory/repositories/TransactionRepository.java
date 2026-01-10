@@ -125,17 +125,18 @@ public class TransactionRepository {
                 ResultSet res = createTransactionStatement.executeQuery();
 
                 if (res.next()) {
-                    ResultSet res_keys = createTransactionStatement.getGeneratedKeys();
-                    if (res_keys.next()) {
-                        String gen_key = res_keys.getString(1);
-                        transaction.setId(gen_key);
-                        System.out.println(gen_key);
+                    String gen_key = res.getString(1);
+                    transaction.setId(gen_key);
+                    if (!gen_key.isEmpty()) {
+                        return 200;
                     }
-                    return res.getInt(1);
+                    else {
+                        return 500; // gen key is empty
+                    }
                 }
                 else {
                     createTransactionStatement.close();
-                    return 401; // invalid product_id maybe...
+                    return 401; // invalid fields to create transaction
                 }
             }
             else {
