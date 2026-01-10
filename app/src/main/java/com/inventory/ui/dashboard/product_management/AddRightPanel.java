@@ -30,6 +30,7 @@ public class AddRightPanel extends JPanel {
         addProductButton.setForeground(Color.WHITE);
         addProductButton.setOpaque(true);
         addProductButton.setBorderPainted(false);
+        addProductButton.setMaximumSize(new Dimension(160, 36));
 
         refreshProducts.setAlignmentX(Component.CENTER_ALIGNMENT);
         refreshProducts.addActionListener(e -> this.product_manager.refreshTableData());
@@ -38,6 +39,7 @@ public class AddRightPanel extends JPanel {
         refreshProducts.setForeground(Color.WHITE);
         refreshProducts.setOpaque(true);
         refreshProducts.setBorderPainted(false);
+        refreshProducts.setMaximumSize(new Dimension(160, 36));
 
         add(Box.createVerticalStrut(20));
         add(addProductButton);

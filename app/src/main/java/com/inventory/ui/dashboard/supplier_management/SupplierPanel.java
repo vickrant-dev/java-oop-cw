@@ -147,11 +147,13 @@ public class SupplierPanel extends JPanel {
         addButton.setForeground(Color.WHITE);
         addButton.setOpaque(true);
         addButton.setBorderPainted(false);
+        addButton.setMaximumSize(new Dimension(160, 36));
 
         refreshButton.setBackground(googleBlue);
         refreshButton.setForeground(Color.WHITE);
         refreshButton.setOpaque(true);
         refreshButton.setBorderPainted(false);
+        refreshButton.setMaximumSize(new Dimension(160, 36));
 
 
         buttonPanel.add(Box.createVerticalStrut(20));
