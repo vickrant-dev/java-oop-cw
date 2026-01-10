@@ -58,13 +58,25 @@ public class TransactionsPanel extends JPanel {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
+        Color googleBlue = Color.decode("#4285f4");
+
         JButton createBtn = new JButton("Create transaction");
         createBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         createBtn.setMaximumSize(new Dimension(160, 36));
 
+        createBtn.setBackground(googleBlue);
+        createBtn.setForeground(Color.WHITE);
+        createBtn.setOpaque(true);
+        createBtn.setBorderPainted(false);
+
         JButton refreshBtn = new JButton("Refresh");
         refreshBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         refreshBtn.setMaximumSize(new Dimension(160, 36));
+
+        refreshBtn.setBackground(googleBlue);
+        refreshBtn.setForeground(Color.WHITE);
+        refreshBtn.setOpaque(true);
+        refreshBtn.setBorderPainted(false);
 
         rightPanel.add(createBtn);
         rightPanel.add(Box.createRigidArea(new Dimension(0,10)));

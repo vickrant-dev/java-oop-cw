@@ -139,8 +139,20 @@ public class SupplierPanel extends JPanel {
         JButton addButton = new JButton("Add new Supplier");
         JButton refreshButton = new JButton("Refresh");
 
+        Color googleBlue = Color.decode("#4285f4");
         addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        addButton.setBackground(googleBlue);
+        addButton.setForeground(Color.WHITE);
+        addButton.setOpaque(true);
+        addButton.setBorderPainted(false);
+
+        refreshButton.setBackground(googleBlue);
+        refreshButton.setForeground(Color.WHITE);
+        refreshButton.setOpaque(true);
+        refreshButton.setBorderPainted(false);
+
 
         buttonPanel.add(Box.createVerticalStrut(20));
         buttonPanel.add(addButton);

@@ -13,19 +13,23 @@ public class Dashboard extends JFrame {
     private JPanel contentPanel;
 
     public Dashboard() {
-        setTitle("Inventory Management System");
+        setTitle("");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false); // this is done to prevent unresponsive app window.
+        setResizable(true); // this is done to prevent unresponsive app window.
         setLayout(new BorderLayout());
 
+        // Add header bar at the top
+        JPanel header = createHeader();
+        add(header,BorderLayout.NORTH);
         // import sidebar
         Sidebar sidebar = new Sidebar();
         add(sidebar, BorderLayout.WEST); // positioning it to the left
 
         // content section
         contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setBackground(new Color(245,245,245));
         add(contentPanel, BorderLayout.CENTER); // positioning the content in the center
 
         // default view being managing products
@@ -53,4 +57,34 @@ public class Dashboard extends JFrame {
         contentPanel.revalidate(); // similar to refreshing the layout to render the newly added components.
         contentPanel.repaint(); // responsible for refreshing state to show the new data from components.
     }
+
+    private JPanel createHeader() {
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(new Color(35, 40, 50));
+        header.setPreferredSize(new Dimension(100, 50));
+
+        JLabel title = new JLabel("Inventory Management System");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Poppins", Font.BOLD, 15));
+        title.setBorder(BorderFactory.createEmptyBorder(0,20,0,0));
+
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT,15,10));
+        rightPanel.setBackground(new Color(35,40,50));
+
+        header.add(title,BorderLayout.WEST);
+        header.add(rightPanel,BorderLayout.EAST);
+
+        return header;
+    }
+
+    private void styleHeaderButton(JButton button) {
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setBackground(new Color(35,40,50));
+        button.setForeground(Color.WHITE);
+        button.setFont((new Font("Poppins",Font.PLAIN,16)));
+    }
+
+
+
 }

@@ -52,12 +52,21 @@ public class CustomerPanel extends JPanel {
         JButton addBtn = new JButton("Add Customer");
         JButton refreshBtn = new JButton("Refresh");
 
+        Color googleBlue = Color.decode("#4285f4");
         // btns
         Dimension d = new Dimension(160, 38);
         for (JButton b : new JButton[]{addBtn, refreshBtn}) {
             b.setMaximumSize(d);
             b.setAlignmentX(CENTER_ALIGNMENT);
+
+            b.setBackground(googleBlue);
+            b.setForeground(Color.WHITE);
+            b.setFocusPainted(false);
+            b.setBorderPainted(false);
+            b.setOpaque(true);
+            b.setContentAreaFilled(true);
         }
+
 
         rightPanel.add(addBtn);
         rightPanel.add(Box.createVerticalStrut(10));

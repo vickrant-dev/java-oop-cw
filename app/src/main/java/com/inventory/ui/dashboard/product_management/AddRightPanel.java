@@ -24,8 +24,20 @@ public class AddRightPanel extends JPanel {
         addProductButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         addProductButton.addActionListener(e -> addNewProduct());
 
+        Color googleBlue = Color.decode("#4285f4");
+
+        addProductButton.setBackground(googleBlue);
+        addProductButton.setForeground(Color.WHITE);
+        addProductButton.setOpaque(true);
+        addProductButton.setBorderPainted(false);
+
         refreshProducts.setAlignmentX(Component.CENTER_ALIGNMENT);
         refreshProducts.addActionListener(e -> this.product_manager.refreshTableData());
+
+        refreshProducts.setBackground(googleBlue);
+        refreshProducts.setForeground(Color.WHITE);
+        refreshProducts.setOpaque(true);
+        refreshProducts.setBorderPainted(false);
 
         add(Box.createVerticalStrut(20));
         add(addProductButton);
